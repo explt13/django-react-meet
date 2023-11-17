@@ -1,0 +1,9 @@
+.container{
+    padding: 10px 30px;
+    display: flex;
+    background-color: #32363a;
+    justify-content: space-between;
+}
+
+
+

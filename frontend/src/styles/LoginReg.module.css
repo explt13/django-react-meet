@@ -1,0 +1,91 @@
+
+.wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    margin: 0 10px;
+}
+
+.container {
+    width: 500px;
+    border: 3px solid #6a5acd;
+    border-radius: 24px;
+    padding: 50px 100px;
+    display: block;
+    background-color: #6a5acd;
+
+}
+
+
+.greeting{
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 15px;
+
+
+}
+
+
+
+.footer{
+    margin-top: 15px;
+    text-align: center;
+    font-size: 18px;
+
+}
+.signUp > a{
+    color: white;
+    transition: color 0.2s ease-in-out;
+}
+.signUp > a:hover{
+    color: #ddd
+}
+
+.error{
+    text-align: center;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    opacity: 0;
+    animation-name: appear;
+    animation-duration: 0.35s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.errorInput{
+    border: 1px solid #842029;
+}
+.errorInput::placeholder{
+    color: #842029;
+}
+.errorInput:focus{
+
+    outline-color: #842029;
+    outline-width: 2;
+}
+
+
+
+
+
+@keyframes appear {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+@media screen and (max-width: 767px){
+    .footer{
+        font-size: 14px;
+    }
+    .footer span{
+        display: block;
+    }
+    .container {
+        padding: 25px 50px;
+    }
+}
