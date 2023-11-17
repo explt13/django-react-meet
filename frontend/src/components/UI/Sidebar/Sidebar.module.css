@@ -1,0 +1,60 @@
+.sidebar{
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    backdrop-filter: saturate(40%);
+}
+
+.sidebar.active{
+    display: flex;
+    justify-content: right;
+    animation: backgroundOpen 0.35s ease-in-out forwards
+}
+
+.sidebar.closing{
+    animation: backgroundClose 0.35s ease-in-out forwards /* have time to finish animation because of delay of setTimeout */
+}
+
+.content{
+    width: 300px;
+    background-color: #32363a;
+    box-shadow: 0px 0px 30px rgba(106, 91, 205, 0.3);
+    border-top-left-radius: 24px;
+    border-bottom-left-radius: 24px;
+    animation: open forwards 0.35s ease-in-out; /* animation only for content not for whole sidebar */
+}
+
+.content.inactive{
+    animation: close 0.35s ease-in-out forwards;
+}
+
+
+.closeBtn{
+    position: absolute;
+    right: 20px;
+    top: 10px   
+}
+
+
+@keyframes open {
+    from{transform: translateX(300px); }
+    to{transform: translateX(0px); }
+}
+@keyframes close {
+    from {transform: translateX(0); }
+    to {transform: translateX(300px); }
+  }
+  
+@keyframes backgroundOpen{
+    from{opacity: 0;}
+    to{opacity: 1;}
+}
+@keyframes backgroundClose{
+    from{opacity: 1;}
+    to{opacity: 0;}
+}
+
+

@@ -2,7 +2,9 @@
     color: #6a5acd;
     font-size: 32px;
     transition: color 0.2s ease-in-out;
-    margin-right: 20px;
+    margin-right: 10px;
+    margin-left: 10px;
+    cursor: pointer;
 }
 
 .icon:hover{

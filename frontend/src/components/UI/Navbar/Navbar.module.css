@@ -1,9 +1,16 @@
 .container{
-    padding: 10px 30px;
+    padding: 10px 20px;
     display: flex;
     background-color: #32363a;
     justify-content: space-between;
 }
 
+.logout {
+    height: max-content;
+    margin-top: 7px
+}
 
+.brand {
+    font-size: 36px;
 
+}

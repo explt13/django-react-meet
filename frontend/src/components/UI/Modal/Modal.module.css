@@ -1,13 +1,11 @@
 .modal {
-    visibility: hidden;
+    display: none;
     position: fixed;
     top: 0px;
     bottom: 0;
     right: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.3);
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
     z-index: 2;
 }
 
@@ -15,13 +13,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 1;
-    visibility: visible;
+    animation: open 0.2s forwards ease-in-out
 }
 
 .modal.closing {
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
+    animation: close 0.2s forwards ease-in-out
 }
 
 
@@ -35,10 +31,13 @@
 
 }
 
-
+@keyframes close{
+    from{opacity: 1;}
+    to{opacity: 0;}
+}
 
 @keyframes open{
-    from{background-color: rgba(0, 0, 0, 0);}
-    to{background-color: rgba(0, 0, 0, 0.3);}
+    from{opacity: 0;}
+    to{opacity: 1;}
 }
 

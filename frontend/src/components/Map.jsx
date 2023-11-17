@@ -11,7 +11,7 @@ import CustomIcon from './UI/CustomIcon/CustomIcon'
 import { faExpand } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const Map = () => {
+const Map = ({readyToRender}) => {
   const [position, setPosition] = useState(null)
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -29,6 +29,8 @@ const Map = () => {
       })
     }
     getLocation()
+
+
     
   }, [])
 
@@ -50,17 +52,17 @@ const Map = () => {
 
 
   return (
-    isLoading
+    isLoading || error || !readyToRender
     ?
     <Loader />
     :
     <div className={[classes.wrapper, 'container'].join(' ')}>
-      <MapContainer center={currentCoords} zoom={13} scrollWheelZoom={false} className={classes.map} attributionControl={false}>
+      <MapContainer  center={currentCoords} zoom={13} scrollWheelZoom={false} className={classes.map} attributionControl={false}>
         <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <FullscreenControl forceSeparateButton={true} content={<i></i>} position='topright'/>
+        <FullscreenControl forceSeparateButton={true} content='[ &nbsp&nbsp]'position='topleft'/>
         {markers.map((marker, index) => (
           <Marker  key={index} position={marker.position} icon={marker.icon} draggable={marker.draggable}>
             <Popup>
