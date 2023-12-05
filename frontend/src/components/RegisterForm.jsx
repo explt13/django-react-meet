@@ -3,20 +3,17 @@ import CustomInput from './UI/CustomInput/CustomInput'
 import CustomButton from './UI/CustomButton/CustomButton'
 import { Link } from 'react-router-dom'
 import UserService from '../API/UserService'
-import classes from '../styles/LoginReg.module.css'
+import classes from './styles/LoginReg.module.css'
 import AuthContext from '../context/AuthContext'
 import UserContext from '../context/UserContext'
 
 const RegisterForm = () => {
     const {isAuth, setIsAuth, csrftoken} = useContext(AuthContext)
-    const {userInfromation, setUserInformation} = useContext(UserContext)
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
     const [confirmation, setConfirmation] = useState('')
     const [errors, setErrors] = useState({})
-
-    const errStyle = classes.errorInput
 
     const usernameHandler = (e) => {
         setUsername(e.target.value)
@@ -42,17 +39,16 @@ const RegisterForm = () => {
             password: password,
             confirmation: confirmation
             }, csrftoken)
-            setIsAuth(true)
-            setUserInformation(response.data)
-            localStorage.setItem('auth', 'true')
+
             setUsername('')
             setEmail('')
             setPassword('')
             setConfirmation('')
+            
+            setIsAuth(true)
+            localStorage.setItem('auth', 'true')
+            localStorage.setItem('username', username)
 
-            const getInfo = await UserService.getUser()
-            setUserInformation(getInfo)
-            localStorage.setItem('user', JSON.stringify(getInfo))
 
         } catch(e) {
             if (e.response.data.username){
@@ -82,10 +78,10 @@ const RegisterForm = () => {
             </div>
             
             <div className={classes.form}>
-                <CustomInput className={errors.username ? errStyle : ''} type='text' placeholder={errors.username ? errors.username : 'Username'} value={username} onChange={(e) => {usernameHandler(e)}} />
-                <CustomInput className={errors.email ? errStyle : ''} type='email' placeholder={errors.email ? errors.email : 'Email'} value={email} onChange={(e) => {emailHandler(e)}} />
-                <CustomInput className={errors.password ? errStyle : ''} type='password' placeholder={errors.password ? errors.password : 'Password'} value={password} onChange={(e) => {passwordHandler(e)}} />
-                <CustomInput className={errors.password ? errStyle : ''} type='password' placeholder='Confirm password' value={confirmation} onChange={(e) => {confirmationHandler(e)}} />
+                <CustomInput className={errors.username ? classes.errorInput : ''} type='text' placeholder={errors.username ? errors.username : 'Username'} value={username} onChange={(e) => {usernameHandler(e)}} />
+                <CustomInput className={errors.email ? classes.errorInput : ''} type='email' placeholder={errors.email ? errors.email : 'Email'} value={email} onChange={(e) => {emailHandler(e)}} />
+                <CustomInput className={errors.password ? classes.errorInput : ''} type='password' placeholder={errors.password ? errors.password : 'Password'} value={password} onChange={(e) => {passwordHandler(e)}} />
+                <CustomInput className={errors.password ? classes.errorInput : ''} type='password' placeholder='Confirm password' value={confirmation} onChange={(e) => {confirmationHandler(e)}} />
                 <CustomButton
                     disabled={!username || !password || !email || !confirmation}
                     onClick={registerUser}>Register
@@ -93,7 +89,7 @@ const RegisterForm = () => {
             </div>
             <div className={classes.footer}>
                 <div>
-                    Already have an account? <span className={classes.signUp}><Link to='/login'>sign in</Link></span>
+                    Already have an account? <span className={classes.switchPages}><Link to='/login'>sign in</Link></span>
                 </div>
             </div>
         </div>

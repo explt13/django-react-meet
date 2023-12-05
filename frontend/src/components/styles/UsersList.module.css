@@ -1,0 +1,67 @@
+.userContainer{
+    display: grid;
+    grid-template-columns: var(--map-width, 124px) auto max-content;
+    grid-template-areas: 'image information additional';
+    padding-bottom: 20px;
+    padding-left: 5px;
+    padding-top: 30px;
+    column-gap: 30px;
+    border-radius: 10px;
+    background-color:#212529;
+    
+}
+
+.unSelectedUser{
+    cursor: pointer;
+    background-color: #32363a;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.unSelectedUser:hover{
+    background-color: rgba(67, 71, 76, 0.5);
+}
+.selectedUser{
+    cursor: pointer;
+    background-color: #43474b!important;
+}
+
+
+.userImage{
+    width: 100%;
+    grid-area: image;
+}
+
+.userImage > img {
+    width: 100%;
+}
+
+.information{
+    margin-top: var(--map-marginTop, 10px);
+    grid-area: information;
+    font-size: var(--map-fontSize, 24px)
+}
+
+
+.userUsername > a{
+    font-size: var(--map-fontSize, 28px);
+    cursor: pointer;
+    text-decoration: none;
+    color: #ddd
+}
+.userUsername > a:hover{
+    color: #bbb
+}
+
+.additional{
+    grid-area: additional;
+}
+
+@media screen and (max-width: 767px) {
+    .userContainer{
+        grid-template-columns: 64px auto max-content;
+        column-gap: 10px;
+    }
+    .userUsername > a{
+        font-size: 22px;
+    }
+}

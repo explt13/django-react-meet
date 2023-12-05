@@ -38,11 +38,11 @@
     font-size: 18px;
 
 }
-.signUp > a{
+.switchPages > a{
     color: white;
     transition: color 0.2s ease-in-out;
 }
-.signUp > a:hover{
+.switchPages > a:hover{
     color: #ddd
 }
 
@@ -58,7 +58,7 @@
 }
 
 .errorInput{
-    border: 1px solid #842029;
+    border-bottom: 1px solid #842029;
 }
 .errorInput::placeholder{
     color: #842029;

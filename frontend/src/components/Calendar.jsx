@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import classes from '../styles/Calendar.module.css'
+import classes from './styles/Calendar.module.css'
 import { getDays, getRowsByDays, getDate, getThisDay } from '../utils/calendarUtil'
 
 const Calendar = () => {

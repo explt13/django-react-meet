@@ -1,0 +1,42 @@
+.mapContainer{
+    height: 600px;
+    width: 1400px;
+    display: flex;
+    padding: 0px;
+}
+
+.friendsContainer{
+    padding-top: 10px;
+    width: 300px;
+    overflow-y: auto;
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #ddd;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: #32363a;
+}
+
+.chosen{
+    background-color: slategray;
+    border-radius: 10px;
+}
+
+@media screen and (max-width: 767px) {
+    .mapContainer{
+
+        height: 500px;
+        flex-direction: column;
+    }
+    .friendsContainer{
+        border-radius: 0px;
+        height: 240px;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .mapContainer{
+        max-width: 300px;
+    }
+}

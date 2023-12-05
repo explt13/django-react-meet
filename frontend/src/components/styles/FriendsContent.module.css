@@ -1,0 +1,43 @@
+.wrapper{
+    display: grid;
+    column-gap: 50px;
+    grid-template-columns: max-content auto;
+    grid-template-areas: 'navigate content';
+
+}
+
+.content{
+    margin-top: 30px;
+    grid-area: content;
+}
+
+.navigate {
+    margin-top: 30px;
+    grid-area: navigate;
+    height: 100%;
+
+}
+.navigate > div{
+    position: sticky;
+    top: 30px;
+
+
+
+}
+.navigateItem{
+    cursor: pointer;
+    margin-left: 50px;
+    margin-bottom: 10px;
+}
+
+
+@media screen and (max-width: 767px) {
+    .wrapper {
+        column-gap: 10px;
+        grid-template-columns: auto;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+        'navigate'
+        'content';
+    }
+}

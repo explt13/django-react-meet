@@ -10,3 +10,10 @@
 .icon:hover{
     color: #ddd;
 }
+
+
+@media screen and ( max-width: 767px){
+    .icon{
+        font-size: 20px;
+    }
+}

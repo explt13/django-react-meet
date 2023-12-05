@@ -10,3 +10,11 @@
     font-size: 24px;
 
 }
+.link{
+    text-decoration: none;
+    color: #ddd
+}
+.link:hover{
+    color: #ccc
+}
+

@@ -3,10 +3,12 @@ import {Routes, Route, BrowserRouter} from 'react-router-dom'
 import { privateRoutes, publicRoutes } from '../router'
 import Loader from './UI/Loader/Loader'
 import AuthContext from '../context/AuthContext'
+import Navbar from './UI/Navbar/Navbar'
 
 
 const AppRouter = () => {
     const {isAuth, isLoading} = useContext(AuthContext)
+
     if (isLoading) {
         return <Loader />
     }
@@ -14,6 +16,7 @@ const AppRouter = () => {
         isAuth
         ?
         <BrowserRouter>
+            <Navbar />
             <Routes>
                 {privateRoutes.map((route) => (
                     <Route

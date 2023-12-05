@@ -2,7 +2,7 @@ import Cookies from 'js-cookie'
 import React, { createContext, useEffect, useState } from 'react'
 import useInit from '../hooks/Init'
 
-export const AuthContext = createContext(null)
+const AuthContext = createContext(false)
 
 export const AuthProvider = ({children}) => {
     const [isAuth, setIsAuth] = useState(false)

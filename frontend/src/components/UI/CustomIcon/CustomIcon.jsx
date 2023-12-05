@@ -3,7 +3,7 @@ import classes from './CustomIcon.module.css'
 
 const CustomIcon = ({children, ...props}) => {
   return (
-    <i className={classes.icon}>
+    <i {...props} className={classes.icon}>
         {children}
     </i>
   )

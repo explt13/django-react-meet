@@ -9,3 +9,18 @@ body{
     background-color: #212529;
     color: #ddd
 }
+
+
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+
+
+
+::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 10px;
+}

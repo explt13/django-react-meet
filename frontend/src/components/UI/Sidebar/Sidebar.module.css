@@ -6,6 +6,7 @@
     left: 0;
     right: 0;
     backdrop-filter: saturate(40%);
+    z-index: 2;
 }
 
 .sidebar.active{

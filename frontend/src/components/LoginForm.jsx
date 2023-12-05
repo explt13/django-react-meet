@@ -3,19 +3,20 @@ import CustomInput from './UI/CustomInput/CustomInput'
 import { Link } from 'react-router-dom'
 import CustomButton from './UI/CustomButton/CustomButton'
 import UserService from '../API/UserService'
-import classes from '../styles/LoginReg.module.css'
+import classes from './styles/LoginReg.module.css'
 import AuthContext from '../context/AuthContext'
 import UserContext from '../context/UserContext'
-
+import Loader from './UI/Loader/Loader'
 
 const LoginForm = () => {
     const {isAuth, setIsAuth, csrftoken} = useContext(AuthContext)
-    const {userInformation, setUserInformation} = useContext(UserContext)
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
+
     const errorClassList = ['alert', 'alert-danger', classes.error]
-    
+
     const usernameHandler = (e) => {
         setUsername(e.target.value)
     }
@@ -25,6 +26,7 @@ const LoginForm = () => {
     }
 
     const loginUser = async () => {
+        setIsLoading(true)
         try{
             await UserService.loginUser({
             username: username,
@@ -34,21 +36,23 @@ const LoginForm = () => {
             
             setUsername('')
             setPassword('')
-            setIsAuth(true)
             
-            const getInfo = await UserService.getUser()
-            setUserInformation(getInfo)
-            localStorage.setItem('user', JSON.stringify(getInfo))
-          
-
+            setIsAuth(true)
+            localStorage.setItem('username', username)
+            
 
         } catch (e) {
             setError(e.response.data)
+        } finally {
+            setIsLoading(false)
         }
     }
     
   return (
-    <div className={classes.wrapper}>
+    isLoading
+    ? <Loader />
+    :
+    
         <div className={classes.container}>
             <div className={classes.greeting}>
                 Login
@@ -64,11 +68,11 @@ const LoginForm = () => {
             </div>
             <div className={classes.footer}>
                 <div>
-                    Don't have an account? <span className={classes.signUp}><Link to='/register'>sign up</Link></span>
+                    Don't have an account? <span className={classes.switchPages}><Link to='/register'>sign up</Link></span>
                 </div>
             </div>
         </div>
-    </div>
+
   )
 }
 

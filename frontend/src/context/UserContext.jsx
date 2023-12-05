@@ -1,15 +1,37 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import UserService from '../API/UserService'
+import AuthContext from './AuthContext'
 
 const UserContext = createContext(null)
 
 
 export const UserProvider = ({children}) => {// otherwise props.children
-    const [userInformation, setUserInformation] = useState({})
+    const {isAuth} = useContext(AuthContext)
+    const [thisUser, setThisUser] = useState(null)
+    const [friends, setFriends] = useState(null)
+
+    useEffect(() => {
+      const username = localStorage.getItem('username')
+      console.log(isAuth)
+      if (username && isAuth){
+        const fetchData = async () => {
+          const userData = await UserService.getUser(username) // ? set to localStorage?
+          setThisUser(userData)
+
+          const friendsData = await UserService.getFriends(username)
+          setFriends([...friendsData])
+        }
+        fetchData()
+      }
+  
+    }, [isAuth])
+  
 
     const context = {
-        userInformation,
-        setUserInformation
+        thisUser,
+        setThisUser,
+        friends,
+        setFriends
     }
 
 

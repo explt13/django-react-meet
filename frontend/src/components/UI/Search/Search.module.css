@@ -1,0 +1,53 @@
+.search{
+    position: relative;
+    display: inline-block;
+    animation: slideSearchOpen 0.5s forwards ease-in-out;
+}
+
+.search.inactive{
+    animation: slideSearchClose 0.5s forwards ease-in-out
+}
+
+
+.buttons{
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    animation: buttonsOpen 0.7s forwards ease-in;
+}
+.buttons.inactive{
+    animation: buttonsClose 0.3s forwards ease-in
+}
+
+@keyframes slideSearchOpen {
+    from{width: 0px; opacity: 0;}
+    to{width: 320px; opacity: 1;}
+}
+
+@keyframes slideSearchClose{
+    from{width: 320px; opacity: 1;}
+    to{width: 0px; opacity: 0;}
+}
+
+@keyframes buttonsClose{
+    from{opacity: 1;}
+    to{opacity: 0;}
+}
+
+@keyframes buttonsOpen{
+    from{opacity: 0;}
+    to{opacity: 1;}
+}
+
+@media screen and (max-width: 767px){
+    @keyframes slideSearchOpen {
+        from{width: 0px; opacity: 0;}
+        to{width: 160px; opacity: 1;}
+    }
+    
+    @keyframes slideSearchClose{
+        from{width: 160px; opacity: 1;}
+        to{width: 0px; opacity: 0;}
+    }
+
+}

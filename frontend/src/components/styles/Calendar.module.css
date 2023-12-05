@@ -31,7 +31,7 @@
     .container{
         grid-template-columns: repeat(auto-fill, 80px);
         max-width: 550px;
-        max-height: 550px;
+        max-height: 400px;
     }
     .day{
         line-height: 70px;

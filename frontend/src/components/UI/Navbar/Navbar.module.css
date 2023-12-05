@@ -3,14 +3,16 @@
     display: flex;
     background-color: #32363a;
     justify-content: space-between;
+
 }
 
 .logout {
     height: max-content;
     margin-top: 7px
 }
-
-.brand {
-    font-size: 36px;
-
+.brand{
+    height: 48px;
+    width: 48px;
+    border-radius: 100px;
+    line-height: 50px;
 }
