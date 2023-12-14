@@ -10,11 +10,11 @@ const MapComp = ({ readyToRender }) => {
 
     
     const handleSeletedUsers = (user) => {
-        const isSelected = selectedUsers.includes(user.username)
+        const isSelected = selectedUsers.find(selectedUser => selectedUser.username === user.username)
         if (!isSelected){
-            setSelectedUsers(prevUsers => [...prevUsers, user.username])
+            setSelectedUsers(prevUsers => [...prevUsers, {username: user.username, is_accepted: false}])
         } else {
-            setSelectedUsers(selectedUsers.filter(selectedUser => selectedUser !== user.username))
+            setSelectedUsers(selectedUsers.filter(selectedUser => selectedUser.username !== user.username))
         }
         
     }

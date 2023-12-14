@@ -6,17 +6,20 @@ import classes from './styles/Map.module.css'
 import Loader from './UI/Loader/Loader'
 import { FullscreenControl } from 'react-leaflet-fullscreen'
 import LocationMarkers from './LocationMarkers'
-import CustomInput from './UI/CustomInput/CustomInput'
+import { getFullDate } from '../utils/calendarUtil'
 import AdditionalControl from './AdditionalControl'
+import L, { map } from 'leaflet'
+
+
 
 
 const Map = ({readyToRender, selectedUsers}) => {
-  const [popupText, setPopupText] = useState(null)
+  const [minDate, maxDate] = getFullDate()
   const [position, setPosition] = useState(null)
+  const [eventInformation, setEventInformation] = useState({text: '', time: minDate})
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [canAddMarkers, setCanAddMarkers] = useState(false)
-  const [canDeleteMarkers, setCanDeleteMarkers] = useState(false)
 
 
   useEffect(() => {
@@ -33,6 +36,8 @@ const Map = ({readyToRender, selectedUsers}) => {
       })
     }
     getLocation()
+
+
   }, [])
   
 
@@ -50,16 +55,13 @@ const Map = ({readyToRender, selectedUsers}) => {
         />
 
         <FullscreenControl forceSeparateButton={true} content='[ &nbsp&nbsp]'position='topleft'/>
-        <LocationMarkers selectedUsers={selectedUsers} canAddMarkers={canAddMarkers} setCanAddMarkers={setCanAddMarkers} canDeleteMarkers={canDeleteMarkers} popupText={popupText}/>
+        <LocationMarkers selectedUsers={selectedUsers} canAddMarkers={canAddMarkers} setCanAddMarkers={setCanAddMarkers} eventInformation={eventInformation}/>
       </MapContainer>
-      
+
       <AdditionalControl
       canAddMarkers={canAddMarkers}
       setCanAddMarkers={setCanAddMarkers}
-      canDeleteMarkers={canDeleteMarkers}
-      setCanDeleteMarkers={setCanDeleteMarkers}
-      popupText={popupText}
-      setPopupText={setPopupText}
+      setEventInformation={setEventInformation}
       mapID={'myMap'}/>
     </div>
   )

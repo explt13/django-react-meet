@@ -1,3 +1,11 @@
+:root{
+  --accept-green: #31af40;
+  --cancel-red: #da2b1d;
+  --main-black: #212529;
+  --main-font-color: #ddd;
+  --main-purple: #6a5bcd;
+}
+
 *{
     margin: 0;
     padding: 0;
@@ -24,3 +32,8 @@ body{
   background: #ddd;
   border-radius: 10px;
 }
+
+.wrapper{
+  margin-top: 40px;
+}
+

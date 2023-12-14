@@ -7,7 +7,7 @@ import UserContext from '../../../context/UserContext'
 import Calendar from '../../Calendar'
 import Modal from '../Modal/Modal'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCalendar, faMapLocationDot, faBars, faHouse, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons'
+import {faCalendar, faMapLocationDot, faBars, faHouse, faSearch, faTimes, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import Map from '../../Map'
 import CustomIcon from '../CustomIcon/CustomIcon'
 import Sidebar from '../Sidebar/Sidebar'
@@ -24,27 +24,15 @@ const Navbar = () => {
   const { friends } = useContext(UserContext)
   const [sidebar, setSidebar] = useState(false)
   const [calendarModal, setCalendarModal] = useState(false)
-  const [mapModal, setMapModal] = useState(false)
-  const [readyToRender, setReadyToRender] = useState(false)
   const [searchValue, setSearchValue] = useState('')
-
-  const handleMapOpen = () => {
-    const timeoutId = setTimeout(() => { // when modal have been opened then setTimeout
-      setReadyToRender(true)
-    }, 0)
-    setMapModal(true)
-    return () => clearTimeout(timeoutId)
-  }
 
 
   const navigate = useNavigate()
-
   const handleSearch = async (e) => {
     if (e.key === 'Enter' || e.type === 'click'){
         navigate(`/search?username=${searchValue}`) // hardcoded as well need to improve
     }
   }
-
 
 
   return (
@@ -55,10 +43,8 @@ const Navbar = () => {
         <Modal visible={calendarModal} setVisible={setCalendarModal}>
           <Calendar />
         </Modal>
-        <CustomIcon><FontAwesomeIcon icon={faMapLocationDot} onClick={handleMapOpen}/></CustomIcon>
-        <Modal visible={mapModal} setVisible={setMapModal}>
-          <MapComp readyToRender={readyToRender}/>
-        </Modal>
+        <Link to='/map'><CustomIcon><FontAwesomeIcon icon={faMapLocationDot}/></CustomIcon></Link>
+        <Link to='/mail'><CustomIcon><FontAwesomeIcon icon={faEnvelope} /></CustomIcon></Link>
         <Search qty={1} placeholder={'user'} handleSearch={handleSearch} setSearchValue={setSearchValue} searchValue={searchValue}/>
         
       </div>

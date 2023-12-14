@@ -11,7 +11,7 @@ const MainPage = () => {
 
   
   return (
-    <div className='container'>
+    <div className='container wrapper'>
       MAIN PAGE
     </div>
   )

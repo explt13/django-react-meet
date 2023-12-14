@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import classes from './styles/FriendsContent.module.css'
-import UserService from '../API/UserService'
+import FriendService from '../API/FriendService'
 import { Link, useParams } from 'react-router-dom'
 import Loader from './UI/Loader/Loader'
 import UsersList from './UsersList'
@@ -39,9 +39,9 @@ const FriendsContent = () => {
 
 
 
-  const fetchAllFriends = useMemo(() => () => UserService.getFriends(params.username), [params.username])
-  const fetchSentRequests = useMemo(() => () => UserService.getSentRequests(params.username), [params.username])
-  const fetchReciviedRequests = useMemo(() => () => UserService.getRecievedRequests(params.username), [params.username])
+  const fetchAllFriends = useMemo(() => () => FriendService.getFriends(params.username), [params.username]) // implicit return
+  const fetchSentRequests = useMemo(() => () => FriendService.getSentRequests(params.username), [params.username])
+  const fetchReciviedRequests = useMemo(() => () => FriendService.getRecievedRequests(params.username), [params.username])
 
   const handleAllFriends = async () => {
     fetchData(fetchAllFriends)
@@ -58,17 +58,17 @@ const FriendsContent = () => {
   }
 
   const handleAccept = async (friendshipID) => {
-    await UserService.acceptFriend(thisUser.username, friendshipID, csrftoken)
+    await FriendService.acceptFriend(thisUser.username, friendshipID, csrftoken)
     setResultList(resultList.filter(friend => friend.friendship_id !== friendshipID))
   }
 
   const handleReject = async (friendshipID) => {
-    await UserService.rejectFriend(thisUser.username, friendshipID, csrftoken)
+    await FriendService.rejectFriend(thisUser.username, friendshipID, csrftoken)
     setResultList(resultList.filter(friend => friend.friendship_id !== friendshipID))
   }
 
   const handleDelete = async (deleteUsername) => {
-    await UserService.deleteFriend(thisUser.username, deleteUsername, csrftoken)
+    await FriendService.deleteFriend(thisUser.username, deleteUsername, csrftoken)
     setResultList(resultList.filter(friend => friend.username !== deleteUsername))
   }
 

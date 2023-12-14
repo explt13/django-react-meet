@@ -11,7 +11,7 @@ const UsersList = ({resultList, tab, forMap, selectedUsers, handleAccept, handle
         <div>
             {resultList.map(user => (
                 <div key={user.username}>
-                    <div className={[classes.userContainer, forMap && (selectedUsers.includes(user.username) ? classes.selectedUser : classes.unSelectedUser)].join(' ')} style={{
+                    <div className={[classes.userContainer, forMap && (selectedUsers.find(selectedUsers => selectedUsers.username === user.username) ? classes.selectedUser : classes.unSelectedUser)].join(' ')} style={{
                         '--map-width': forMap && '64px',
                         }}
                         onClick={forMap ? () => onUserClick(user) : undefined}>

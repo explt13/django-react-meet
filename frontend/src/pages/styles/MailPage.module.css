@@ -1,0 +1,58 @@
+.mailContainer{
+    margin-top: 10px;
+}
+
+
+.mailItemContainer{
+    padding: 10px 20px;
+    border: 3px #6a5bcd solid;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+
+.header{
+    font-size: 20px;
+}
+
+.content{
+    margin-top: 3px;
+}
+
+.from, .to{
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.deleteEmail{
+    position: absolute;
+    right: 0;
+}
+.deleteEmail > i{
+    color: white;
+    font-size: 20px;
+}
+.deleteEmail > i:hover{
+    color: #ee5544
+}
+hr{
+    margin: 5px 0px 10px;
+}
+
+.sent{
+    color: grey;
+    margin-top: 10px;
+}
+
+.sortContainer > select{
+    margin-right: 5px;
+}
+
+.controlPanel{
+    display: flex;
+    justify-content: space-between;
+}
+
+.sortContainer{
+    align-self: center;
+}

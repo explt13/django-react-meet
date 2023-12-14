@@ -40,3 +40,30 @@ export function getThisDay() {
     const day = new Date().getDate()
     return day
 }
+
+
+export function getFullDate() {
+    const date = new Date()
+    let day = date.getDate();
+    let month = date.getMonth() + 1; // Месяцы начинаются с 0, поэтому добавляем 1
+    let year = date.getFullYear();
+
+
+    if (month < 10){
+        month = '0' + String(month)
+    }
+    if (day < 10){
+        day = '0' + String(day)
+    }
+
+    const minDate = `${year}-${month}-${day}`
+    
+    month += 1
+    if (month === 13){
+        year += 1
+        month = '01'
+    }
+    const maxDate = `${year}-${month}-${day}`
+
+    return [minDate, maxDate]
+}

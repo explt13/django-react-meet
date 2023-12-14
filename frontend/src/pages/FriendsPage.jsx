@@ -6,7 +6,7 @@ import classes from './styles/FriendsPage.module.css'
 const FriendsPage = () => {
 
   return (
-    <div className='container'>
+    <div className='container wrapper'>
       <FriendsContent />
     </div>
   )

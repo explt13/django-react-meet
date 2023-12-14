@@ -1,0 +1,53 @@
+.container{
+    width: 800px;
+    height: 500px;
+    background-color: #32363a;
+    border-radius: 10px;
+    display: grid;
+    justify-content: center;
+    grid-template-rows: 100px auto 80px;
+
+
+}
+
+.heading{
+    font-size: 36px;
+    justify-self: center;
+    align-self: center;
+}
+.form{
+    margin-top: 25px;
+    width: 500px;
+}
+
+.dateInput{
+    margin-top: 10px;
+    height: 30px;
+
+}
+
+.confirmation{
+    display: flex;
+    justify-content: center;
+    gap: 70px
+
+}
+
+.cancelPopup{
+    font-size: 40px;
+    height: min-content;
+    color: var(--cancel-red)
+}
+
+.acceptPopup{
+    font-size: 40px;
+    height: min-content;
+    color: var(--accept-green)
+}
+
+.acceptPopup:hover{
+    color: green
+}
+.cancelPopup:hover{
+    color: darkred
+}

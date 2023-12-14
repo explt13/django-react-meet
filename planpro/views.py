@@ -2,12 +2,13 @@ from django.contrib.auth import get_user_model, login, logout
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer, FriendshipSerializer, EventSerializer
+from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer, FriendshipSerializer, EventSerializer, MailSerializer
 from rest_framework import permissions, status
 from django.core.exceptions import ValidationError
 from django.middleware.csrf import get_token
-from .models import User, Friendship, Event
+from .models import User, Friendship, Event, Event_Recipient, Mail
 from django.http import JsonResponse
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class GetCsrf(APIView):
@@ -133,6 +134,8 @@ class FriendsView(APIView):
     def delete(self, request, username, delete_username):
         user = User.objects.get(username=username)
         delete_user = User.objects.get(username=delete_username)
+        user.recieved_events.filter(requester=delete_user).delete() # clear user's recieved events
+        delete_user.recieved_events.filter(requester=user).delete() # clear delete_user's recieved events 
         user.friends.remove(delete_user)
         return Response('friend has been deleted')
         
@@ -144,10 +147,13 @@ class SendFriendRequest(APIView):
     def post(self, request): # sent request
         data = request.data
         recipient = User.objects.get(username=data.get('username'))
+        
         if request.user.friends.filter(username=recipient).exists():
             return Response('already friends')
         
-        if not Friendship.objects.filter(requester=request.user, recipient=recipient).exists():    
+        if not Friendship.objects.filter(requester=request.user, recipient=recipient, status='pending').exists():
+            mail = Mail.objects.create(sender=request.user, header='Friends request', content=f'User {request.user.username} wants to be friedns', category='friends') 
+            mail.recipients.add(recipient)
             Friendship.objects.create(requester=request.user, recipient=recipient, status='pending')
             return Response('Friend request has been sent')
 
@@ -166,21 +172,32 @@ class EventSentView(APIView):
 
     def post(self, request):
         data = request.data
-        recipient = User.objects.filter(username__in=data.get('recipient_username'))
-        if not recipient.exists(): return Response('at least one user must be chosen')
+        print(data)
+        recipients = data.get('recipients')
+        recipients_array = [recipient['username'] for recipient in recipients]
+        recipients = User.objects.filter(username__in=recipients_array)
+        if not recipients.exists(): return Response('at least one user must be chosen')
 
         serializer = EventSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.validated_data['requester'] = request.user
             event = serializer.create(validated_data=serializer.validated_data)
-            event.recipient.add(*recipient) # need model for confirmation?
+            event.recipients.add(*recipients) # need model for confirmation?
+
+            mail = Mail.objects.create(sender=request.user, header='Event request', content=f'{data.get('text')} at {data.get('time')}', category='events')
+            mail.recipients.add(*recipients)
+
             return Response('event has been sent')
         return Response(serializer.errors)
     
     def delete(self, request):
-        data = request.query_params
-        event = Event.objects.get(marker_id=data.get('marker_id'))
-        event.delete()
+        try:
+            data = request.query_params
+            event = Event.objects.get(marker_id=data.get('marker_id'))
+            event.delete()
+        except ObjectDoesNotExist:
+            return Response('event has been deleted')
+
         return Response('event has been deleted')
 
 
@@ -199,7 +216,7 @@ class EventRecievedView(APIView):
         user = request.user
         event = Event.objects.get(marker_id=data.get('marker_id'))
         user.recieved_events.remove(event)
-        if not event.recipient.exists():
+        if not event.recipients.exists():
             event.delete()
         return Response('event rejected')
     
@@ -208,6 +225,29 @@ class EventRecievedView(APIView):
         data = request.data
         marker_id = data.get('marker_id')
         event = Event.objects.get(marker_id=marker_id)
-        event.is_accepted = True
-        event.save()
+        event_recipient = Event_Recipient.objects.get(event=event, recipient=user)
+        event_recipient.is_accepted = True
+        event_recipient.save()
+
         return Response('event accepted')
+
+
+
+
+class MailView(APIView):
+    def get(self, request):
+        recieved_emails = request.user.recieved_emails.all()
+        serializer = MailSerializer(recieved_emails, many=True)
+        return Response(serializer.data)
+    
+    def delete(self, request, method):
+        if method == 'delete':
+            email = request.query_params.get('email_id')
+            mail = Mail.objects.get(pk=email)
+            request.user.recieved_emails.remove(mail)
+            if not mail.recipients.exists():
+                mail.delete()
+            return Response('email has been deleted')
+        elif method == 'clear':
+            request.user.recieved_emails.clear() # if there is no recipients anymore?
+            return Response('mail has been cleared')

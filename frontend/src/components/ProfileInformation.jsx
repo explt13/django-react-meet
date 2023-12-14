@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import UserContext from '../context/UserContext'
 import classes from './styles/ProfileInformation.module.css'
 import { useParams } from 'react-router-dom'
-import UserService from '../API/UserService'
+import FriendService from '../API/FriendService'
 import Loader from './UI/Loader/Loader'
 import CustomButton from './UI/CustomButton/CustomButton'
 import AuthContext from '../context/AuthContext'
+import UserService from '../API/UserService'
 
 const ProfileInformation = () => {
     const {thisUser, setThisUser} = useContext(UserContext)
@@ -27,7 +28,7 @@ const ProfileInformation = () => {
     
 
     const handleAddFriend = async () => {
-        const data = await UserService.sendFriendRequest(user.username, csrftoken)
+        const data = await FriendService.sendFriendRequest(user.username, csrftoken)
         console.log(data)
     }
 

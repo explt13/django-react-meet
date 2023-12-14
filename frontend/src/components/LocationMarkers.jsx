@@ -6,36 +6,35 @@ import purpleMarker from './../media/img/purpleMarker.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import classes from './styles/LocationMarkers.module.css'
-import UserService from '../API/UserService'
+import EventService from '../API/EventService'
 import AuthContext from '../context/AuthContext'
 import UserContext from '../context/UserContext'
 import Loader from './UI/Loader/Loader'
 import { Link } from 'react-router-dom'
 import CustomButton from './UI/CustomButton/CustomButton'
 
-const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, canDeleteMarkers, popupText}) => {
+const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, eventInformation}) => {
     const [markers, setMarkers] = useState([]) // create two different states one for sent one for recieved
-    const [confirmMarker, setConfirmMarker] = useState(false)
     const [draggable, setDraggable] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const {csrftoken} = useContext(AuthContext)
     const {thisUser} = useContext(UserContext)
-    const popupRef = useRef(null)
     
 
     useEffect(() => {
         setIsLoading(true)
         const getEvents = async () => {
-            const sent_events = await UserService.getEvents('sent')
-            const recieved_events = await UserService.getEvents('recieved')
+            const sent_events = await EventService.getEvents('sent')
+            const recieved_events = await EventService.getEvents('recieved')
             setMarkers([...sent_events, ...recieved_events])
+
             setIsLoading(false)
         }
 
         getEvents()
         
     }, [])
-    console.log(markers)
+
 
     function defineMarker(color){
         const customIcon = new Icon({
@@ -51,32 +50,40 @@ const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, canDel
         
     }
     
-    const handleMarkerDelete = (e) => {
-        if (canDeleteMarkers){
-            setMarkers(markers.filter(marker => marker.marker_id !== e.target.options.id))
-        }
-    }
+
 
     const handleMarkerAccept = async (markerID, requester_username) => { // move to mapComp?
         if (thisUser.username === requester_username){
             const marker = markers.find(m => m.marker_id === markerID)
             const data = {
                 marker_id: marker.marker_id,
-                popup: marker.popup,
+                time: marker.time,
+                text: marker.text,
                 latitude: marker.latitude,
                 longitude: marker.longitude,
-                recipient_username: selectedUsers,
+                recipients: selectedUsers,
                 requester_username: thisUser.username
             }
-            const response = await UserService.sendEvent(data, csrftoken)
-            setConfirmMarker(true)
+            const response = await EventService.sendEvent(data, csrftoken)
             setDraggable(false)
+            setMarkers(prevMarkers => prevMarkers.map(marker => marker.marker_id === markerID ? {...marker, is_confirmed: true} : marker))
             console.log(response)
         } else {
-            setConfirmMarker(true)
-            const response = await UserService.acceptEvent(markerID, csrftoken)
+            const response = await EventService.acceptEvent(markerID, csrftoken)
+            setMarkers(prevMarkers => prevMarkers.map(marker => 
+            marker.marker_id === markerID
+                ? {
+                    ...marker,
+                    recipients: marker.recipients.map(recipient => 
+                        recipient.username === thisUser.username
+                        ? {...recipient, is_accepted: true}
+                        : recipient
+                    )
+                }
+                : marker))
+
+            console.log(response)
         }
-        setMarkers(prevMarkers => prevMarkers.map(marker => marker.marker_id === markerID ? {...marker, is_accepted: true} : marker))
         
     }
 
@@ -84,16 +91,20 @@ const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, canDel
         if (thisUser.username === requester_username){
             setMarkers(markers.filter(marker => marker.marker_id !== markerID)) // automically set
         } else {
-            const response = await UserService.rejectEvent(markerID, csrftoken)
+            const response = await EventService.rejectEvent(markerID, csrftoken)
             setMarkers(markers.filter(marker => marker.marker_id !== markerID))
             console.log(response)
         }
         
     }
 
-    const handleCancelEvent = async(markerID) => { // automically set
-        const response = await UserService.cancelEvent(markerID, csrftoken)
+    const handleCancelEvent = async (markerID) => { // automically set
+    
+        const response = await EventService.cancelEvent(markerID, csrftoken)
+        setMarkers(markers.filter(marker => marker.marker_id !== markerID))
         console.log(response)
+
+        
     }
 
 
@@ -103,12 +114,13 @@ const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, canDel
                 const marker = {
                     marker_id: Date.now() + Math.random(),
                     requester_username: thisUser.username,
-                    recipient_username: selectedUsers,
+                    recipients: selectedUsers,
                     latitude: e.latlng.lat,
                     longitude: e.latlng.lng,
                     icon: defineMarker(purpleMarker),
-                    is_accepted: false,
-                    popup: popupText || 'See you soon',
+                    text: eventInformation.text || 'See you soon',
+                    time: eventInformation.time,
+                    is_confirmed: false,
                 }
                 setMarkers(prevMarkers => [...prevMarkers, marker])
                 setCanAddMarkers(false)
@@ -129,23 +141,25 @@ const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, canDel
     :
     <React.Fragment>
         {markers.map(marker =>
+        {
+        const recipient = marker.recipients.find(recipient => recipient.username === thisUser.username)
+        return (
         <Marker
             id={marker.marker_id}
-            eventHandlers={{dragend: handleMarkerDrag, click: handleMarkerDelete}}
+            eventHandlers={{dragend: handleMarkerDrag}}
             key={marker.marker_id} position={[marker.latitude, marker.longitude]}
             icon={defineMarker(thisUser.username === marker.requester_username ? purpleMarker : redMarker)}
             draggable={!marker.event_id && draggable}
             >
-            <Popup ref={popupRef}>
+            <Popup>
                 {
-                ((marker.event_id && !(thisUser.username === marker.requester_username) && !marker.is_accepted) ||
-                (!marker.event_id && (thisUser.username === marker.requester_username && !marker.is_accepted))) && // for every user is_accepted
+                ((marker.event_id && !(thisUser.username === marker.requester_username) && !recipient.is_accepted) || // if user is recipient
+                (!marker.event_id && (thisUser.username === marker.requester_username)) && !marker.is_confirmed) && // if user is requester and not confirmed marker yet
                 <div className={classes.choice}> 
-                    <FontAwesomeIcon icon={faCheck} style={{color: "#31af40",}} onClick={() => handleMarkerAccept(marker.marker_id, marker.requester_username)}/>
-                    <FontAwesomeIcon icon={faXmark} style={{color: "#d72828",}} onClick={() => handleMarkerReject(marker.marker_id, marker.requester_username)}/>
+                    <FontAwesomeIcon title={'decline'} icon={faXmark} style={{color: 'var(--cancel-red)'}} onClick={() => handleMarkerReject(marker.marker_id, marker.requester_username)}/>
+                    <FontAwesomeIcon title={recipient ? 'accept' : 'confirm'} icon={faCheck} style={{color: 'var(--accept-green)'}} onClick={() => handleMarkerAccept(marker.marker_id, marker.requester_username)}/>
                 </div>
                 }
-                
 
                 <div className={classes.eventInformationContainer}>
                     {marker.event_id &&
@@ -160,31 +174,35 @@ const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, canDel
                     </div>
                     <div className={classes.recipient}>
                         <strong>Recipients: </strong>
-                        {marker.recipient_username.map(username => 
-                        <span key={username}>
-                            {thisUser.username === username
+                        {marker.recipients.map(recipient => 
+                        <span key={recipient.username}>
+                            {thisUser.username === recipient.username
                             ? <strong>You</strong>
-                            : <Link to={`/user/${username}`}>{username}</Link>
+                            : <Link to={`/user/${recipient.username}`}>{recipient.username}</Link>
                             }
                             &nbsp;
                         </span>
                         )}
-                    </div>
+                    </div> 
                     </>
                     }
                     <div className={classes.popup}>
                         <strong>Message: </strong><br/>
-                        {marker.popup}
+                        {marker.text} <br/>
+                        <strong>Time: </strong><br/>
+                        {marker.time}
                     </div>
                 </div>
 
-                {(thisUser.username === marker.requester_username && marker.is_accepted) &&
+                {((thisUser.username === marker.requester_username) || (recipient && recipient.is_accepted))&&
                 <div className={classes.cancelEventButton}>
-                    <CustomButton onClick={() => handleCancelEvent(marker.marker_id)} >Cancel event</CustomButton>
+                    <CustomButton onClick={() => recipient ? handleMarkerReject(marker.marker_id, marker.requester_username) : handleCancelEvent(marker.marker_id)}>{recipient ? 'Cancel participation' : 'Cancel event'}</CustomButton>
                 </div>
                 }
             </Popup>
         </Marker>)}
+        )
+    }
     </React.Fragment>
   )
 }

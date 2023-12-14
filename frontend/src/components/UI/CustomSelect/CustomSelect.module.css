@@ -1,0 +1,10 @@
+select{
+    background: transparent;
+    color: #eee;
+    border: 1px solid #6a5bcd;
+}
+
+select > option:enabled{
+    color: black
+}
+

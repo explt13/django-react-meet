@@ -5,7 +5,7 @@ import ProfileInformation from '../components/ProfileInformation'
 
 const ProfilePage = () => {
   return (
-    <div className='container'>
+    <div className='container wrapper'>
       <ProfileInformation />
     </div>
   )

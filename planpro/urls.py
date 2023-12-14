@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import GetCsrf, UserLogin, UserRegister, UserLogout, CheckAuth, UserView, UsersView, SendFriendRequest, FriendsView, EventSentView, EventRecievedView
+from .views import GetCsrf, UserLogin, UserRegister, UserLogout, CheckAuth, UserView, UsersView, SendFriendRequest, FriendsView, EventSentView, EventRecievedView, MailView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -22,5 +22,11 @@ urlpatterns = [
     path('event/reject', EventRecievedView.as_view(), name='event_reject'),
     path('event/accept', EventRecievedView.as_view(), name='event_accept'),
     path('event/cancel', EventSentView.as_view(), name='event_cancel'),
+
+    path('mail/recieved', MailView.as_view(), name='mail_recieved'),
+    path('mail/<str:method>', MailView.as_view(), name='mail_delete'),
+    path('mail/<str:method>', MailView.as_view(), name='mail_clear')
+
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

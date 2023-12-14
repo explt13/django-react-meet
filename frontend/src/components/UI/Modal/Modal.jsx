@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import classes from './Modal.module.css'
 
-const Modal = ({ children, visible, setVisible }) => {
+const Modal = ({ children, visible, setVisible, block}) => {
     const [closing, setClosing] = useState(false);
     const rootClasses = [classes.modal];
     
@@ -24,7 +24,7 @@ const Modal = ({ children, visible, setVisible }) => {
     }
 
     return (
-        <div className={rootClasses.join(' ')} onClick={handleClose}>
+        <div className={rootClasses.join(' ')} onClick={block ? undefined : handleClose}>
             <div className={classes.modalContent} onClick={(e) => e.stopPropagation()}>
                 {children}
             </div>

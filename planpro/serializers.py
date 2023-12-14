@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from django.core.exceptions import ValidationError
-from .models import User, Friendship, Event
+from .models import User, Friendship, Event, Event_Recipient, Mail
 
 class UserRegisterSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -64,30 +64,59 @@ class FriendshipSerializer(serializers.ModelSerializer):
         return representation
 	
 
+class UserForEventSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = User
+		fields = ('username', )
+
+
+class Event_RecipientSerializer(serializers.ModelSerializer):
+	recipient = UserForEventSerializer(read_only=True)
+	
+	class Meta:
+		model = Event_Recipient
+		fields = ('recipient', 'is_accepted')
+
+	def to_representation(self, instance):
+		representation = super().to_representation(instance)
+		recipient_representaion = representation.pop('recipient')
+		representation['username'] = recipient_representaion['username']
+		return representation
+
+
 class EventSerializer(serializers.ModelSerializer):
-	requester = UserSerializer(read_only=True) # otherwise it will be treated like i want overwrite it so it will take validators on and all fields that requered as well
-	recipient = UserSerializer(many=True, read_only=True) # inforamtion = requester: {username: 'someusername'} i even don't have to declare this field
-	# I could pass user object using PrimaryKeyRelations but it'll be only id, there fully serialized information
-	#requester = serializers.PrimaryKeyRelatedField(read_only=True)
-	#recipient = serializers.PrimaryKeyRelatedField(read_only=True)
+	requester = UserForEventSerializer(read_only=True)
+	recipients = serializers.SerializerMethodField() 
 
 
 	class Meta:
 		model = Event
-		fields = ('requester', 'recipient', 'event_id', 'latitude', 'longitude', 'popup', 'sent', 'is_accepted', 'marker_id')
+		fields = ('requester', 'recipients', 'event_id', 'latitude', 'longitude', 'text', 'time', 'sent', 'marker_id')
+
+	def get_recipients(self, instance):
+		event_recipients = Event_Recipient.objects.filter(event=instance)
+		return Event_RecipientSerializer(event_recipients, many=True).data
 
 	def to_representation(self, instance):
 		representation = super().to_representation(instance)
 		requester_representation = representation.pop('requester')
-		recipient_representation = representation.pop('recipient')
-		recipient_username_array = list()
-
 		representation['requester_username'] = requester_representation['username']
-		for recipient in recipient_representation:
-			recipient_username_array.append(recipient['username'])
-		representation['recipient_username'] = recipient_username_array
-
 		return representation
 	
 	def create(self, validated_data):
+
 		return Event.objects.create(**validated_data)
+	
+
+class MailSerializer(serializers.ModelSerializer):
+	sender = UserSerializer(read_only=True)
+	recipients = UserSerializer(read_only=True, many=True)
+	formatted_sent = serializers.SerializerMethodField()
+	
+	class Meta:
+		model = Mail
+		fields = ('id', 'sender', 'recipients', 'header', 'content', 'sent', 'category', 'formatted_sent')
+
+	def get_formatted_sent(self, obj):
+		return obj.format_sent()
+	
