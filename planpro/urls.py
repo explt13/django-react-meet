@@ -24,6 +24,7 @@ urlpatterns = [
     path('event/cancel', EventSentView.as_view(), name='event_cancel'),
 
     path('mail/recieved', MailView.as_view(), name='mail_recieved'),
+    path('mail/read', MailView.as_view(), name='mail_read'),
     path('mail/<str:method>', MailView.as_view(), name='mail_delete'),
     path('mail/<str:method>', MailView.as_view(), name='mail_clear')
 

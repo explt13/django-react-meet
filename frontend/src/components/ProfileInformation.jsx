@@ -9,18 +9,19 @@ import AuthContext from '../context/AuthContext'
 import UserService from '../API/UserService'
 
 const ProfileInformation = () => {
-    const {thisUser, setThisUser} = useContext(UserContext)
+    const {thisUser, setThisUser, friends} = useContext(UserContext)
     const { csrftoken } = useContext(AuthContext)
     const [user, setUser] = useState(null)
-    const [isLoading, setIsLoading] = useState(true)
+    const [isUserLoading, setIsUserLoading] = useState(false)
     const params = useParams()
 
 
     useEffect(() => {
+        setIsUserLoading(true)
         const getUser = async () => {
             const user = await UserService.getUser(params.username)
             setUser(user)
-            setIsLoading(false)
+            setIsUserLoading(false)
         }
         getUser()
         
@@ -31,9 +32,9 @@ const ProfileInformation = () => {
         const data = await FriendService.sendFriendRequest(user.username, csrftoken)
         console.log(data)
     }
-
+    console.log(user)
     return (
-        isLoading
+        (isUserLoading || !user)
         ? <Loader />
         :
         <div className={classes.profileInformation}>
@@ -49,7 +50,7 @@ const ProfileInformation = () => {
                 </div>
             </div>
             <div className={classes.buttons}>
-            {thisUser.username !== user.username && <CustomButton onClick={handleAddFriend}>send friend request</CustomButton>}
+            {thisUser.username !== user.username && !friends.find(friend => friend.username === user.username) && <CustomButton onClick={handleAddFriend}>send friend request</CustomButton>}
             </div>
         </div>
     )

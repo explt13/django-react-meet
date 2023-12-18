@@ -14,26 +14,10 @@ import { Link } from 'react-router-dom'
 import CustomButton from './UI/CustomButton/CustomButton'
 
 const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, eventInformation}) => {
-    const [markers, setMarkers] = useState([]) // create two different states one for sent one for recieved
     const [draggable, setDraggable] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
     const {csrftoken} = useContext(AuthContext)
-    const {thisUser} = useContext(UserContext)
+    const {thisUser, events, setEvents, isLoading} = useContext(UserContext)
     
-
-    useEffect(() => {
-        setIsLoading(true)
-        const getEvents = async () => {
-            const sent_events = await EventService.getEvents('sent')
-            const recieved_events = await EventService.getEvents('recieved')
-            setMarkers([...sent_events, ...recieved_events])
-
-            setIsLoading(false)
-        }
-
-        getEvents()
-        
-    }, [])
 
 
     function defineMarker(color){
@@ -46,7 +30,7 @@ const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, eventI
 
     const handleMarkerDrag = (e) => {
         const {lat, lng} = e.target.getLatLng()
-        setMarkers(prevMarkers => prevMarkers.map(marker => marker.marker_id === e.target.options.id ? {...marker, latitude: lat, longitude: lng} : marker))
+        setEvents(prevMarkers => prevMarkers.map(marker => marker.marker_id === e.target.options.id ? {...marker, latitude: lat, longitude: lng} : marker))
         
     }
     
@@ -54,7 +38,7 @@ const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, eventI
 
     const handleMarkerAccept = async (markerID, requester_username) => { // move to mapComp?
         if (thisUser.username === requester_username){
-            const marker = markers.find(m => m.marker_id === markerID)
+            const marker = events.find(m => m.marker_id === markerID)
             const data = {
                 marker_id: marker.marker_id,
                 time: marker.time,
@@ -66,11 +50,11 @@ const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, eventI
             }
             const response = await EventService.sendEvent(data, csrftoken)
             setDraggable(false)
-            setMarkers(prevMarkers => prevMarkers.map(marker => marker.marker_id === markerID ? {...marker, is_confirmed: true} : marker))
+            setEvents(prevMarkers => prevMarkers.map(marker => marker.marker_id === markerID ? {...marker, is_confirmed: true} : marker))
             console.log(response)
         } else {
             const response = await EventService.acceptEvent(markerID, csrftoken)
-            setMarkers(prevMarkers => prevMarkers.map(marker => 
+            setEvents(prevMarkers => prevMarkers.map(marker => 
             marker.marker_id === markerID
                 ? {
                     ...marker,
@@ -89,10 +73,10 @@ const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, eventI
 
     const handleMarkerReject= async (markerID, requester_username) => { // ?? accesptness for someone else?
         if (thisUser.username === requester_username){
-            setMarkers(markers.filter(marker => marker.marker_id !== markerID)) // automically set
+            setEvents(events.filter(marker => marker.marker_id !== markerID)) // automically set
         } else {
             const response = await EventService.rejectEvent(markerID, csrftoken)
-            setMarkers(markers.filter(marker => marker.marker_id !== markerID))
+            setEvents(events.filter(marker => marker.marker_id !== markerID))
             console.log(response)
         }
         
@@ -101,7 +85,7 @@ const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, eventI
     const handleCancelEvent = async (markerID) => { // automically set
     
         const response = await EventService.cancelEvent(markerID, csrftoken)
-        setMarkers(markers.filter(marker => marker.marker_id !== markerID))
+        setEvents(events.filter(marker => marker.marker_id !== markerID))
         console.log(response)
 
         
@@ -122,7 +106,7 @@ const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, eventI
                     time: eventInformation.time,
                     is_confirmed: false,
                 }
-                setMarkers(prevMarkers => [...prevMarkers, marker])
+                setEvents(prevMarkers => [...prevMarkers, marker])
                 setCanAddMarkers(false)
                 setDraggable(true)
             } else{
@@ -136,11 +120,8 @@ const LocationMarkers = ({selectedUsers, canAddMarkers, setCanAddMarkers, eventI
     })
 
   return (
-    isLoading
-    ? <Loader />
-    :
     <React.Fragment>
-        {markers.map(marker =>
+        {events.map(marker =>
         {
         const recipient = marker.recipients.find(recipient => recipient.username === thisUser.username)
         return (

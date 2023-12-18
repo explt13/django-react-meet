@@ -28,6 +28,11 @@ class MailService {
         })
         return response.data
     }
+
+    static async getEmailQty(){
+        const response = await axios.get('http://127.0.0.1:8000/mail/recieved?qty=true')
+        return response.data
+    }
 }
 
 export default MailService

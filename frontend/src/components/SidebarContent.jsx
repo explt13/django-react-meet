@@ -9,7 +9,7 @@ import Loader from './UI/Loader/Loader'
 
 const SidebarContent = () => {
     const {isAuth, setIsAuth, csrftoken} = useContext(AuthContext)
-    const {thisUser, setThisUser} = useContext(UserContext)
+    const {thisUser, setThisUser, isLoading} = useContext(UserContext)
 
     const logout = async () => {
         try {
@@ -21,7 +21,7 @@ const SidebarContent = () => {
         }
     }
     return (
-      !thisUser
+      isLoading
       ? <Loader />
       :
         <div className={classes.content}>

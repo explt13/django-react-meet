@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 import React, { createContext, useEffect, useState } from 'react'
-import useInit from '../hooks/Init'
+import useInit from '../hooks/useInit'
 
 const AuthContext = createContext(false)
 

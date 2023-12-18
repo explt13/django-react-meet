@@ -16,8 +16,19 @@ class EventService {
         return response.data
     }
 
-    static async getEvents(action){
-        const response = await axios.get(`http://127.0.0.1:8000/event/${action}`)
+    static async getSentEvents(){
+        const response = await axios.get(`http://127.0.0.1:8000/event/sent`)
+        return response.data
+    }
+
+    static async getRecievedEvents(){
+        const response = await axios.get(`http://127.0.0.1:8000/event/recieved`)
+        return response.data
+    }
+
+
+    static async getAcceptedEvents(){
+        const response = await axios.get(`http://127.0.0.1:8000/event/recieved?accepted=true`)
         return response.data
     }
 

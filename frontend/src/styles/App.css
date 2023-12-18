@@ -4,20 +4,20 @@
   --main-black: #212529;
   --main-font-color: #ddd;
   --main-purple: #6a5bcd;
+  --main-gray: #32363a;
 }
-
 *{
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
+
     box-sizing: border-box;
     
 }
 body{
-    background-color: #212529;
-    color: #ddd
+  font-family: 'IBM Plex Mono';
+  background-color: #212529;
+  color: #ddd;
 }
-
 
 
 ::-webkit-scrollbar {

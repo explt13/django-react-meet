@@ -37,15 +37,9 @@
 }
 
 .addMarkerAction{
-    cursor: url('./images/markerCursor.png'), auto;
-}
-.deleteMarkerAction, .deleteMarkerAction img{
-    cursor: url('./images/deleteCursor.png'), auto;
+    cursor: url('./../../media/img/markerCursor.png'), auto;
 }
 
-.deleteMarkerAction img:hover{
-    cursor: url('./images/deleteCursorActive.png'), auto;
-}
 
 
 .popupInput{

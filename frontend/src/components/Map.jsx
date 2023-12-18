@@ -13,39 +13,20 @@ import L, { map } from 'leaflet'
 
 
 
-const Map = ({readyToRender, selectedUsers}) => {
+const Map = ({selectedUsers, position}) => {
   const [minDate, maxDate] = getFullDate()
-  const [position, setPosition] = useState(null)
   const [eventInformation, setEventInformation] = useState({text: '', time: minDate})
-  const [error, setError] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
   const [canAddMarkers, setCanAddMarkers] = useState(false)
 
-
-  useEffect(() => {
-    setIsLoading(true)
-    const getLocation = () => {
-      navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const {latitude, longitude} = pos.coords
-        setPosition([latitude, longitude])
-        setIsLoading(false)
-      },
-      (err) => {
-        setError(err)
-      })
-    }
-    getLocation()
-
-
-  }, [])
+  console.log(position)
+  
   
 
 
   return (
-    isLoading || error || !readyToRender
+    !position
     ?
-    <Loader />
+    <Loader /> // error
     :
     <div className={[classes.wrapper, 'container'].join(' ')}> {/* container ?? */}
       <MapContainer id='myMap' center={position} zoom={13} scrollWheelZoom={true} className={classes.map} attributionControl={false}>

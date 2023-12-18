@@ -12,7 +12,6 @@ const FriendsContent = () => {
   const {csrftoken} = useContext(AuthContext)
   const params = useParams()
   const [resultList, setResultList] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(false)
   const [tab, setTab] = useState(null)
   const {thisUser, setThisUser, friends, setFriends} = useContext(UserContext)
@@ -24,7 +23,7 @@ const FriendsContent = () => {
 
 
   const fetchData = async (fetchFunction) => {
-    setIsLoading(true)
+
     try{
       const data = await fetchFunction();
       setResultList(data)
@@ -32,7 +31,7 @@ const FriendsContent = () => {
     } catch (e) {
       setError(e.response.data)
     } finally {
-      setIsLoading(false)
+
     }
   }
 
@@ -82,14 +81,12 @@ const FriendsContent = () => {
             <CustomButton className={classes.navigateItem} onClick={handleRecievedRequests}>Recieved requests</CustomButton>
             </div>
         </div>
-        {isLoading || !resultList
-        ? <Loader />
-        :
+
         <div className={classes.content}>
           <div className={classes.searchInformation}>{resultList.length === 0 && 'Seems empty..'}</div>
           <UsersList tab={tab} resultList={resultList} handleAccept={handleAccept} handleReject={handleReject} handleDelete={handleDelete}/>
         </div>
-        }
+
     </div>
   )
 }

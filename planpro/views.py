@@ -87,6 +87,7 @@ class UsersView(APIView):
         if data.get('username') == '':
             return Response('Users not found', status=status.HTTP_400_BAD_REQUEST)
         queryset = User.objects.filter(username__startswith=data.get('username'))
+        queryset = queryset.exclude(pk=request.user.pk)
         if not queryset:
             return Response('Users not found', status=status.HTTP_400_BAD_REQUEST)
         serializer = UserSerializer(queryset, many=True)
@@ -172,7 +173,6 @@ class EventSentView(APIView):
 
     def post(self, request):
         data = request.data
-        print(data)
         recipients = data.get('recipients')
         recipients_array = [recipient['username'] for recipient in recipients]
         recipients = User.objects.filter(username__in=recipients_array)
@@ -206,7 +206,15 @@ class EventRecievedView(APIView):
     authentication_classes = (SessionAuthentication, )
 
     def get(self, request):
+        data = request.query_params
         user = request.user
+        if data.get('accepted'):
+            accepted_events = user.event_recipient_set.filter(is_accepted=True) # get all records from M2M of user where is filtered
+            events_ids = accepted_events.values('event_id') # query set of dicts filtered only for event_id field name
+            events = Event.objects.filter(event_id__in=events_ids)
+            serializer = EventSerializer(events, many=True)
+            return Response(serializer.data)
+
         recieved_events = user.recieved_events.all()
         serializer = EventSerializer(recieved_events, many=True)
         return Response(serializer.data)
@@ -236,10 +244,16 @@ class EventRecievedView(APIView):
 
 class MailView(APIView):
     def get(self, request):
+        data = request.query_params
+        if data.get('qty'):
+            return Response(request.user.recieved_emails.count())
         recieved_emails = request.user.recieved_emails.all()
         serializer = MailSerializer(recieved_emails, many=True)
         return Response(serializer.data)
     
+    def patch(self, request):
+        pass
+
     def delete(self, request, method):
         if method == 'delete':
             email = request.query_params.get('email_id')

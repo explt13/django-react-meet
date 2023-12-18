@@ -21,7 +21,9 @@ const MailPage = () => {
   useEffect(() => {
     setIsLoading(true)
     const getEmails = async () => {
-      const data = await MailService.getEmails()
+      const data = await MailService.getEmails() // read them as well?
+      await MailService.readMail(csrftoken)
+      console.log(data)
       setEmails([...data])
       setIsLoading(false)
     }
