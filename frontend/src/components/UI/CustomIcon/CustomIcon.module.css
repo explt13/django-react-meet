@@ -1,5 +1,5 @@
 .icon {
-    color: #6a5acd;
+    color: var(--main-purple);
     font-size: 32px;
     transition: color 0.2s ease-in-out;
     margin-right: 10px;
@@ -8,7 +8,7 @@
 }
 
 .icon:hover{
-    color: #ddd;
+    color: var(--main-navy);
 }
 
 

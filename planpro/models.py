@@ -3,13 +3,13 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-EVENT_CHOICES = (# do this, mail add did read,
+EVENT_CHOICES = (# do this,
     ('HEALTH', 'Health'),
     ('EDUCATION', 'Education'),
-    ('DINNERS', 'Dinners'),
+    ('DINNER', 'Dinner'),
     ('BAR', 'Bar'),
     ('LEISURE', 'Leisure'),
-    ('RELAX', 'Relax'),
+    ('RELAXATION', 'Relaxation'),
 )
 
 STATUS_CHOICES = (
@@ -44,7 +44,6 @@ class Event(models.Model): # split in two?
     event_id = models.AutoField(primary_key=True)
 
 
-
 class Event_Recipient(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE) # records where user is event_recipient
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
@@ -52,10 +51,11 @@ class Event_Recipient(models.Model):
 
 
 
+
 class Mail(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_emails')
-    recipients = models.ManyToManyField(User, related_name='recieved_emails') # i could use another table for this if i needed more fields for it
-    category = models.CharField(max_length=20, choices=[('friends', 'Friends'), ('events', 'Events')])
+    recipients = models.ManyToManyField(User, related_name='recieved_emails', through='Mail_Recipient') # i could use another table for this if i needed more fields for it
+    category = models.CharField(max_length=20, choices=[('FRIENDS', 'Friends'), ('EVENTS', 'Events')])
     header = models.CharField(max_length=32)
     content = models.CharField(max_length=250)
     sent = models.DateTimeField(auto_now_add=True)
@@ -64,7 +64,7 @@ class Mail(models.Model):
     def format_sent(self):
         return self.sent.strftime('%Y-%m-%d at %H:%M')
 
-class Mail_Read(models.Model):
+class Mail_Recipient(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.ForeignKey(Mail, on_delete=models.CASCADE)
     is_read = models.BooleanField(default=False)

@@ -7,12 +7,12 @@
     border-radius: 3px;
     cursor: pointer;
     display: block;
-    color: #eee;
+    color: var(--main-navy);
     border-radius: 15px;
     transition: all 0.2s ease-in-out
 }
 
 .customButton:hover{
-    background-color: #eee;
-    color: #6a5acd
+    background-color: var(--main-purple);
+    color: var(--main-gray)
 }

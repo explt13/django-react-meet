@@ -8,13 +8,14 @@ import CustomButton from './UI/CustomButton/CustomButton'
 const UsersList = ({resultList, tab, forMap, selectedUsers, handleAccept, handleReject, handleDelete, onUserClick}) => {
 
     return (
-        <div>
+        <>
             {resultList.map(user => (
-                <div key={user.username}>
-                    <div className={[classes.userContainer, forMap && (selectedUsers.find(selectedUsers => selectedUsers.username === user.username) ? classes.selectedUser : classes.unSelectedUser)].join(' ')} style={{
-                        '--map-width': forMap && '64px',
-                        }}
-                        onClick={forMap ? () => onUserClick(user) : undefined}>
+                <>
+                    <div key={user.username}
+                    className={[classes.userContainer, forMap && (selectedUsers.find(selectedUsers => selectedUsers.username === user.username) ? classes.selectedUser : classes.unSelectedUser)].join(' ')}
+                    style={{'--map-width': forMap && '64px',}}
+                    onClick={forMap ? () => onUserClick(user) : undefined}
+                    >
                         <div className={classes.userImage}>
                             <img src={`http://127.0.0.1:8000/${user.profile_pic}`} />
                         </div>
@@ -27,25 +28,32 @@ const UsersList = ({resultList, tab, forMap, selectedUsers, handleAccept, handle
                             </div>
                         </div>
 
-                        {tab === 'recieved' &&
+                        {!forMap
+                        &&
+                        <>
+                            {tab === 'recieved' &&
                             <div className={classes.additional}>
                                 <CustomButton onClick={() => handleAccept(user.friendship_id)}>Accept</CustomButton>
                                 <CustomButton onClick={() => handleReject(user.friendship_id)}>Reject</CustomButton>
                             </div>}
 
-                        {tab === 'requested' &&
+                            {tab === 'requested' &&
                             <div className={classes.additional}>
                                 {user.status}
                             </div>}
-                        {tab === 'friends' &&
+                            
+                            {tab === 'friends' &&
                             <div className={classes.additional}>
                                 <CustomButton onClick={() => handleDelete(user.username)}>Delete</CustomButton>
                             </div>}
+                        
+                        </>
+                        }
+                        
                     </div>
-                    <hr />
-                </div>
+                </>
             ))}
-        </div>
+        </>
     )
 }
 

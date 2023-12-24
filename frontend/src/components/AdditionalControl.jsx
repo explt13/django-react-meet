@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import classes from './styles/AdditionalControl.module.css'
 import CustomIcon from './UI/CustomIcon/CustomIcon'
 import CustomInput from './UI/CustomInput/CustomInput'
@@ -7,9 +7,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import L, { popup } from 'leaflet'
 import Modal from './UI/Modal/Modal'
 import PopupForm from './PopupForm'
+import MapContext from '../context/MapContext'
 
-const AdditionalControl = ({canAddMarkers, setCanAddMarkers, mapID, setEventInformation}) => {
+const AdditionalControl = () => {
     const [modalPopup, setModalPopup] = useState(false)
+    const {canAddMarkers, setCanAddMarkers, mapID} = useContext(MapContext)
 
     useEffect(() => {
         const map = L.DomUtil.get(mapID)
@@ -38,7 +40,7 @@ const AdditionalControl = ({canAddMarkers, setCanAddMarkers, mapID, setEventInfo
                 </div>
             </div>
             <Modal visible={modalPopup} setVisible={setModalPopup} block={true}>
-                <PopupForm setEventInformation={setEventInformation} isOpen={modalPopup} setIsOpen={setModalPopup} setCanAddMarkers={setCanAddMarkers}/>
+                <PopupForm isOpen={modalPopup} setIsOpen={setModalPopup}/>
             </Modal>
         </div>
   )

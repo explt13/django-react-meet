@@ -1,0 +1,27 @@
+.container{
+    display: grid;
+    column-gap: 50px;
+    grid-template-rows: max-content auto;
+    grid-template-columns: max-content auto;
+    grid-template-areas:
+    'space heading'
+    'navigate content';
+
+}
+
+.heading{
+    grid-area: heading;
+    font-size: 38px;
+    margin-bottom: 20px;
+}
+
+@media screen and (max-width: 767px) {
+    .container {
+        column-gap: 10px;
+        grid-template-columns: auto;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+        'navigate'
+        'content';
+    }
+}

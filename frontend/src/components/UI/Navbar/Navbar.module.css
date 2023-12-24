@@ -1,7 +1,7 @@
 .container{
     padding: 10px 20px;
     display: flex;
-    background-color: #32363a;
+    background-color: var(--main-gray);
     justify-content: space-between;
 
 }
@@ -15,4 +15,15 @@
     width: 48px;
     border-radius: 100px;
     line-height: 50px;
+}
+
+
+.mailIcon{
+    display: inline;
+    position: relative;
+}
+.mailIcon > span{
+    color: red;
+    position: absolute;
+    right: 0;
 }

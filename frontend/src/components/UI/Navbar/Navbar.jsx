@@ -21,7 +21,7 @@ import MapComp from '../../MapComp'
 
 
 const Navbar = () => {
-  const { friends } = useContext(UserContext)
+  const { emailQty } = useContext(UserContext)
   const [sidebar, setSidebar] = useState(false)
   const [calendarModal, setCalendarModal] = useState(false)
   const [searchValue, setSearchValue] = useState('')
@@ -44,7 +44,10 @@ const Navbar = () => {
           <Calendar />
         </Modal>
         <Link to='/map'><CustomIcon><FontAwesomeIcon icon={faMapLocationDot}/></CustomIcon></Link>
-        <Link to='/mail'><CustomIcon><FontAwesomeIcon icon={faEnvelope} /></CustomIcon></Link>
+        <div className={classes.mailIcon}>
+          <Link to='/mail'><CustomIcon><FontAwesomeIcon icon={faEnvelope} /></CustomIcon></Link>
+          {emailQty > 0&& <span>*</span>}
+        </div>
         <Search qty={1} placeholder={'user'} handleSearch={handleSearch} setSearchValue={setSearchValue} searchValue={searchValue}/>
         
       </div>
@@ -52,7 +55,7 @@ const Navbar = () => {
       <div className={classes.rightSide}>
         <CustomIcon><FontAwesomeIcon icon={faBars} onClick={() => setSidebar(true)}/></CustomIcon>
         <Sidebar visible={sidebar} setVisible={setSidebar}>
-          <SidebarContent />
+          <SidebarContent setSidebarVisible={setSidebar}/>
         </Sidebar>
       </div>
     </div>

@@ -1,0 +1,17 @@
+.navigate {
+    grid-area: navigate;
+    height: 100%;
+    
+
+}
+.navigate > div{
+    position: sticky;
+    top: 25px;
+    padding: 40px 20px;
+    background-color: var(--main-gray);
+    border-radius: 5px;
+
+}
+.navigateItem{
+    cursor: pointer;
+}

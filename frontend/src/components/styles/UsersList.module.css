@@ -2,27 +2,25 @@
     display: grid;
     grid-template-columns: var(--map-width, 124px) auto max-content;
     grid-template-areas: 'image information additional';
-    padding-bottom: 20px;
-    padding-left: 5px;
-    padding-top: 30px;
+    padding: 30px 10px;
     column-gap: 30px;
     border-radius: 10px;
-    background-color:#212529;
-    
+    background-color: var(--main-gray);
+    margin-bottom: 20px;
 }
 
 .unSelectedUser{
     cursor: pointer;
-    background-color: #32363a;
+    background-color: var(--main-gray);
     transition: background-color 0.2s ease-in-out;
 }
 
 .unSelectedUser:hover{
-    background-color: rgba(67, 71, 76, 0.5);
+    background-color: var(--main-gray50);
 }
 .selectedUser{
     cursor: pointer;
-    background-color: #43474b!important;
+    background-color: var(--main-gray50);
 }
 
 
@@ -46,10 +44,11 @@
     font-size: var(--map-fontSize, 28px);
     cursor: pointer;
     text-decoration: none;
-    color: #ddd
+    color: var(--main-navy);
+    transition: color 0.1s ease-in-out;
 }
 .userUsername > a:hover{
-    color: #bbb
+    color: var(--main-gray-hover)
 }
 
 .additional{

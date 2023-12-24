@@ -1,0 +1,130 @@
+
+.categoryContainer{
+    position: relative;
+    grid-area: categories;
+    height: 100%;
+}
+
+
+.categoryHeading{
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.categories{
+    margin-top: 20px;
+    padding: 30px 5px;
+    border-radius: 10px;
+    column-gap: 30px;
+    row-gap: 20px;
+    display: flex;
+    justify-content: space-evenly;
+    background-color: var(--main-gray);
+    height: 280px;
+    
+}
+
+.category{
+    cursor: pointer;
+    height: 200px;
+    width: 200px;
+    overflow: auto;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0px 5px 0px gray;
+    transition: all ease-in-out 0.2s;
+}
+
+.categoryName{
+    height: 30%;
+    background-color: white;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    color: var(--main-navy);
+    transition: font-size ease-in-out 0.2s;
+}
+
+
+.categoryIcon{
+    height: 70%;
+    background-color: var(--main-navy);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 56px;
+    transition: font-size ease-in-out 0.2s;
+}
+
+.category:hover .categoryIcon{
+    font-size: 66px;
+}
+.category:hover .categoryName{
+    font-size: 28px;
+}
+
+
+
+.moreCategories{
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.arrow{
+    font-size: 32px;
+    
+}
+.arrow:hover{
+    color: var(--main-navy);
+}
+
+.bar{
+    color: rgb(171, 96, 179)
+}
+.bar:hover{
+    box-shadow: 0px 5px 2px rgb(171, 96, 179);
+}
+
+.dinner{
+    color: rgb(238, 147, 36);
+}
+.dinner:hover{
+    box-shadow: 0px 5px 2px rgb(238, 147, 36);;
+}
+
+
+.relaxation{
+    color: rgb(122, 224, 11)
+}
+.relaxation:hover{
+    box-shadow: 0px 5px 2px rgb(122, 224, 11);
+}
+
+.leisure{
+    color: rgb(224, 195, 117)
+}
+.leisure:hover{
+    box-shadow: 0px 5px 2px rgb(224, 195, 117)
+}
+
+.education{
+    color: rgb(123, 142, 243)
+}
+.education:hover{
+    box-shadow: 0px 5px 2px rgb(123, 142, 243)
+}
+
+.health{
+    color: var(--main-red);
+}
+.health:hover{
+    box-shadow: 0px 5px 2px var(--main-red);
+}

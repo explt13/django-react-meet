@@ -11,7 +11,7 @@ const useRandomFriends = (friends, qty) => {
 
     useEffect(() => {
         
-        if (friends && friendsArrayCopy.length === friends.length && friends.length > qty){ // clear it out later
+        if (friends && friendsArrayCopy.length === friends.length && friends.length > qty){
             for (let i = 0; i < qty; i++){
                 const index = Math.floor(Math.random() * friendsArrayCopy.length)
                 const friend = friendsArrayCopy[index]

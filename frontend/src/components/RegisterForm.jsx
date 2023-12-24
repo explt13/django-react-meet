@@ -73,7 +73,7 @@ const RegisterForm = () => {
   return (
     <div className={classes.wrapper}>
         <div className={classes.container}>
-            <div className={classes.greeting}>
+            <div className={classes.heading}>
                 Register
             </div>
             
@@ -83,6 +83,7 @@ const RegisterForm = () => {
                 <CustomInput className={errors.password ? classes.errorInput : ''} type='password' placeholder={errors.password ? errors.password : 'Password'} value={password} onChange={(e) => {passwordHandler(e)}} />
                 <CustomInput className={errors.password ? classes.errorInput : ''} type='password' placeholder='Confirm password' value={confirmation} onChange={(e) => {confirmationHandler(e)}} />
                 <CustomButton
+                    className={classes.enter}
                     disabled={!username || !password || !email || !confirmation}
                     onClick={registerUser}>Register
                 </CustomButton>

@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model, authenticate
 from django.core.exceptions import ValidationError
 from .models import User, Friendship, Event, Event_Recipient, Mail
 
+
 class UserRegisterSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
@@ -17,7 +18,8 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
 
 class UserLoginSerializer(serializers.Serializer):
-	
+	username = serializers.CharField()
+
 	def check_user(self, data):
 		user = authenticate(username=data['username'], password=data['password'])
 		if not user:
@@ -91,7 +93,7 @@ class EventSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Event
-		fields = ('requester', 'recipients', 'event_id', 'latitude', 'longitude', 'text', 'time', 'sent', 'marker_id')
+		fields = ('requester', 'recipients', 'category', 'event_id', 'latitude', 'longitude', 'text', 'time', 'sent', 'marker_id')
 
 	def get_recipients(self, instance):
 		event_recipients = Event_Recipient.objects.filter(event=instance)
@@ -120,3 +122,16 @@ class MailSerializer(serializers.ModelSerializer):
 	def get_formatted_sent(self, obj):
 		return obj.format_sent()
 	
+
+
+class EventQtySerializer(serializers.Serializer):
+	category = serializers.CharField()
+	qty = serializers.IntegerField()
+
+
+	def to_representation(self, instance):
+		representation = super().to_representation(instance)
+		category = representation.pop('category')
+		representation['name'] = category.capitalize()
+		representation['value'] = category
+		return representation

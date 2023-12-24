@@ -1,10 +1,22 @@
-select{
+.select{
     background: transparent;
-    color: #eee;
-    border: 1px solid #6a5bcd;
+    margin-top: 7px;
+    width: 100%;
+    border: 1px solid var(--main-navy);
+    border-radius: 5px;
+    color: var(--main-navy);
+
 }
 
-select > option:enabled{
-    color: black
+.select > option:enabled{
+    color: var(--main-navy);
+    background-color: var(--main-gray);
+}
+
+
+
+.select > option:disabled{
+    color: var(--main-gray-hover);
+    background-color: var(--main-gray);
 }
 

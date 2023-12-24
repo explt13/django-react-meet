@@ -7,7 +7,7 @@ import CustomButton from './UI/CustomButton/CustomButton'
 import { Link } from 'react-router-dom'
 import Loader from './UI/Loader/Loader'
 
-const SidebarContent = () => {
+const SidebarContent = ({handleClose}) => {
     const {isAuth, setIsAuth, csrftoken} = useContext(AuthContext)
     const {thisUser, setThisUser, isLoading} = useContext(UserContext)
 
@@ -21,14 +21,13 @@ const SidebarContent = () => {
         }
     }
     return (
-      isLoading
+      isLoading || !thisUser
       ? <Loader />
       :
         <div className={classes.content}>
 
-            <div className={classes.contentItem}><Link to={`/user/${thisUser.username}`} className={classes.link}>{thisUser.username}</Link></div>
-            <div className={classes.contentItem}><Link to={`/user/${thisUser.username}/friends`} className={classes.link}>Friends</Link></div>
-            
+            <div onClick={handleClose} className={classes.contentItem}><Link to={`/user/${thisUser.username}`} className={classes.link}>{thisUser.username}</Link></div>
+            <div onClick={handleClose} className={classes.contentItem}><Link to={`/user/${thisUser.username}/friends`} className={classes.link}>Friends</Link></div>
             <div className={classes.contentItem}><CustomButton onClick={logout}>Log out</CustomButton></div>
         </div>
 

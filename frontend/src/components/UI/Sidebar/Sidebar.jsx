@@ -26,6 +26,13 @@ const Sidebar = ({children, visible, setVisible}) => {
         contentClasses.push(classes.inactive)
     }
 
+    const enhancedChildren = React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          return React.cloneElement(child, { handleClose });
+        }
+        return child;
+      });
+
 
     return (
         <div className={rootClasses.join(' ')} onClick={handleClose}>
@@ -33,7 +40,7 @@ const Sidebar = ({children, visible, setVisible}) => {
                 <div className={classes.closeBtn}>
                     <CustomIcon><FontAwesomeIcon icon={faTimes} onClick={handleClose}/></CustomIcon>
                 </div>
-                {children}
+                {enhancedChildren}
             </div>
         </div>
   )

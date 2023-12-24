@@ -1,47 +1,66 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import classes from './styles/PopupForm.module.css'
 import CustomInput from './UI/CustomInput/CustomInput'
 import CustomTextarea from './UI/textarea/CustomTextarea'
 import CustomInputV2 from './UI/CustomInput/CustomInputV2'
-import {getFullDate} from './../utils/calendarUtil'
+import {getFormattedFullDate, getFullDate} from './../utils/calendarUtil'
 import CustomButton from './UI/CustomButton/CustomButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faCheck } from '@fortawesome/free-solid-svg-icons'
 import CustomIcon from './UI/CustomIcon/CustomIcon'
+import MapContext from '../context/MapContext'
+import CustomSelect from './UI/CustomSelect/CustomSelect'
+import UserContext from '../context/UserContext'
 
-const PopupForm = ({setEventInformation, isOpen, setIsOpen, setCanAddMarkers}) => {
+// ADAPT FOR MOBILE!
+
+const PopupForm = ({isOpen, setIsOpen}) => {
   const phrases = ['Let\'s go bowling..', 'Let\'s have a drink..', 'Let\'s have a walk..', 'let\'s go have lunch..', 'Would you like...']
   const [phrase, setPhrase] = useState(null)
-  const [dateValue, setDateValue] = useState('')
-  const [text, setText] = useState('')
   const [minDate, maxDate] = getFullDate()
-  const ind = Math.ceil(Math.random() * phrases.length)
+  const [valid, setValid] = useState(true)
+  const formattedDate = getFormattedFullDate()
+  const ind = Math.floor(Math.random() * phrases.length)
+  const {setEventInformation, setCanAddMarkers, eventInformation} = useContext(MapContext)
+  const [dateClasses, setDateClasses] = useState([classes.dateInput])
+  const {eventCategories} = useContext(UserContext)
 
   useEffect(() => {
-    setText('')
-    setDateValue(minDate)
-    setPhrase(phrases[ind-1])
+    setPhrase(phrases[ind])
 
   }, [isOpen])
 
   const handleCancelPopup = () => {
     setIsOpen(false)
+    setEventInformation({text: '', time: minDate, category: ''})
     setCanAddMarkers(false)
   }
 
   const handleAcceptPopup = () => {
-    setIsOpen(false)
+    if (valid){
+      setIsOpen(false)
+    }
+    
   }
 
 
-  const handleText = (ev) => {
-    setText(ev.target.value)
+  const handleText = (ev) => { // i have default text so i dont need to validate this field
     setEventInformation(prevInformation => ({...prevInformation, text: ev.target.value}))
   }
 
   const handleDate = (ev) => {
-    setDateValue(ev.target.value)
+    if (ev.target.value > maxDate || ev.target.value < minDate){
+      setValid(false)
+      setDateClasses(prevClasses => [...prevClasses, classes.invalidDate])
+    } else{
+      setValid(true)
+      setDateClasses([classes.dateInput])
+    }
     setEventInformation(prevInformation => ({...prevInformation, time: ev.target.value}))
+  }
+
+  const handleCategory = (ev) => {
+    setEventInformation(prevInformation => ({...prevInformation, category: ev.target.value}))
   }
 
   return (
@@ -50,10 +69,21 @@ const PopupForm = ({setEventInformation, isOpen, setIsOpen, setCanAddMarkers}) =
           Create Event
         </div>
         <div className={classes.form}>
-          <CustomTextarea placeholder={phrase} value={text} onChange={handleText} />
-          <div className={classes.dateInput}>
+          <CustomTextarea placeholder={phrase} value={eventInformation.text} onChange={handleText} />
+          <div className={classes.dateAndCategory}>
+
+
+          <div className={dateClasses.join(' ')}>
             <label htmlFor='datePopup'>Date</label>
-            <CustomInput id='datePopup' value={dateValue} onChange={handleDate} type={'date'} min={minDate} max={maxDate} required/>
+            <CustomInput id='datePopup' value={eventInformation.time} onChange={handleDate} type={'date'} min={minDate} max={maxDate} required/>
+          </div>
+          <div>
+            <label htmlFor='categoryPopup'>Category</label>
+            <CustomSelect id='categoryPopup' withNums={false} value={eventInformation.category} onChange={handleCategory} className={classes.categorySelect} defaultName='Categrory' options={eventCategories}
+              />
+          </div>
+
+          
           </div>
         </div>
         <div className={classes.confirmation}>

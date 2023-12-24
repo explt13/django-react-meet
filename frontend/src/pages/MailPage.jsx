@@ -10,12 +10,14 @@ import AuthContext from './../context/AuthContext'
 import useEmails from '../hooks/useEmails'
 import SortEmails from '../components/SortEmails'
 import CustomButton from './../components/UI/CustomButton/CustomButton'
+import UserContext from '../context/UserContext'
 
 const MailPage = () => {
   const [emails, setEmails] = useState([])
   const [sortedEmails, setSortedEmails] = useState([])
   const {csrftoken} = useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(false)
+  const {setEmailQty} = useContext(UserContext)
   
 
   useEffect(() => {
@@ -23,6 +25,7 @@ const MailPage = () => {
     const getEmails = async () => {
       const data = await MailService.getEmails() // read them as well?
       await MailService.readMail(csrftoken)
+      setEmailQty(0)
       console.log(data)
       setEmails([...data])
       setIsLoading(false)
@@ -48,9 +51,12 @@ const MailPage = () => {
     ? <Loader />
     :
     <div className='container wrapper'>
+      <div className={classes.heading}>
+        Mail
+      </div>
       <div className={classes.controlPanel}>
         <SortEmails emails={emails} setSortedEmails={setSortedEmails}/>
-        <CustomButton onClick={handleClearMail}>clear mail</CustomButton>
+        <CustomButton onClick={handleClearMail} className={classes.clearMail}>clear mail</CustomButton>
       </div>
       <div className={classes.mailContainer}>
         {sortedEmails.map(email => (
@@ -64,7 +70,7 @@ const MailPage = () => {
             <div className={classes.sent}>sent {email.formatted_sent}</div>
           </div>
         ))}
-
+        {sortedEmails.length === 0 && <div className={classes.noMail}>Seems empty..</div>}
       </div>
     </div>
   )

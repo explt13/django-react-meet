@@ -62,6 +62,15 @@ class EventService {
         })
         return response.data
     }
+
+    static async getEventsQty(){
+        const response = await axios.get('http://127.0.0.1:8000/event/qty', {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        return response.data
+    }
 }
 
 export default EventService

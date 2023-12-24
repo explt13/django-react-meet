@@ -9,6 +9,16 @@ class MailService {
         return response.data
     }
 
+    static async readMail(csrf){
+        const response = await axios.patch(`http://127.0.0.1:8000/mail/read`, {}, {
+            headers: {
+                'X-CSRFToken': csrf,
+                'Content-Type': 'application/json'
+            }
+        })
+        return response.data
+    }
+
     static async deleteEmail(emailID, csrf){
         const response = await axios.delete(`http://127.0.0.1:8000/mail/delete?email_id=${emailID}`, {
             headers:{

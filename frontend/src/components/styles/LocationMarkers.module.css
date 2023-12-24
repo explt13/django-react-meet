@@ -4,7 +4,14 @@
     justify-content: space-around;
     margin-bottom: 5px;
 }
-
+.noRecipientsSelected{
+    margin-bottom: 10px;
+}
+.category{
+    display: flex;
+    justify-content: center;
+    color: var(--main-red)
+}
 .choice > svg {
     cursor: pointer;
 }
@@ -26,13 +33,13 @@
 
 .cancelEventButton > button{
     color: black;
-    border: 2px solid #da2b1d;
+    border: 2px solid var(--main-red);
     margin-top: 5px;
     
 }
 
 .cancelEventButton > button:hover{
-    background-color: #da2b1d;
+    background-color: var(--main-red);
     color: #ddd;
 }
 .cancelEventButton {

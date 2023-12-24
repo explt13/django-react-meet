@@ -12,9 +12,9 @@
 }
 .link{
     text-decoration: none;
-    color: #ddd
+    color: var(--main-navy)
 }
 .link:hover{
-    color: #ccc
+    color: var(--main-navy-hover)
 }
 

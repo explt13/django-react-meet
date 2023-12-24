@@ -67,3 +67,9 @@ export function getFullDate() {
 
     return [minDate, maxDate]
 }
+
+export function getFormattedFullDate(){
+    const date = new Date()
+    const formattedDate = date.toLocaleString('en-US', {dateStyle: 'medium'})
+    return formattedDate
+}

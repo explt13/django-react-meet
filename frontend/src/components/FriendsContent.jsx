@@ -8,53 +8,10 @@ import CustomButton from './UI/CustomButton/CustomButton'
 import UserContext from '../context/UserContext'
 import AuthContext from '../context/AuthContext'
 
-const FriendsContent = () => {
+const FriendsContent = ({tab, resultList, setResultList}) => {
   const {csrftoken} = useContext(AuthContext)
-  const params = useParams()
-  const [resultList, setResultList] = useState([])
-  const [error, setError] = useState(false)
-  const [tab, setTab] = useState(null)
-  const {thisUser, setThisUser, friends, setFriends} = useContext(UserContext)
+  const {thisUser} = useContext(UserContext)
 
-  useEffect(() => {
-    setResultList(friends)
-    setTab('friends')
-  }, [friends])
-
-
-  const fetchData = async (fetchFunction) => {
-
-    try{
-      const data = await fetchFunction();
-      setResultList(data)
-      console.log(data)
-    } catch (e) {
-      setError(e.response.data)
-    } finally {
-
-    }
-  }
-
-
-
-
-  const fetchAllFriends = useMemo(() => () => FriendService.getFriends(params.username), [params.username]) // implicit return
-  const fetchSentRequests = useMemo(() => () => FriendService.getSentRequests(params.username), [params.username])
-  const fetchReciviedRequests = useMemo(() => () => FriendService.getRecievedRequests(params.username), [params.username])
-
-  const handleAllFriends = async () => {
-    fetchData(fetchAllFriends)
-    setTab('friends')
-  }
-  const handleSentRequests = () => {
-    fetchData(fetchSentRequests)
-    setTab('requested')
-  }
-
-  const handleRecievedRequests = async () => {
-    fetchData(fetchReciviedRequests)
-    setTab('recieved')
-  }
 
   const handleAccept = async (friendshipID) => {
     await FriendService.acceptFriend(thisUser.username, friendshipID, csrftoken)
@@ -73,20 +30,10 @@ const FriendsContent = () => {
 
 
   return (
-    <div className={[classes.wrapper, classes.container].join(' ')}>
-        <div className={classes.navigate}>
-          <div>
-            <CustomButton className={classes.navigateItem} onClick={handleAllFriends}>All friends</CustomButton>
-            <CustomButton className={classes.navigateItem} onClick={handleSentRequests}>Sent requests</CustomButton>
-            <CustomButton className={classes.navigateItem} onClick={handleRecievedRequests}>Recieved requests</CustomButton>
-            </div>
-        </div>
-
-        <div className={classes.content}>
-          <div className={classes.searchInformation}>{resultList.length === 0 && 'Seems empty..'}</div>
-          <UsersList tab={tab} resultList={resultList} handleAccept={handleAccept} handleReject={handleReject} handleDelete={handleDelete}/>
-        </div>
-
+    
+    <div className={classes.container}>
+      <div className={classes.searchInformation}>{resultList.length === 0 && 'Seems empty..'}</div>
+      <UsersList tab={tab} resultList={resultList} handleAccept={handleAccept} handleReject={handleReject} handleDelete={handleDelete}/>
     </div>
   )
 }

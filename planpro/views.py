@@ -2,13 +2,19 @@ from django.contrib.auth import get_user_model, login, logout
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer, FriendshipSerializer, EventSerializer, MailSerializer
+from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer, FriendshipSerializer, EventSerializer, MailSerializer, EventQtySerializer
 from rest_framework import permissions, status
 from django.core.exceptions import ValidationError
 from django.middleware.csrf import get_token
 from .models import User, Friendship, Event, Event_Recipient, Mail
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count, F, Sum, Q
+from . import models
+from itertools import chain
+from collections import defaultdict
+
+
 
 
 class GetCsrf(APIView):
@@ -141,7 +147,6 @@ class FriendsView(APIView):
         return Response('friend has been deleted')
         
 
-
 class SendFriendRequest(APIView):
     permission_classes = (permissions.IsAuthenticated, )
     authentication_classes = (SessionAuthentication, )
@@ -153,7 +158,7 @@ class SendFriendRequest(APIView):
             return Response('already friends')
         
         if not Friendship.objects.filter(requester=request.user, recipient=recipient, status='pending').exists():
-            mail = Mail.objects.create(sender=request.user, header='Friends request', content=f'User {request.user.username} wants to be friedns', category='friends') 
+            mail = Mail.objects.create(sender=request.user, header='Friends request', content=f'User {request.user.username} wants to be friedns', category='FRIENDS') 
             mail.recipients.add(recipient)
             Friendship.objects.create(requester=request.user, recipient=recipient, status='pending')
             return Response('Friend request has been sent')
@@ -184,7 +189,7 @@ class EventSentView(APIView):
             event = serializer.create(validated_data=serializer.validated_data)
             event.recipients.add(*recipients) # need model for confirmation?
 
-            mail = Mail.objects.create(sender=request.user, header='Event request', content=f'{data.get('text')} at {data.get('time')}', category='events')
+            mail = Mail.objects.create(sender=request.user, header='Event request', content=f'{data.get('text')} at {data.get('time')}', category='EVENTS')
             mail.recipients.add(*recipients)
 
             return Response('event has been sent')
@@ -224,6 +229,7 @@ class EventRecievedView(APIView):
         user = request.user
         event = Event.objects.get(marker_id=data.get('marker_id'))
         user.recieved_events.remove(event)
+
         if not event.recipients.exists():
             event.delete()
         return Response('event rejected')
@@ -241,18 +247,18 @@ class EventRecievedView(APIView):
 
 
 
-
 class MailView(APIView):
     def get(self, request):
         data = request.query_params
         if data.get('qty'):
-            return Response(request.user.recieved_emails.count())
+            return Response(request.user.mail_recipient_set.filter(is_read=False).count())
         recieved_emails = request.user.recieved_emails.all()
         serializer = MailSerializer(recieved_emails, many=True)
         return Response(serializer.data)
     
     def patch(self, request):
-        pass
+        request.user.mail_recipient_set.all().update(is_read=True)
+        return Response('mail has been read')
 
     def delete(self, request, method):
         if method == 'delete':
@@ -265,3 +271,20 @@ class MailView(APIView):
         elif method == 'clear':
             request.user.recieved_emails.clear() # if there is no recipients anymore?
             return Response('mail has been cleared')
+
+
+
+class EventQtyView(APIView):# have separate DB?
+    def get(self, request):
+        
+        se_qs = list(Event.objects.filter(requester_id=request.user).values('category').annotate(qty=Count('category')))
+        re_qs = list(Event.objects.filter(recipients=request.user).values('category').annotate(qty=Count('category')))
+        category_sums = defaultdict(int)
+
+        for entry in se_qs + re_qs:
+            category_sums[entry['category']] += entry['qty']
+
+
+        result_list = [{'category': category, 'qty': qty} for category, qty in category_sums.items()]
+        serializer = EventQtySerializer(result_list, many=True)
+        return Response(serializer.data)

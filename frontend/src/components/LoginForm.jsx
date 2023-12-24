@@ -52,26 +52,26 @@ const LoginForm = () => {
     isLoading
     ? <Loader />
     :
-    
-        <div className={classes.container}>
-            <div className={classes.greeting}>
-                Login
-            </div>
-            {error && <div className={errorClassList.join(' ')}>{error}</div>}
-            <div className={classes.form}>
-                <CustomInput type='text' placeholder='Username' value={username} onChange={(e) => {usernameHandler(e)}}></CustomInput> {/* Without curly braces it returns value */}
-                <CustomInput type='password' placeholder='Password' value={password} onChange={(e) => {passwordHandler(e)}}></CustomInput>
-                <CustomButton
-                    disabled={!username || !password}
-                    onClick={loginUser}>Log in
-                </CustomButton>
-            </div>
-            <div className={classes.footer}>
-                <div>
-                    Don't have an account? <span className={classes.switchPages}><Link to='/register'>sign up</Link></span>
-                </div>
+    <div className={classes.container}>
+        <div className={classes.heading}>
+            Login
+        </div>
+        {error && <div className={errorClassList.join(' ')}>{error}</div>}
+        <div className={classes.form}>
+            <CustomInput type='text' placeholder='Username' value={username} onChange={(e) => {usernameHandler(e)}}></CustomInput> {/* Without curly braces it returns value */}
+            <CustomInput type='password' placeholder='Password' value={password} onChange={(e) => {passwordHandler(e)}}></CustomInput>
+            <CustomButton
+                className={classes.enter}
+                disabled={!username || !password}
+                onClick={loginUser}>Log in
+            </CustomButton>
+        </div>
+        <div className={classes.footer}>
+            <div>
+                Don't have an account? <div className={classes.switchPages}><Link to='/register'>sign up</Link></div>
             </div>
         </div>
+    </div>
 
   )
 }
