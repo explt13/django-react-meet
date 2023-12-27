@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import CustomInput from '../CustomInput/CustomInput'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faTimes, faXmark } from '@fortawesome/free-solid-svg-icons'
 import classes from './Search.module.css'
 import CustomIcon from '../CustomIcon/CustomIcon'
 import UserService from '../../../API/UserService'
@@ -46,8 +46,8 @@ const Search = ({qty, placeholder, handleSearch, searchValue, setSearchValue}) =
         <div className={searchClasses.join(' ')}>
             <CustomInput placeholder={`Search ${placeholder}...`} style={{marginBottom: '0px'}} value={searchValue} onKeyDown={(e) => {handleSearch(e)}} onChange={(e) => setSearchValue(e.target.value)} />
             <div className={buttonsClasses.join(' ')}>
-                <CustomIcon style={{fontSize: '20px'}}><FontAwesomeIcon icon={faSearch} onClick={(e) => {handleSearch(e)}} /></CustomIcon>
-                <CustomIcon style={{fontSize: '20px'}}><FontAwesomeIcon icon={faTimes} onClick={handleSearchClose} /></CustomIcon>
+                <CustomIcon className={classes.searchIcon}><FontAwesomeIcon icon={faSearch} onClick={(e) => {handleSearch(e)}} /></CustomIcon>
+                <CustomIcon className={classes.searchClose}><FontAwesomeIcon icon={faXmark} onClick={handleSearchClose} /></CustomIcon>
             </div>
         </div>
         :

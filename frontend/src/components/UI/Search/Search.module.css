@@ -19,6 +19,13 @@
     animation: buttonsClose 0.3s forwards ease-in
 }
 
+.searchIcon{
+    font-size: 20px!important;
+}
+.searchClose{
+    font-size: 20px!important;
+}
+
 @keyframes slideSearchOpen {
     from{width: 0px; opacity: 0;}
     to{width: 320px; opacity: 1;}

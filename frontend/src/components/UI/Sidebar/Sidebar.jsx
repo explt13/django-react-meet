@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import classes from './Sidebar.module.css'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faTimes, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon  } from '@fortawesome/react-fontawesome'
 import CustomIcon from '../CustomIcon/CustomIcon'
 
@@ -38,7 +38,7 @@ const Sidebar = ({children, visible, setVisible}) => {
         <div className={rootClasses.join(' ')} onClick={handleClose}>
             <div className={contentClasses.join(' ')} onClick={(e) => e.stopPropagation()}>
                 <div className={classes.closeBtn}>
-                    <CustomIcon><FontAwesomeIcon icon={faTimes} onClick={handleClose}/></CustomIcon>
+                    <CustomIcon><FontAwesomeIcon icon={faXmark} onClick={handleClose}/></CustomIcon>
                 </div>
                 {enhancedChildren}
             </div>

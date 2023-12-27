@@ -4,6 +4,7 @@ import UserContext from '../context/UserContext'
 import { useNavigate } from 'react-router-dom'
 import classes from './styles/Categories.module.css'
 
+
 const CategoriesList = ({all}) => {
 
     const { eventCategories } = useContext(UserContext)

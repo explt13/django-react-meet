@@ -19,7 +19,6 @@ const PopupForm = ({isOpen, setIsOpen}) => {
   const [phrase, setPhrase] = useState(null)
   const [minDate, maxDate] = getFullDate()
   const [valid, setValid] = useState(true)
-  const formattedDate = getFormattedFullDate()
   const ind = Math.floor(Math.random() * phrases.length)
   const {setEventInformation, setCanAddMarkers, eventInformation, setCategory} = useContext(MapContext)
   const [dateClasses, setDateClasses] = useState([classes.dateInput])
@@ -32,7 +31,7 @@ const PopupForm = ({isOpen, setIsOpen}) => {
 
   const handleCancelPopup = () => {
     setIsOpen(false)
-    setEventInformation({text: '', time: minDate, category: ''})
+    setEventInformation({text: '', time: minDate, category: 'HEALTH'})
     setCanAddMarkers(false)
   }
 

@@ -56,6 +56,7 @@ class Event(models.Model): # split in two?m
     sent = models.DateField(auto_now_add=True)
     marker_id = models.FloatField(null=False)
     event_id = models.AutoField(primary_key=True)
+    icon = models.CharField(max_length=128)
 
 
 class Event_Recipient(models.Model):

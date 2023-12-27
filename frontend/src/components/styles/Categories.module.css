@@ -100,81 +100,81 @@
 
 .arrow{
     font-size: 32px;
-    
 }
 .arrow:hover{
     color: var(--main-navy);
 }
 
 
+
 .bar{
     color: rgb(171, 96, 179)
-}
-.bar:hover{
+  }
+  .bar:hover{
     box-shadow: 0px 5px 2px rgb(171, 96, 179);
-}
-
-.dinner{
+  }
+  
+  .dinner{
     color: #FFC72C;
-}
-.dinner:hover{
+  }
+  .dinner:hover{
     box-shadow: 0px 5px 2px #FFC72C;
-}
-
-
-.relaxation{
+  }
+  
+  
+  .relaxation{
     color: rgb(122, 224, 11)
-}
-.relaxation:hover{
+  }
+  .relaxation:hover{
     box-shadow: 0px 5px 2px rgb(122, 224, 11);
-}
-
-.leisure{
+  }
+  
+  .leisure{
     color: rgb(224, 195, 117)
-}
-.leisure:hover{
+  }
+  .leisure:hover{
     box-shadow: 0px 5px 2px rgb(224, 195, 117)
-}
-
-.education{
+  }
+  
+  .education{
     color: rgb(123, 142, 243)
-}
-.education:hover{
+  }
+  .education:hover{
     box-shadow: 0px 5px 2px rgb(123, 142, 243)
-}
-
-.health{
+  }
+  
+  .health{
     color: #FF3800;
-}
-.health:hover{
+  }
+  .health:hover{
     box-shadow: 0px 5px 2px #FF3800;
-}
-
-.holiday{
+  }
+  
+  .holiday{
     color: var(--main-lightblue);
-}
-.holiday:hover{
+  }
+  .holiday:hover{
     box-shadow: 0px 5px 2px var(--main-lightblue);
-}
-
-.work{
+  }
+  
+  .work{
     color: #8FBC8B;
-}
-.work:hover{
+  }
+  .work:hover{
     box-shadow: 0px 5px 2px #8FBC8B;
-}
-
-.travel{
+  }
+  
+  .travel{
     color: #EE82EE;
-}
-.travel:hover{
+  }
+  .travel:hover{
     box-shadow: 0px 5px 2px #EE82EE;
-}
-
-.shoping{
+  }
+  
+  .shoping{
     color: #F400A1
-}
-
-.shoping:hover{
+  }
+  
+  .shoping:hover{
     box-shadow: 0px 5px 2px #F400A1;
-}
+  }

@@ -44,32 +44,29 @@ export function getThisDay() {
 
 export function getFullDate() {
     const date = new Date()
-    let day = date.getDate();
-    let month = date.getMonth() + 1; // Месяцы начинаются с 0, поэтому добавляем 1
-    let year = date.getFullYear();
+    let [day, month, year] = date.toLocaleDateString().split('.')
 
-
-    if (month < 10){
-        month = '0' + String(month)
-    }
-    if (day < 10){
-        day = '0' + String(day)
-    }
-
-    const minDate = `${year}-${month}-${day}`
     
-    month += 1
+    const minDate = `${year}-${month}-${day}`    
+    
+    month = Number(month) + 1
     if (month === 13){
-        year += 1
-        month = '01'
+        year = Number(year) + 1
+        month = 1
     }
+    if (month < 10){
+        month = String('0' + month)
+    }
+    
     const maxDate = `${year}-${month}-${day}`
 
     return [minDate, maxDate]
 }
 
-export function getFormattedFullDate(){
-    const date = new Date()
-    const formattedDate = date.toLocaleString('en-US', {dateStyle: 'medium'})
-    return formattedDate
+export function getFormattedFullDate(date){
+    const formattedDate = new Date()
+    const [year, month, day] = date.split('-')
+    
+    formattedDate.setFullYear(year, month - 1, day) // those indexes so - 1
+    return formattedDate.toLocaleString('en-US', {dateStyle: 'medium'})
 }

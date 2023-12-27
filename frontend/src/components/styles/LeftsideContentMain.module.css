@@ -36,10 +36,11 @@
 
 .emailQty{
     font-size: 12px;
-    background-color: var(--cancel-red);
+    background-color: var(--main-red);
     padding: 5px;
     margin-left: 3px;
     border-radius: 50px;
+
 }
 
 .inviteFriendsContainer{

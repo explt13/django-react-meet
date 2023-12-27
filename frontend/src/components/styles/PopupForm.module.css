@@ -29,7 +29,7 @@
     height: auto;
 }
 .invalidDate > input{
-    border-bottom: 2px solid var(--cancel-red);
+    border-bottom: 2px solid var(--main-red);
 }
 
 .dateAndCategory{

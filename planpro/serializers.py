@@ -99,7 +99,7 @@ class EventSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Event
-		fields = ('requester', 'recipients', 'category', 'event_id', 'latitude', 'longitude', 'text', 'time', 'sent', 'marker_id')
+		fields = ('requester', 'recipients', 'category', 'event_id', 'latitude', 'longitude', 'text', 'time', 'sent', 'marker_id', 'icon')
 
 	def get_recipients(self, instance):
 		event_recipients = Event_Recipient.objects.filter(event=instance)

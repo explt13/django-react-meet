@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import UserContext from '../context/UserContext'
-import { Icon } from 'leaflet'
+import { Icon, marker } from 'leaflet'
 import EventService from '../API/EventService'
 import AuthContext from '../context/AuthContext'
 import { Marker, Popup, useMapEvents } from 'react-leaflet'
@@ -17,9 +17,9 @@ import MapContext from '../context/MapContext'
 const RecievedEvents = () => {
 
     const {csrftoken} = useContext(AuthContext)
-    const {thisUser, recievedEvents, setRecievedEvents, setAcceptedEvents, eventCategories} = useContext(UserContext)
+    const {thisUser, recievedEvents, setRecievedEvents, setAcceptedEvents, setEventCategories} = useContext(UserContext)
     const {category} = useContext(MapContext)
-    
+
 
     const sortedEvents = useMemo(() => {
         if (category === 'ALL'){
@@ -28,12 +28,14 @@ const RecievedEvents = () => {
         return [...recievedEvents].filter(event => event.category === category) // my event not default event
     }, [category, recievedEvents])
 
-    const customIcon = new L.divIcon({
-        className: classes.myDivIcon,
-        html: '<i class="fa-solid fa-check"></i>',
-        iconSize: [0, 0], // Set the size of the icon
-      });
-      
+    const customIcon = (name) =>{
+        const icon = new L.divIcon({
+            className: classes.myDivIcon,
+            html: name,
+            iconSize: [0, 0], // Set the size of the icon
+        });
+        return icon
+    } 
 
     const handleMarkerAccept = async (markerID) => { // move to mapComp?
         console.log("ACCEPTED")
@@ -54,8 +56,11 @@ const RecievedEvents = () => {
     }
 
     const handleMarkerReject = async (markerID) => { // ?? accesptness for someone else?
+        const event = recievedEvents.find(ev => ev.marker_id === markerID)
         const response = await EventService.rejectEvent(markerID, csrftoken)
-        setRecievedEvents(recievedEvents.filter(event => event.marker_id !== markerID))
+        setRecievedEvents(prevEvents => prevEvents.filter(event => event.marker_id !== markerID))
+        setEventCategories(prevCategories => prevCategories.map(category => category.value === event.category ? {...category, qty: category.qty - 1} : category))   
+
         console.log(response)
     }
 
@@ -68,7 +73,7 @@ const RecievedEvents = () => {
             id={event.marker_id}
             key={event.marker_id}
             position={[event.latitude, event.longitude]}
-            icon={customIcon}
+            icon={customIcon(event.icon)}
             draggable={false}
             
             >

@@ -14,13 +14,13 @@
                 {sentEvents.length !== 0 
                 ?
                 <div className={classes.events}>
-                    {sentEvents.slice((sentEvents.length > 5 ? sentEvents.length - 5 : 0), sentEvents.length).map(ev => (
+                    {sentEvents.slice((sentEvents.length > 6 ? sentEvents.length - 6 : 0), sentEvents.length).map(ev => (
                         <CustomTitle key={ev.event_id}>
-                        <div className={classes.event}>
-                            <div>to: {ev.recipients.map(recipient => <span key={recipient.username}>{recipient.username} </span>)}</div>
-                            <div>sent: {ev.time}</div>
-                            <div>text: {ev.text}</div>
-                        </div>
+                            <div className={classes.event}>
+                                <div>to: {ev.recipients.map(recipient => <span key={recipient.username}>{recipient.username} </span>)}</div>
+                                <div>sent: {ev.time}</div>
+                                <div>text: {ev.text}</div>
+                            </div>
                         </CustomTitle>
                     ))}
                 </div>

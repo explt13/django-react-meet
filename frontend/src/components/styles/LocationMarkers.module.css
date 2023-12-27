@@ -50,3 +50,62 @@
 .myDivIcon{
     font-size: 24px;
 }
+
+
+
+i{
+    font-size: 32px!important;
+}
+
+
+.bar{
+    color: rgb(171, 96, 179)
+}
+
+
+.dinner{
+    color: #FFC72C;
+}
+
+
+
+.relaxation{
+    color: rgb(122, 224, 11)
+}
+
+
+.leisure{
+    color: rgb(224, 195, 117)
+}
+
+
+.education{
+    color: rgb(123, 142, 243)
+}
+
+
+.health{
+    color: #FF3800;
+}
+
+
+.holiday{
+    color: var(--main-lightblue);
+}
+
+
+.work{
+    color: #8FBC8B;
+}
+
+.travel{
+    color: #EE82EE;
+}
+
+.shoping{
+    color: #F400A1
+}
+
+.borderForIcon{
+    text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+}

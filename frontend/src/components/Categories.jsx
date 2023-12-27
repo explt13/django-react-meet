@@ -8,6 +8,7 @@ import { faCircleArrowRight, faGraduationCap } from '@fortawesome/free-solid-svg
 import CustomTitle from './UI/CustomTitle/CustomTitle'
 import CategoriesList from './CategoriesList'
 
+
 const Categories = () => {
     
     return (
