@@ -1,0 +1,58 @@
+.main{
+    position: relative;
+    cursor: help;
+}
+
+
+.titleContainer{
+    display: flex;
+    cursor:default;
+    position: absolute;
+    min-width: 300px;
+    max-width: 600px;
+    flex-direction: column;
+    opacity: 0;
+    animation: show 0.4s ease-in-out forwards;
+}
+/* could do useing active classes*/
+/* .titleContainer.active{ */
+    /* display: flex; */
+/* } */
+
+.titleContainer.leave{
+    animation: close 0.4s ease-in-out forwards
+}
+
+.titleContent div{
+    max-height: unset!important;
+    height: unset!important;
+    border: none;
+    overflow: auto!important;
+    
+}
+
+.titleContent{
+    box-shadow: -3px 5px 0 var(--main-purple);
+    color: var(--main-white);
+    padding: 10px 30px;
+    border-radius: 5px;
+    background-color: var(--main-navy);
+
+
+}
+
+.titleFooter{
+    align-self: center;
+    border: 30px solid transparent;
+    border-top: 20px solid var(--main-navy);
+}
+
+@keyframes show{
+    from{opacity: 0;}
+    to{opacity: 1;}
+}
+
+@keyframes close {
+    from{opacity: 1;}
+    to{opacity: 0;}
+}

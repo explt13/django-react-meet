@@ -18,10 +18,6 @@ const Map = () => {
   const {position} = useContext(MapContext)
 
   return (
-    !position
-    ?
-    <Loader /> // error
-    :
     <div className={[classes.wrapper, 'container'].join(' ')}> {/* container ?? */}
       <MapContainer id='myMap' center={position} zoom={13} scrollWheelZoom={true} className={classes.map} attributionControl={false} doubleClickZoom={false}>
         <TileLayer

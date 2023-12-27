@@ -10,7 +10,7 @@ const MapPage = () => {
 
     return (
         <MapProvider>
-            <div className='wrapper container'>
+            <div className='wrapper container' >
                 <MapComp />
             </div>
         </MapProvider>

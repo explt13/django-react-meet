@@ -21,8 +21,20 @@
     display: flex;
     justify-content: space-evenly;
     background-color: var(--main-gray);
-    height: 280px;
+    flex-wrap: wrap;
     
+}
+
+.categories.all{
+
+    background-color: var(--main-white);
+    column-gap: 40px;
+    justify-content: center;
+    align-content: start;
+}
+.categories.all > .category{
+    width: 20%;
+
 }
 
 .category{
@@ -62,6 +74,13 @@
     transition: font-size ease-in-out 0.2s;
 }
 
+.qty{
+    position: absolute;
+    right: 10px;
+    font-size: 32px;
+}
+
+
 .category:hover .categoryIcon{
     font-size: 66px;
 }
@@ -72,6 +91,7 @@
 
 
 .moreCategories{
+
     margin-top: 10px;
     display: flex;
     justify-content: center;
@@ -86,6 +106,7 @@
     color: var(--main-navy);
 }
 
+
 .bar{
     color: rgb(171, 96, 179)
 }
@@ -94,10 +115,10 @@
 }
 
 .dinner{
-    color: rgb(238, 147, 36);
+    color: #FFC72C;
 }
 .dinner:hover{
-    box-shadow: 0px 5px 2px rgb(238, 147, 36);;
+    box-shadow: 0px 5px 2px #FFC72C;
 }
 
 
@@ -123,8 +144,37 @@
 }
 
 .health{
-    color: var(--main-red);
+    color: #FF3800;
 }
 .health:hover{
-    box-shadow: 0px 5px 2px var(--main-red);
+    box-shadow: 0px 5px 2px #FF3800;
+}
+
+.holiday{
+    color: var(--main-lightblue);
+}
+.holiday:hover{
+    box-shadow: 0px 5px 2px var(--main-lightblue);
+}
+
+.work{
+    color: #8FBC8B;
+}
+.work:hover{
+    box-shadow: 0px 5px 2px #8FBC8B;
+}
+
+.travel{
+    color: #EE82EE;
+}
+.travel:hover{
+    box-shadow: 0px 5px 2px #EE82EE;
+}
+
+.shoping{
+    color: #F400A1
+}
+
+.shoping:hover{
+    box-shadow: 0px 5px 2px #F400A1;
 }

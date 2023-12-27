@@ -5,7 +5,7 @@ import EventService from '../API/EventService'
 import AuthContext from '../context/AuthContext'
 import { Marker, Popup, useMapEvents } from 'react-leaflet'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faIceCream, faXmark } from '@fortawesome/free-solid-svg-icons'
 import redMarker from './../media/img/redMarker.png'
 import classes from './styles/LocationMarkers.module.css'
 import { Link } from 'react-router-dom'
@@ -17,8 +17,9 @@ import MapContext from '../context/MapContext'
 const RecievedEvents = () => {
 
     const {csrftoken} = useContext(AuthContext)
-    const {thisUser, recievedEvents, setRecievedEvents, setAcceptedEvents} = useContext(UserContext)
+    const {thisUser, recievedEvents, setRecievedEvents, setAcceptedEvents, eventCategories} = useContext(UserContext)
     const {category} = useContext(MapContext)
+    
 
     const sortedEvents = useMemo(() => {
         if (category === 'ALL'){
@@ -27,13 +28,12 @@ const RecievedEvents = () => {
         return [...recievedEvents].filter(event => event.category === category) // my event not default event
     }, [category, recievedEvents])
 
-    function defineMarker(color){
-        const customIcon = new Icon({
-          iconUrl: color,
-          iconSize: [64, 64]
-        })
-        return customIcon
-    }
+    const customIcon = new L.divIcon({
+        className: classes.myDivIcon,
+        html: '<i class="fa-solid fa-check"></i>',
+        iconSize: [0, 0], // Set the size of the icon
+      });
+      
 
     const handleMarkerAccept = async (markerID) => { // move to mapComp?
         console.log("ACCEPTED")
@@ -68,8 +68,9 @@ const RecievedEvents = () => {
             id={event.marker_id}
             key={event.marker_id}
             position={[event.latitude, event.longitude]}
-            icon={defineMarker(redMarker)}
+            icon={customIcon}
             draggable={false}
+            
             >
             <Popup>
                 {

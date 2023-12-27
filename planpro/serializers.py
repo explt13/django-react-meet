@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from django.core.exceptions import ValidationError
 from .models import User, Friendship, Event, Event_Recipient, Mail
-
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 class UserRegisterSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -30,10 +30,16 @@ class UserLoginSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ('username', 'email', 'first_name', 'last_name', 'profile_pic')
+		fields = ('id', 'username', 'email', 'first_name', 'last_name', 'profile_pic', 'about')
+
+	def validate_profile_pic(self, profile_pic):
+		print(profile_pic)
+		if isinstance(profile_pic, InMemoryUploadedFile):
+			return profile_pic
+		return self.instance.profile_pic
 
 	def update(self, instance, validated_data):
-		instance.username = validated_data.get('username', instance.username)
+		instance.about = validated_data.get('about', instance.about)
 		instance.first_name = validated_data.get('first_name', instance.first_name)
 		instance.last_name = validated_data.get('last_name', instance.last_name)
 		instance.profile_pic = validated_data.get('profile_pic', instance.profile_pic)

@@ -63,6 +63,19 @@ class UserService { // should I split it
         return response.data
     }
 
+    static async updateInformation(username, data, csrf){
+
+        const response = await axios.patch(`http://127.0.0.1:8000/user/${username}/update`, data=data, {
+            withCredentials: true,
+            headers: {
+                'X-CSRFToken': csrf,
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+
+        return response.data
+    }
+
 }
 
 export default UserService

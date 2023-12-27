@@ -11,6 +11,7 @@ urlpatterns = [
     path('register', UserRegister.as_view(), name='register'),
     path('logout', UserLogout.as_view(), name='logout'),
     path('user/<str:username>', UserView.as_view(), name='user'),
+    path('user/<str:username>/update', UserView.as_view(), name='user_update'),
     path('user/<str:username>/friends', FriendsView.as_view(), name='friends'),
     path('user/<str:username>/friends/<str:delete_username>', FriendsView.as_view(), name='friends_delete'),
     path('user/<str:username>/friendship/<int:friendshipID>', FriendsView.as_view(), name='friendsip_response'),

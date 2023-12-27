@@ -21,7 +21,7 @@ const PopupForm = ({isOpen, setIsOpen}) => {
   const [valid, setValid] = useState(true)
   const formattedDate = getFormattedFullDate()
   const ind = Math.floor(Math.random() * phrases.length)
-  const {setEventInformation, setCanAddMarkers, eventInformation} = useContext(MapContext)
+  const {setEventInformation, setCanAddMarkers, eventInformation, setCategory} = useContext(MapContext)
   const [dateClasses, setDateClasses] = useState([classes.dateInput])
   const {eventCategories} = useContext(UserContext)
 
@@ -38,6 +38,7 @@ const PopupForm = ({isOpen, setIsOpen}) => {
 
   const handleAcceptPopup = () => {
     if (valid){
+      setCategory(eventInformation.category)
       setIsOpen(false)
     }
     

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import RegexValidator
 
 # Create your models here.
 
@@ -10,6 +11,10 @@ EVENT_CHOICES = (# do this,
     ('BAR', 'Bar'),
     ('LEISURE', 'Leisure'),
     ('RELAXATION', 'Relaxation'),
+    ('HOLIDAY', 'Holiday'),
+    ('WORK', 'Work'),
+    ('TRAVEL', 'Travel'),
+    ('SHOPING', 'Shoping')
 )
 
 STATUS_CHOICES = (
@@ -20,6 +25,15 @@ STATUS_CHOICES = (
 
 
 class User(AbstractUser):
+    alphanumeric_validator = RegexValidator(
+        r'^[0-9a-zA-Z]*$',
+        'Only alphanumeric characters are allowed for the username.'
+    )
+    first_name = models.CharField(max_length=46, null=False, blank=False)
+    last_name = models.CharField(max_length=46, null=False, blank=False)
+    username= models.CharField(max_length=16, unique=True, null=False, blank=False, validators=[alphanumeric_validator])
+    email = models.EmailField(max_length=64, null=False, blank=False)
+    about = models.CharField(max_length=256, null=True, blank=True)
     profile_pic = models.ImageField(upload_to='images/', default='images/default.png')
     friends = models.ManyToManyField('self', blank=True)
 
@@ -30,7 +44,7 @@ class Friendship(models.Model):
     friendship_id = models.AutoField(primary_key=True)
 
 
-class Event(models.Model): # split in two?
+class Event(models.Model): # split in two?m
 
     requester = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_events')
     recipients = models.ManyToManyField(User, related_name='recieved_events', through='Event_Recipient') # all users events

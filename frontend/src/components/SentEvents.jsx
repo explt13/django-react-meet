@@ -11,7 +11,7 @@ import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import CustomButton from './UI/CustomButton/CustomButton'
 import { Link } from 'react-router-dom'
 import MapContext from '../context/MapContext'
-
+import L from 'leaflet'
 
 const SentEvents = () => {
     const {thisUser, sentEvents, setSentEvents} = useContext(UserContext)
@@ -26,6 +26,11 @@ const SentEvents = () => {
         })
         return customIcon
     }
+    const customIcon = new L.divIcon({
+        className: classes.myDivIcon,
+        html: '<i class="fa-solid fa-check"></i>',
+        iconSize: [0, 0], // Set the size of the icon
+      });
 
     const handleMarkerDrag = (e) => {
         const {lat, lng} = e.target.getLatLng()
@@ -100,7 +105,7 @@ const SentEvents = () => {
             key={event.marker_id}
             eventHandlers={{dragend: handleMarkerDrag}}
             position={[event.latitude, event.longitude]}
-            icon={defineMarker(purpleMarker)}
+            icon={customIcon}
             draggable={!event.event_id && !event.is_confirmed}
             >
                 <Popup>

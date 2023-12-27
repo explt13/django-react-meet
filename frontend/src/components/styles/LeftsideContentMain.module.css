@@ -54,24 +54,29 @@
     display: flex;
 }
 .friendContainer{
-    width: min-content;
-    height: 100%;
+
+    height: 74px;
+    width: 74px;
     padding: 5px;
     transition: all 0.2s ease-in-out;
-
 }
+
+
 .friendContainer:nth-child(1n + 2){
     margin-left: -40px;
 }
 
 .friendContainer:hover{
-    height: 105%;
+    height: 77.69px;
+    width: 77.69px;
     transform: translateX(-2px) translateY(-2px);
 }
 
 .friendImage{
+    object-fit: cover;
     cursor: pointer;
     height: 100%;
+    width: 100%;
     border: 1px solid var(--main-navy);
     border-radius: 50px;
 }

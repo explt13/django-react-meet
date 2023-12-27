@@ -1,0 +1,91 @@
+.profileInformationContainer{
+    display: flex;
+    flex-direction: column;
+
+}
+.imgContainer{
+    width: 170px;
+    height: 170px;
+    cursor: pointer;
+
+    border-radius: 100px;
+}
+
+.imgContainer > img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+.mainInformation{
+    display: flex;
+    gap: 50px;
+
+}
+
+.userUsername{
+    font-size: 22px;
+}
+.userUsername::before{
+    content: '@';
+}
+
+.editProfile{
+
+    flex-basis: 10%;
+    display: flex;
+    justify-content: right;
+}
+
+.editProfile > a{
+    text-decoration: none;
+    height: min-content;
+    color: var(--main-navy)
+}
+
+
+.userInformation{
+    row-gap: 15px;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+
+    margin-top: 20px;
+}
+
+.userInformation > div{
+    display: flex;
+    column-gap: 20px;
+    justify-content: start;
+}
+
+.labels{
+    width: 150px;
+}
+
+input{
+    padding-left: 5px
+}
+
+textarea{
+    resize: none;
+    width: 400px;
+    height: 150px;
+    font-size: 16px;
+    padding: 5px 10px
+}
+
+.buttons{
+    margin-top: 10px;
+    align-self: end;
+
+}
+
+
+.discardChanges > button:hover{
+    background-color: var(--main-red);
+}
+.saveChanges > button:hover{
+    background-color: var(--main-green);
+}

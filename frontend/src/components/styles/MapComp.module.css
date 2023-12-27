@@ -15,6 +15,7 @@
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     background-color: var(--main-gray);
+
 }
 
 .categorySelectContainer{
@@ -36,7 +37,7 @@
 
 .friendsSelect{
     margin-top: 20px;
-
+    width: 100%;
 }
 
 
@@ -45,20 +46,40 @@
     border-radius: 10px;
 }
 
+
+.mapGeoErrorContainer{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 108px;
+    left: 0;
+    right: 0;
+    justify-content: center;
+    align-items: center;
+}
+.mapGeoErrorIcon{
+    font-size: 118px;
+}
+.mapGeoErrorText{
+    font-size: 28px;
+}
+
+
+
 @media screen and (max-width: 767px) {
     .mapContainer{
-
-        height: 500px;
         flex-direction: column;
+        max-width: 100%;
+        height: var(--main-phone);
+
+    }
+    .rightPanel{
+        height: 30vh;
+        width: 100%;
     }
     .friendsContainer{
         border-radius: 0px;
         height: 240px;
-    }
-}
-
-@media screen and (max-width: 575px) {
-    .mapContainer{
-        max-width: 300px;
     }
 }

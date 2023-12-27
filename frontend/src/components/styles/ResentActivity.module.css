@@ -23,11 +23,16 @@
 }
 
 .event{
-
-    overflow: auto;
     border-radius: 10px;
     padding: 10px;
     border: 2px solid slategray;
+    height: 120px;
+    overflow: hidden;
+}
+
+.event > div{
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 

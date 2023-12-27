@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import UserContext from '../context/UserContext'
 import classes from './styles/ProfileInformation.module.css'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import FriendService from '../API/FriendService'
 import Loader from './UI/Loader/Loader'
 import CustomButton from './UI/CustomButton/CustomButton'
@@ -37,22 +37,27 @@ const ProfileInformation = () => {
         (isUserLoading || !user)
         ? <Loader />
         :
-        <div className={classes.profileInformation}>
-            <div className={classes.image}>
-                <img src={`http://127.0.0.1:8000/${user.profile_pic}`} />
-            </div>
-            <div className={classes.information}>
-                <div className={classes.fullName}>
-                    {user.first_name} {user.last_name}
+        <div className={classes.profileInformationContainer}>
+            <div className={classes.mainInformation}>
+                <div className={classes.imgContainer}><img src={`http://127.0.0.1:8000/${user.profile_pic}`}></img></div>
+                <div className={classes.userInformation}>
+                    <div className={classes.fullName}>
+                        <div>{user.first_name}</div>
+                        <div>{user.last_name}</div>
+                    </div>
+                    <div className={classes.userUsername}>{user.username}</div>
+                    {user.about &&
+                    <div className={classes.userAbout}>About: <div>{user.about}</div></div>
+                    }
                 </div>
-                <div className={classes.username}>
-                    @{user.username}
-                </div>
             </div>
-            <div className={classes.buttons}>
-            {thisUser.username !== user.username && !friends.find(friend => friend.username === user.username) && <CustomButton onClick={handleAddFriend}>send friend request</CustomButton>}
+            <div className={classes.editProfile}>
+                <Link to={`/user/${thisUser.username}/edit`}>Edit profile</Link>
             </div>
         </div>
+ 
+        /* {thisUser.username !== user.username && !friends.find(friend => friend.username === user.username) && <CustomButton onClick={handleAddFriend}>send friend request</CustomButton>} */
+
     )
 }
 

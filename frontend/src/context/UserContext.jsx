@@ -4,7 +4,7 @@ import FriendService from '../API/FriendService'
 import AuthContext from './AuthContext'
 import EventService from '../API/EventService'
 import MailService from '../API/MailService'
-import { faGraduationCap, faPlusSquare, faUtensils, faWineGlass, faMountainSun, faBaseballBatBall } from '@fortawesome/free-solid-svg-icons'
+import { faGraduationCap, faPlusSquare, faUtensils, faWineGlass, faMountainSun, faBaseballBatBall, faSnowman, faBriefcase, faCar, faBagShopping, faMugHot } from '@fortawesome/free-solid-svg-icons'
 
 
 const UserContext = createContext(null)
@@ -23,10 +23,14 @@ export const UserProvider = ({children}) => {// otherwise props.children
     const [eventCategories, setEventCategories] = useState([
       {name: 'Health', value: 'HEALTH', qty: 0, icon: faPlusSquare, className: 'health'},
       {name: 'Education', value: 'EDUCATION', qty: 0, icon: faGraduationCap, className: 'education'},
-      {name: 'Dinner', value: 'DINNER', qty: 0, icon: faUtensils, className: 'dinner'},
+      {name: 'Dinner', value: 'DINNER', qty: 0, icon: faMugHot, className: 'dinner'},
       {name: 'Bar', value: 'BAR', qty: 0, icon: faWineGlass, className: 'bar'},
       {name: 'Leisure', value: 'LEISURE', qty: 0, icon: faBaseballBatBall, className: 'leisure'},
       {name: 'Relaxation', value: 'RELAXATION', qty: 0, icon: faMountainSun, className: 'relaxation'},
+      {name: 'Holiday', value: 'HOLIDAY', qty: 0, icon: faSnowman, className: 'holiday'},
+      {name: 'Work', value: 'WORK', qty: 0, icon: faBriefcase, className: 'work'},
+      {name: 'Travel', value: 'TRAVEL', qty: 0, icon: faCar, className: 'travel'},
+      {name: 'Shoping', value: 'SHOPING', qty: 0, icon: faBagShopping, className: 'shoping'}
   ])
      
 
@@ -38,17 +42,15 @@ export const UserProvider = ({children}) => {// otherwise props.children
       if (username && isAuth){
         const fetchData = async () => {
           const userData = await UserService.getUser(username) // ? set to localStorage?
-          setThisUser(userData)
-
           const friendsData = await FriendService.getFriends(username)
-          setFriends([...friendsData])
-
           const sent_events = await EventService.getSentEvents()
           const recieved_events = await EventService.getRecievedEvents()
           const accepted_events = await EventService.getAcceptedEvents()
           const emailQty = await MailService.getEmailQty() // change to unread mail
           const eventsQty = await EventService.getEventsQty()
-
+          
+          setThisUser(userData)
+          setFriends([...friendsData])
           setEmailQty(emailQty)
           setSentEvents([...sent_events])
           setRecievedEvents([...recieved_events])

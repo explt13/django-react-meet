@@ -34,7 +34,6 @@ class CheckAuth(APIView):
 
 class UserLogin(APIView):
     permission_classes = (permissions.AllowAny, )
-
     def post(self, request):
         data = request.data
         serializer = UserLoginSerializer(data=data)
@@ -76,12 +75,13 @@ class UserView(APIView):
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def post(self, request): #update user information
-        data = request.data 
+    def patch(self, request, username): #update user information
+        data = request.data
         serializer = UserSerializer(request.user, data=data, partial=True)
         if serializer.is_valid():
             serializer.update(request.user, serializer.validated_data) 
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response('Profile information has been updated', status=status.HTTP_200_OK)
+        return Response(serializer.errors)
 
 
 class UsersView(APIView):
@@ -262,19 +262,24 @@ class MailView(APIView):
 
     def delete(self, request, method):
         if method == 'delete':
-            email = request.query_params.get('email_id')
-            mail = Mail.objects.get(pk=email)
+            email_id = request.query_params.get('email_id')
+            mail = Mail.objects.get(pk=email_id)
             request.user.recieved_emails.remove(mail)
             if not mail.recipients.exists():
                 mail.delete()
             return Response('email has been deleted')
         elif method == 'clear':
-            request.user.recieved_emails.clear() # if there is no recipients anymore?
+            emails = request.user.recieved_emails.all() # if there is no recipients anymore?
+            for email in emails:
+                request.user.recieved_emails.remove(email)
+                if not email.recipients.exists():
+                    email.delete()
+
             return Response('mail has been cleared')
 
 
-
 class EventQtyView(APIView):# have separate DB?
+
     def get(self, request):
         
         se_qs = list(Event.objects.filter(requester_id=request.user).values('category').annotate(qty=Count('category')))
@@ -288,3 +293,5 @@ class EventQtyView(APIView):# have separate DB?
         result_list = [{'category': category, 'qty': qty} for category, qty in category_sums.items()]
         serializer = EventQtySerializer(result_list, many=True)
         return Response(serializer.data)
+    
+

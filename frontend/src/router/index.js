@@ -8,10 +8,14 @@ import SearchPage from "../pages/SearchPage"
 import FriendsPage from "../pages/FriendsPage"
 import MailPage from "../pages/MailPage"
 import MapPage from "../pages/MapPage"
+import CategoriesPage from "../pages/CategoriesPage"
+import ProfileEditPage from "../pages/ProfileEditPage"
 
 
 export const privateRoutes = [
     {path: 'user/:username/friends', element: <FriendsPage />, exact: true},
+    {path: 'user/:username/edit', element: <ProfileEditPage />, exact: true},
+    {path: 'categories', element: <CategoriesPage />, exact: true},
     {path: 'map', element: <MapPage />, excat: true},
     {path: 'search', element: <SearchPage />, exact: true},
     {path: 'mail', element: <MailPage />, excat: true},

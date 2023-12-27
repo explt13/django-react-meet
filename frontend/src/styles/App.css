@@ -6,12 +6,17 @@
   --main-font-color: #ddd;
   --main-purple: #6a5bcd;
   --main-navy: rgb(24, 49, 83);
+  --main-navyA3: rgba(24, 49, 83, 0.3);
   --main-navy-hover: rgb(14, 29, 49);
   --main-white: rgb(250, 250, 250);
   --main-gray: rgb(235, 236, 238);
   --main-gray50: rgb(205, 206, 208);;
+  --main-grayA3: rgba(235, 236, 238, 0.3);
   --main-gray-hover:rgb(131, 142, 155);
   --main-eggshell: #D0EAD6;
+  --main-lightblue: #B9D9EB;
+  --height-laptop: calc(100vh - 108px);
+  --height-phone: calc(100vh - 70px);
 
 }
 *{
@@ -41,5 +46,16 @@ body{
 
 .wrapper{
   margin-top: 40px;
+  height: var(--height-laptop); /* 40px 68px - navbar*/
+  position: relative;
+}
+
+
+
+
+@media screen and (max-width: 767px) {
+  .wrapper{
+    margin-top: 20px;
+  }
 }
 

@@ -5,6 +5,7 @@ import ProfileInformation from '../components/ProfileInformation'
 import Loader from '../components/UI/Loader/Loader'
 import { useParams } from 'react-router-dom'
 import UserService from '../API/UserService'
+import classes from './styles/ProfilePage.module.css'
 
 const ProfilePage = () => {
   const {isLoading, setIsLoading} = useContext(UserContext)
@@ -15,7 +16,10 @@ const ProfilePage = () => {
     ? <Loader />
     :
     <div className='container wrapper'>
-      <ProfileInformation/>
+      <div className={classes.profileContainer}>
+        <ProfileInformation/>
+      </div>
+      
     </div>
   )
 }

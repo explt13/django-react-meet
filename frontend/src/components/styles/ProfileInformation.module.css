@@ -1,63 +1,65 @@
-.profileInformation{
-    display: grid;
-    grid-template-columns: max-content auto;
-    grid-template-rows: auto auto;
-    grid-template-areas:
-    'image information'
-    'buttons space';
+.profileInformationContainer{
+    display: flex;
+    justify-content: space-between;
+}
+.imgContainer{
+    width: 170px;
+    height: 170px;
+    border-radius: 100px;
+}
+.imgContainer > img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
     
 }
 
-.image{
-    width: 240px;
-    height: 240px;
+.mainInformation{
+    display: flex;
+    gap: 50px;
+
 }
-.image > img{
-    width: 100%;
+
+.userUsername{
+    font-size: 22px;
 }
-.information{
-    margin-left: 100px;
-    display: grid;
-    grid-template-columns: max-content;
-    grid-template-rows: 20px min-content min-content;
-    column-gap: 10px;
-    grid-template-areas:
-    'space'
-    'fullName'
-    'username';
-    font-size: 48px;
+.userUsername::before{
+    content: '@';
+}
+
+.editProfile{
+
+    flex-basis: 10%;
+    display: flex;
+    justify-content: right;
+}
+
+.editProfile > a{
+    text-decoration: none;
+    height: min-content;
+    color: var(--main-navy)
 }
 
 .fullName{
-    grid-area: fullName
-}
-.username{
-    grid-area: username;
-    font-size: 24px;
+    gap: 15px;
+    font-size: 36px;
+    display: flex;
 }
 
-.buttons{
+
+.userAbout{
     margin-top: 20px;
-    text-align: center;
-    grid-area: buttons;
+    font-size: 20px;
+    width: 500px;
+    height: 200px;
+    overflow: auto;
 }
 
-
-
-@media screen and (max-width: 767px){
-    .image{
-        width: 120px;
-        height: 120px;
-    }
-    .profileInformation{
-        grid-template-columns: min-content auto;
-        grid-template-rows: auto auto;
-    }
-    .information{
-        font-size: 24px;
-        margin-left: 40px;
-    }
-    .username{
-        font-size: 20px;
-    }
+.userAbout > div{
+    font-size: 18px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
