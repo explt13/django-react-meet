@@ -26,26 +26,25 @@ const LoginForm = () => {
     }
 
     const loginUser = async () => {
-        setIsLoading(true)
-        try{
-            await UserService.loginUser({
-            username: username,
-            password: password,
-            },
-            csrftoken)
-            
-            setUsername('')
-            setPassword('')
-            
+        
+        
+        const response = await UserService.loginUser({
+        username: username,
+        password: password,
+        },
+        csrftoken)
+        
+        setUsername('')
+        setPassword('')
+        if (response.status === 200){
             setIsAuth(true)
             localStorage.setItem('username', username)
-            
-
-        } catch (e) {
-            setError(e.response.data)
-        } finally {
-            setIsLoading(false)
         }
+        if (response.status === 400){
+            setError(response.data)
+        }
+        
+        
     }
     
   return (

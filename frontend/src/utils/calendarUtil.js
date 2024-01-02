@@ -1,48 +1,40 @@
-export function getDays() {
-    const date = new Date();
-    const month = date.getMonth() + 1
-    const array = Array()
-    let days;
-    if ([4, 6, 9, 11].includes(month)){
-        days = 30
-    } else if (month === 2){
-        days = 28
-    } else {
-        days = 31
-    }
+export function getDaysInMonth(date, monthInd) {
+    const daysInMonth = new Date(2024, monthInd + 1, 0).getDate() // month bt default is zeroBased but i needed to add  +1 cuz using zero is date means get last day of previous month
+    const shift = getWeekdayIndex(monthInd)
 
-    for (let i=1; i <= days; i ++){
+    const array = Array(shift).fill(' ', 0, shift)
+    for (let i=1; i <= daysInMonth; i ++){
         array.push(i)
     }
-
     return array
 }
 
-export function getRowsByDays() {
-    const days = getDays();
-    let rows;
-    if (days.length <= 30){
-        rows = 5
-    } else {
-        rows = 6
-    }
-    return rows
+export function getWeekdayIndex(monthInd){
+    const weekdayIndex = (new Date(2024, monthInd, 1).getDay() + 6) % 7 // right shift 1 cuz getDay starts with Sunday
+    return weekdayIndex
 }
 
-export function getDate(){
+
+export function getDateInfo(monthNum){
     const date = new Date()
     const year = date.getFullYear()
-    const month = date.toLocaleString('en-US', {'month': 'short'})
-    return [year, month]
+    const monthInd = date.getMonth() + monthNum
+    const dayOfMonth = date.getDate()
+
+    const daysInMonth = getDaysInMonth(date, monthInd)
+
+    const dateInfo = new Date(date.setFullYear(year, monthInd, monthNum === 0 ? dayOfMonth : 1)).toLocaleString('en-US', {year: 'numeric', month: 'long', day: '2-digit'})
+    const [m, d, y] = dateInfo.split(RegExp(/, | /))
+    return [d, daysInMonth, m, y]
+
+    
 }
 
-export function getThisDay() {
-    const day = new Date().getDate()
-    return day
-}
 
 
-export function getFullDate() {
+
+
+export function getDateForInput() {
     const date = new Date()
     let [day, month, year] = date.toLocaleDateString().split('.')
 

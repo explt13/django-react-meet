@@ -51,7 +51,7 @@ const Search = ({qty, placeholder, handleSearch, searchValue, setSearchValue}) =
             </div>
         </div>
         :
-        <CustomIcon><FontAwesomeIcon icon={faSearch} onClick={handleSearchOpen} /></CustomIcon>
+        <CustomIcon className={classes.searchButton}><FontAwesomeIcon icon={faSearch} onClick={handleSearchOpen} /></CustomIcon>
 
     )
 }

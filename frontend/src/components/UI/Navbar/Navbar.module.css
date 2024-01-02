@@ -10,12 +10,7 @@
     height: max-content;
     margin-top: 7px
 }
-.brand{
-    height: 48px;
-    width: 48px;
-    border-radius: 100px;
-    line-height: 50px;
-}
+
 
 
 .mailIcon{
@@ -26,4 +21,13 @@
     color: red;
     position: absolute;
     right: 0;
+}
+
+
+a > i{
+    font-size: 24px!important;
+}
+
+.barsIcon{
+    font-size: 24px!important;
 }

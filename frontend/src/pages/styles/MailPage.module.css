@@ -32,7 +32,7 @@
     right: 0;
 }
 .deleteEmail > i{
-    font-size: 20px;
+    font-size: 20px!important;
     color: var(--main-navy)
 }
 

@@ -94,6 +94,8 @@
 
 .additional{
     grid-area: additional;
+    height: min-content;
+    margin-top: 10px;
 }
 
 @media screen and (max-width: 767px) {

@@ -4,15 +4,24 @@ axios.defaults.withCredentials = true;
 
 
 class FriendService {
+    static async requestWrapper(req){
+        try{
+            return await req
+        } catch (e){
+            return e.response
+        }
+
+    }
+
     static async sendFriendRequest(username, csrf){
-        const response = await axios.post(`http://127.0.0.1:8000/friend_request`, {"username": username}, {
-            withCredentials: true,
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrf
-            }
-        })
-        return response.data
+        return this.requestWrapper(
+            axios.post(`http://127.0.0.1:8000/friend_request`, {"username": username}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrf
+                }
+            })
+        )
     }
     
     static async getFriends(username){
@@ -32,33 +41,47 @@ class FriendService {
     }
 
     static async deleteFriend(username, deleteUsername, csrf){
-        const response = await axios.delete(`http://127.0.0.1:8000/user/${username}/friends/${deleteUsername}`,{
+        return this.requestWrapper(
+            axios.delete(`http://127.0.0.1:8000/user/${username}/friends/${deleteUsername}`,{
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrf
             }
         })
-        return response.data
+        )
     }
 
     static async rejectFriend(username, friendshipID, csrf){
-        const response = await axios.post(`http://127.0.0.1:8000/user/${username}/friendship/${friendshipID}`, {action: 'reject'}, {
+        return this.requestWrapper(
+            axios.post(`http://127.0.0.1:8000/user/${username}/friendship/${friendshipID}`, {action: 'reject'}, {
             headers: {
                 'X-CSRFToken': csrf,
                 'Content-Type': 'application/json'
             }
         })
-        return response.data
+        )
     }
 
     static async acceptFriend(username, friendshipID, csrf){
-        const response = await axios.post(`http://127.0.0.1:8000/user/${username}/friendship/${friendshipID}`, {action: 'accept'}, {
+        return this.requestWrapper(
+            axios.post(`http://127.0.0.1:8000/user/${username}/friendship/${friendshipID}`, {action: 'accept'}, {
             headers: {
                 'X-CSRFToken': csrf,
                 'Content-Type': 'application/json'
             }
         })
-        return response.data
+        )
+    }
+    
+    static async cancelFriend(username, friendshipID, csrf){
+        return this.requestWrapper(
+            axios.post(`http://127.0.0.1:8000/user/${username}/friendship/${friendshipID}`, {action: 'cancel'}, {
+            headers: {
+                'X-CSRFToken': csrf,
+                'Content-Type': 'application/json'
+            }
+        })
+        )
     }
 }
 

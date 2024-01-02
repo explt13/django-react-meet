@@ -16,7 +16,7 @@ const Categories = () => {
               <div className={classes.categoryHeading}>
                 Categories
               </div>
-              <CategoriesList all={false}/>
+              <CategoriesList choose={false} all={false}/>
               <div className={classes.moreCategories}>
                 explore more.. <Link to='/categories'><CustomIcon className={classes.arrow}><FontAwesomeIcon icon={faCircleArrowRight} /></CustomIcon></Link>
               </div>

@@ -34,8 +34,9 @@
 }
 .categories.all > .category{
     width: 20%;
-
 }
+
+
 
 .category{
     cursor: pointer;
@@ -49,6 +50,25 @@
     box-shadow: 0px 5px 0px gray;
     transition: all ease-in-out 0.2s;
 }
+
+.category.mini{
+  width: 150px!important;
+  height: 150px;
+}
+
+.category.mini > .categoryName{
+  font-size: 20px;
+}
+.category.mini:hover .categoryName{
+  font-size: 22px!important;
+}
+.category.mini.active .categoryName{
+  font-size: 22px;
+}
+.category.mini.active .categoryIcon{
+  font-size: 66px;
+}
+
 
 .categoryName{
     height: 30%;
@@ -109,72 +129,101 @@
 
 .bar{
     color: rgb(171, 96, 179)
-  }
-  .bar:hover{
+}
+.active.bar{
+  box-shadow: 0px 5px 2px rgb(171, 96, 179);
+}
+.bar:hover{
     box-shadow: 0px 5px 2px rgb(171, 96, 179);
-  }
+}
   
-  .dinner{
-    color: #FFC72C;
-  }
-  .dinner:hover{
-    box-shadow: 0px 5px 2px #FFC72C;
-  }
-  
-  
-  .relaxation{
-    color: rgb(122, 224, 11)
-  }
-  .relaxation:hover{
-    box-shadow: 0px 5px 2px rgb(122, 224, 11);
-  }
-  
-  .leisure{
-    color: rgb(224, 195, 117)
-  }
-  .leisure:hover{
-    box-shadow: 0px 5px 2px rgb(224, 195, 117)
-  }
-  
-  .education{
-    color: rgb(123, 142, 243)
-  }
-  .education:hover{
-    box-shadow: 0px 5px 2px rgb(123, 142, 243)
-  }
-  
-  .health{
-    color: #FF3800;
-  }
-  .health:hover{
-    box-shadow: 0px 5px 2px #FF3800;
-  }
-  
-  .holiday{
-    color: var(--main-lightblue);
-  }
-  .holiday:hover{
-    box-shadow: 0px 5px 2px var(--main-lightblue);
-  }
-  
-  .work{
-    color: #8FBC8B;
-  }
-  .work:hover{
-    box-shadow: 0px 5px 2px #8FBC8B;
-  }
-  
-  .travel{
-    color: #EE82EE;
-  }
-  .travel:hover{
-    box-shadow: 0px 5px 2px #EE82EE;
-  }
-  
-  .shoping{
-    color: #F400A1
-  }
-  
-  .shoping:hover{
-    box-shadow: 0px 5px 2px #F400A1;
-  }
+.dinner{
+  color: #FFC72C;
+}
+.active.dinner{
+  box-shadow: 0px 5px 2px #FFC72C;
+}
+.dinner:hover{
+  box-shadow: 0px 5px 2px #FFC72C;
+}
+
+
+.relaxation{
+  color: rgb(122, 224, 11)
+}
+.active.relaxation{
+  box-shadow: 0px 5px 2px rgb(122, 224, 11);
+}
+.relaxation:hover{
+  box-shadow: 0px 5px 2px rgb(122, 224, 11);
+}
+
+.leisure{
+  color: rgb(224, 195, 117)
+}
+.active.leisure{
+  box-shadow: 0px 5px 2px rgb(224, 195, 117)
+}
+.leisure:hover{
+  box-shadow: 0px 5px 2px rgb(224, 195, 117)
+}
+
+.education{
+  color: rgb(123, 142, 243)
+}
+.active.education{
+  box-shadow: 0px 5px 2px rgb(123, 142, 243)
+}
+.education:hover{
+  box-shadow: 0px 5px 2px rgb(123, 142, 243)
+}
+
+.health{
+  color: #FF3800;
+}
+.active.health{
+  box-shadow: 0px 5px 2px #FF3800;
+}
+.health:hover{
+  box-shadow: 0px 5px 2px #FF3800;
+}
+
+.holiday{
+  color: var(--main-lightblue);
+}
+.active.holiday{
+  box-shadow: 0px 5px 2px var(--main-lightblue);
+}
+.holiday:hover{
+  box-shadow: 0px 5px 2px var(--main-lightblue);
+}
+
+.work{
+  color: #8FBC8B;
+}
+.active.work{
+  box-shadow: 0px 5px 2px #8FBC8B;
+}
+.work:hover{
+  box-shadow: 0px 5px 2px #8FBC8B;
+}
+
+.travel{
+  color: #EE82EE;
+}
+.active.travel{
+  box-shadow: 0px 5px 2px #EE82EE;
+}
+.travel:hover{
+  box-shadow: 0px 5px 2px #EE82EE;
+}
+
+.shoping{
+  color: #F400A1
+}
+.active.shoping{
+  box-shadow: 0px 5px 2px #F400A1;
+}
+.shoping:hover{
+  box-shadow: 0px 5px 2px #F400A1;
+}

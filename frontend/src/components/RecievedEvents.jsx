@@ -17,7 +17,7 @@ import MapContext from '../context/MapContext'
 const RecievedEvents = () => {
 
     const {csrftoken} = useContext(AuthContext)
-    const {thisUser, recievedEvents, setRecievedEvents, setAcceptedEvents, setEventCategories} = useContext(UserContext)
+    const {thisUser, recievedEvents, setRecievedEvents, setAcceptedEvents, setEventCategories, setAlertResponse} = useContext(UserContext)
     const {category} = useContext(MapContext)
 
 
@@ -52,7 +52,7 @@ const RecievedEvents = () => {
             }
             : event))
         setAcceptedEvents(prevEvents => [...prevEvents, recievedEvents.find(event => event.marker_id === markerID)])
-        console.log(response)
+        setAlertResponse({status: response.status, text: response.data})
     }
 
     const handleMarkerReject = async (markerID) => { // ?? accesptness for someone else?
@@ -60,8 +60,7 @@ const RecievedEvents = () => {
         const response = await EventService.rejectEvent(markerID, csrftoken)
         setRecievedEvents(prevEvents => prevEvents.filter(event => event.marker_id !== markerID))
         setEventCategories(prevCategories => prevCategories.map(category => category.value === event.category ? {...category, qty: category.qty - 1} : category))   
-
-        console.log(response)
+        setAlertResponse({status: response.status, text: response.data})
     }
 
 

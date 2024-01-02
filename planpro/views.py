@@ -16,7 +16,6 @@ from collections import defaultdict
 
 
 
-
 class GetCsrf(APIView):
     permission_classes = (permissions.AllowAny, )
     
@@ -63,7 +62,7 @@ class UserLogout(APIView):
     authentication_classes = (SessionAuthentication, )
     def post(self, request):
         logout(request)
-        return Response(status=status.HTTP_200_OK)
+        return Response('Log out',status=status.HTTP_200_OK)
     
 
 class UserView(APIView):
@@ -71,17 +70,22 @@ class UserView(APIView):
     authentication_classes = (SessionAuthentication, )
 
     def get(self, request, username): #get user
-        user = User.objects.get(username=username)
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            user = User.objects.get(username=username)
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        
     
     def patch(self, request, username): #update user information
         data = request.data
         serializer = UserSerializer(request.user, data=data, partial=True)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.update(request.user, serializer.validated_data) 
             return Response('Profile information has been updated', status=status.HTTP_200_OK)
-        return Response(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
 class UsersView(APIView):
@@ -131,11 +135,15 @@ class FriendsView(APIView):
         if data.get('action') == 'accept':
             user.friends.add(friendship.requester)
             friendship.delete()
-            return Response('friendship request accepted', status=status.HTTP_200_OK)
+            return Response('Friendship request accepted', status=status.HTTP_200_OK)
 
         elif data.get('action') == 'reject':
             friendship.delete()
-            return Response('friendship request rejected', status=status.HTTP_200_OK)
+            return Response('Friendship request rejected', status=status.HTTP_200_OK)
+        
+        elif data.get('action') == 'cancel':
+            friendship.delete()
+            return Response('Friendship request canceled', status=status.HTTP_200_OK) 
 
         
     def delete(self, request, username, delete_username):
@@ -144,7 +152,7 @@ class FriendsView(APIView):
         user.recieved_events.filter(requester=delete_user).delete() # clear user's recieved events
         delete_user.recieved_events.filter(requester=user).delete() # clear delete_user's recieved events 
         user.friends.remove(delete_user)
-        return Response('friend has been deleted')
+        return Response('Friend has been deleted', status=status.HTTP_200_OK)
         
 
 class SendFriendRequest(APIView):
@@ -155,15 +163,15 @@ class SendFriendRequest(APIView):
         recipient = User.objects.get(username=data.get('username'))
         
         if request.user.friends.filter(username=recipient).exists():
-            return Response('already friends')
+            return Response('Already in friends list', status=status.HTTP_400_BAD_REQUEST)
         
         if not Friendship.objects.filter(requester=request.user, recipient=recipient, status='pending').exists():
             mail = Mail.objects.create(sender=request.user, header='Friends request', content=f'User {request.user.username} wants to be friedns', category='FRIENDS') 
             mail.recipients.add(recipient)
             Friendship.objects.create(requester=request.user, recipient=recipient, status='pending')
-            return Response('Friend request has been sent')
+            return Response('Friend request has been sent', status=status.HTTP_200_OK)
 
-        return Response('Friend request alreay sent')
+        return Response('Friend request alreay sent', status=status.HTTP_409_CONFLICT)
 
 
 class EventSentView(APIView):
@@ -181,7 +189,7 @@ class EventSentView(APIView):
         recipients = data.get('recipients')
         recipients_array = [recipient['username'] for recipient in recipients]
         recipients = User.objects.filter(username__in=recipients_array)
-        if not recipients.exists(): return Response('at least one user must be chosen')
+        if not recipients.exists(): return Response('At least one user must be chosen', status=status.HTTP_400_BAD_REQUEST)
 
         serializer = EventSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
@@ -192,8 +200,8 @@ class EventSentView(APIView):
             mail = Mail.objects.create(sender=request.user, header='Event request', content=f'{data.get('text')} at {data.get('time')}', category='EVENTS')
             mail.recipients.add(*recipients)
 
-            return Response('event has been sent')
-        return Response(serializer.errors)
+            return Response('Event has been sent', status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request):
         try:
@@ -201,9 +209,9 @@ class EventSentView(APIView):
             event = Event.objects.get(marker_id=data.get('marker_id'))
             event.delete()
         except ObjectDoesNotExist:
-            return Response('event has been deleted')
+            return Response('Event has been deleted', status=status.HTTP_200_OK)
 
-        return Response('event has been deleted')
+        return Response('Event has been deleted', status=status.HTTP_200_OK)
 
 
 class EventRecievedView(APIView):
@@ -232,7 +240,7 @@ class EventRecievedView(APIView):
 
         if not event.recipients.exists():
             event.delete()
-        return Response('event rejected')
+        return Response('Event rejected', status=status.HTTP_200_OK)
     
     def patch(self, request):
         user = request.user
@@ -243,8 +251,7 @@ class EventRecievedView(APIView):
         event_recipient.is_accepted = True
         event_recipient.save()
 
-        return Response('event accepted')
-
+        return Response('Event accepted', status=status.HTTP_200_OK)
 
 
 class MailView(APIView):
@@ -258,7 +265,7 @@ class MailView(APIView):
     
     def patch(self, request):
         request.user.mail_recipient_set.all().update(is_read=True)
-        return Response('mail has been read')
+        return Response('Mail has been read', status=status.HTTP_200_OK)
 
     def delete(self, request, method):
         if method == 'delete':
@@ -267,7 +274,7 @@ class MailView(APIView):
             request.user.recieved_emails.remove(mail)
             if not mail.recipients.exists():
                 mail.delete()
-            return Response('email has been deleted')
+            return Response('Email has been deleted', status=status.HTTP_200_OK)
         elif method == 'clear':
             emails = request.user.recieved_emails.all() # if there is no recipients anymore?
             for email in emails:
@@ -275,10 +282,10 @@ class MailView(APIView):
                 if not email.recipients.exists():
                     email.delete()
 
-            return Response('mail has been cleared')
+            return Response('Mail has been cleared', status=status.HTTP_200_OK)
 
 
-class EventQtyView(APIView):# have separate DB?
+class EventQtyView(APIView):
 
     def get(self, request):
         
@@ -293,5 +300,4 @@ class EventQtyView(APIView):# have separate DB?
         result_list = [{'category': category, 'qty': qty} for category, qty in category_sums.items()]
         serializer = EventQtySerializer(result_list, many=True)
         return Response(serializer.data)
-    
 

@@ -6,15 +6,23 @@
 }
 
 .contentItem{
-    margin-top: 15px;
+    margin-top: 25px;
     font-size: 24px;
-
+    cursor: pointer;
 }
+
+.logout:hover{
+    color: var(--main-red)
+}
+
 .link{
     text-decoration: none;
     color: var(--main-navy)
 }
 .link:hover{
-    color: var(--main-navy-hover)
+    color: var(--main-purple)
 }
 
+.logout{
+    font-size: 20px;
+}

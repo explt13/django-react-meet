@@ -7,36 +7,26 @@ import Loader from './UI/Loader/Loader'
 import CustomButton from './UI/CustomButton/CustomButton'
 import AuthContext from '../context/AuthContext'
 import UserService from '../API/UserService'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
 
-const ProfileInformation = () => {
-    const {thisUser, setThisUser, friends} = useContext(UserContext)
+
+const ProfileInformation = ({user}) => {
+    const {thisUser, setAlertResponse, friends, sentFriendRequests, setSentFriendRequests} = useContext(UserContext)
     const { csrftoken } = useContext(AuthContext)
-    const [user, setUser] = useState(null)
-    const [isUserLoading, setIsUserLoading] = useState(false)
-    const params = useParams()
-
-
-    useEffect(() => {
-        setIsUserLoading(true)
-        const getUser = async () => {
-            const user = await UserService.getUser(params.username)
-            setUser(user)
-            setIsUserLoading(false)
-        }
-        getUser()
-        
-    }, [params.username])
-    
 
     const handleAddFriend = async () => {
-        const data = await FriendService.sendFriendRequest(user.username, csrftoken)
-        console.log(data)
+        
+        const response = await FriendService.sendFriendRequest(user.username, csrftoken)
+        setSentFriendRequests(prevRequests => [...prevRequests, {username: user.username}])
+        setAlertResponse({status: response.status, text: response.data})
     }
-    console.log(user)
+
+    const isThisUser = thisUser.username === user.username
+    const isPending = sentFriendRequests.find(friend => friend.username === user.username)
+    const isFriend = friends.find(friend => friend.username === user.username)
+    
     return (
-        (isUserLoading || !user)
-        ? <Loader />
-        :
         <div className={classes.profileInformationContainer}>
             <div className={classes.mainInformation}>
                 <div className={classes.imgContainer}><img src={`http://127.0.0.1:8000/${user.profile_pic}`}></img></div>
@@ -51,8 +41,13 @@ const ProfileInformation = () => {
                     }
                 </div>
             </div>
-            <div className={classes.editProfile}>
-                <Link to={`/user/${thisUser.username}/edit`}>Edit profile</Link>
+            <div className={classes.options}>
+                {isThisUser && <Link to={`/user/${thisUser.username}/edit`}>Edit profile</Link>}
+                {isPending && <div className={classes.pending}>pending</div>}
+                {isFriend && <div className={classes.alreadyFriends}>friends <FontAwesomeIcon icon={faCheck}/></div>}
+                {!isThisUser && !isPending && !isFriend &&
+                <CustomButton className={classes.addFriend} onClick={handleAddFriend}>Add friend</CustomButton>
+                }
             </div>
         </div>
  

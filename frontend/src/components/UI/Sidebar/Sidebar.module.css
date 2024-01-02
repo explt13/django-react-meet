@@ -44,6 +44,7 @@
     from{transform: translateX(300px); }
     to{transform: translateX(0px); }
 }
+
 @keyframes close {
     from {transform: translateX(0); }
     to {transform: translateX(300px); }

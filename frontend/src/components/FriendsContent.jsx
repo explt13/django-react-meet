@@ -10,30 +10,41 @@ import AuthContext from '../context/AuthContext'
 
 const FriendsContent = ({tab, resultList, setResultList}) => {
   const {csrftoken} = useContext(AuthContext)
-  const {thisUser} = useContext(UserContext)
+  const {thisUser, setAlertResponse} = useContext(UserContext)
+ 
 
 
   const handleAccept = async (friendshipID) => {
-    await FriendService.acceptFriend(thisUser.username, friendshipID, csrftoken)
+    const response = await FriendService.acceptFriend(thisUser.username, friendshipID, csrftoken)
     setResultList(resultList.filter(friend => friend.friendship_id !== friendshipID))
+    setAlertResponse({status: response.status, text: response.data})
   }
 
   const handleReject = async (friendshipID) => {
-    await FriendService.rejectFriend(thisUser.username, friendshipID, csrftoken)
+    const response = await FriendService.rejectFriend(thisUser.username, friendshipID, csrftoken)
     setResultList(resultList.filter(friend => friend.friendship_id !== friendshipID))
+    setAlertResponse({status: response.status, text: response.data})
+  }
+
+  const handleCancel = async (friendshipID) => {
+    const response = await FriendService.cancelFriend(thisUser.username, friendshipID, csrftoken)
+    setResultList(resultList.filter(friend => friend.friendship_id !== friendshipID))
+    setAlertResponse({status: response.status, text: response.data})
   }
 
   const handleDelete = async (deleteUsername) => {
-    await FriendService.deleteFriend(thisUser.username, deleteUsername, csrftoken)
+    const response = await FriendService.deleteFriend(thisUser.username, deleteUsername, csrftoken)
     setResultList(resultList.filter(friend => friend.username !== deleteUsername))
+    setAlertResponse({status: response.status, text: response.data})
   }
 
+  
 
   return (
     
     <div className={classes.container}>
       <div className={classes.searchInformation}>{resultList.length === 0 && 'Seems empty..'}</div>
-      <UsersList tab={tab} resultList={resultList} handleAccept={handleAccept} handleReject={handleReject} handleDelete={handleDelete}/>
+      <UsersList tab={tab} resultList={resultList} handleAccept={handleAccept} handleReject={handleReject} handleDelete={handleDelete} handleCancel={handleCancel}/>
     </div>
   )
 }

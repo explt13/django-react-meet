@@ -4,16 +4,24 @@ axios.defaults.withCredentials = true;
 
 
 class EventService {
-    static async sendEvent(data, csrf){
+    static async requestWrapper(req){
+        try{
+            return await req
+        } catch (e){
+            return e.response
+        }
 
-        const response = await axios.post('http://127.0.0.1:8000/event/sent', data, {
-            withCredentials: true,
+    }
+
+    static async sendEvent(data, csrf){
+        return this.requestWrapper(
+            axios.post('http://127.0.0.1:8000/event/sent', data, {
             headers: {
                 'X-CSRFToken': csrf,
                 'Content-Type': 'application/json',
             }
         })
-        return response.data
+        )
     }
 
     static async getSentEvents(){
@@ -34,33 +42,37 @@ class EventService {
 
 
     static async acceptEvent(marker_id, csrf){
-        const response = await axios.patch(`http://127.0.0.1:8000/event/accept`, {marker_id: marker_id}, {
-            headers: {
-                'X-CSRFToken': csrf,
-                'Content-Type': 'application/json'
-            }
-        })
-        return response.data
+        return this.requestWrapper(
+            axios.patch(`http://127.0.0.1:8000/event/accept`, {marker_id: marker_id}, {
+                headers: {
+                    'X-CSRFToken': csrf,
+                    'Content-Type': 'application/json'
+                }
+            })
+        )
     }
     
     static async rejectEvent(marker_id, csrf){
-        const response = await axios.delete(`http://127.0.0.1:8000/event/reject?marker_id=${marker_id}`, {
-            headers: {
-                'X-CSRFToken': csrf,
-                'Content-Type': 'application/json'
-            }
-        })
-        return response.data
+        return this.requestWrapper(
+            axios.delete(`http://127.0.0.1:8000/event/reject?marker_id=${marker_id}`, {
+                headers: {
+                    'X-CSRFToken': csrf,
+                    'Content-Type': 'application/json'
+                }
+            })
+        )
     }
 
     static async cancelEvent(marker_id, csrf){
-        const response = await axios.delete(`http://127.0.0.1:8000/event/cancel?marker_id=${marker_id}`, {
-            headers: {
-                'X-CSRFToken': csrf,
-                'Content-Type': 'application/json'
-            }
-        })
-        return response.data
+        return this.requestWrapper(
+            axios.delete(`http://127.0.0.1:8000/event/cancel?marker_id=${marker_id}`, {
+                headers: {
+                    'X-CSRFToken': csrf,
+                    'Content-Type': 'application/json'
+                }
+            })
+        )
+
     }
 
     static async getEventsQty(){

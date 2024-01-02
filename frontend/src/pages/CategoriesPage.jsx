@@ -7,7 +7,7 @@ const CategoriesPage = () => {
   return (
     <div className='container wrapper'>
         <div className={classes.heading}>All Categories</div>
-        <CategoriesList all={true}/>
+        <CategoriesList all={true} withQty={true} choose={false}/>
     </div>
   )
 }

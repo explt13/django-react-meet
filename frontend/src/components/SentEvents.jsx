@@ -12,13 +12,13 @@ import CustomButton from './UI/CustomButton/CustomButton'
 import { Link } from 'react-router-dom'
 import MapContext from '../context/MapContext'
 import L from 'leaflet'
-import { getFormattedFullDate, getFullDate } from '../utils/calendarUtil'
+import { getFormattedFullDate, getDateForInput } from '../utils/calendarUtil'
 
 const SentEvents = () => {
-    const {thisUser, sentEvents, setSentEvents, setEventCategories} = useContext(UserContext)
+    const {thisUser, sentEvents, setSentEvents, setEventCategories, setAlertResponse} = useContext(UserContext)
     const {selectedUsers, setSelectedUsers, canAddMarkers, setCanAddMarkers, eventInformation, setEventInformation, category} = useContext(MapContext)
     const [draggable, setDraggable] = useState(false)
-    const [minDate, maxDate] = getFullDate()
+    const [minDate, maxDate] = getDateForInput()
     const {csrftoken} = useContext(AuthContext)
 
     
@@ -68,11 +68,11 @@ const SentEvents = () => {
         setEventCategories(prevCategories => prevCategories.map(category => category.value === event.category ? {...category, qty: category.qty + 1} : category))  
         setDraggable(false)
         setSelectedUsers([])
-        console.log(response)
+        setAlertResponse({status: response.status, text: response.data})
     }
+
     const handleMarkerReject= async (markerID) => { // ?? accesptness for someone else?
         setSentEvents(sentEvents.filter(event => event.marker_id !== markerID)) // automically set
-        
     }
 
     const handleCancelEvent = async (markerID) => { // automically set
@@ -80,7 +80,7 @@ const SentEvents = () => {
         const response = await EventService.cancelEvent(markerID, csrftoken)
         setSentEvents(sentEvents.filter(event => event.marker_id !== markerID))
         setEventCategories(prevCategories => prevCategories.map(category => category.value === event.category ? {...category, qty: category.qty - 1} : category))   
-        console.log(response)
+        setAlertResponse({status: response.status, text: response.data})
     }
 
     const sortedEvents = useMemo(() => {

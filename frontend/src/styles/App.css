@@ -15,6 +15,13 @@
   --main-gray-hover:rgb(131, 142, 155);
   --main-eggshell: #D0EAD6;
   --main-lightblue: #B9D9EB;
+  --main-cyan: #1abc9c;
+  
+  --alert-orange: #ff7800;
+  --alert-red: #B33A3A;
+  --alert-green: #5cb85c;
+
+
   --height-laptop: calc(100vh - 108px);
   --height-phone: calc(100vh - 70px);
 
@@ -46,8 +53,8 @@ body{
 
 .wrapper{
   margin-top: 40px;
-  height: var(--height-laptop); /* 40px 68px - navbar*/
-  position: relative;
+  height: 100%;
+
 }
 
 

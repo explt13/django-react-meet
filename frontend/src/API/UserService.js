@@ -4,33 +4,40 @@ axios.defaults.withCredentials = true;
 
 
 class UserService { // should I split it
+    static async requestWrapper(req){
+        try{
+            return await req
+        } catch (e){
+            return e.response
+        }
 
+    }
+    
     static async checkAuth(){
         const response = await axios.get('http://127.0.0.1:8000/checkauth', {withCredentials: true})
         return response
     }
 
     static async loginUser(data, csrf) {
-        const response = await axios.post('http://127.0.0.1:8000/login', data, {
-            withCredentials: true,
+        return this.requestWrapper(
+            axios.post('http://127.0.0.1:8000/login', data, {
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrf
             },
         })
-        return response
+        )
     }
 
     static async registerUser(data, csrf){
-        const response = await axios.post('http://127.0.0.1:8000/register', data, {
-            withCredentials: true,
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrf
-            }
-        })
-
-        return response
+        return this.requestWrapper(
+            axios.post('http://127.0.0.1:8000/register', data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrf
+                }
+            })
+        )
     }
 
     static async getCsrf() {
@@ -40,14 +47,15 @@ class UserService { // should I split it
 
 
     static async logoutUser(csrf) {
-        const response = await axios.post('http://127.0.0.1:8000/logout', {}, {
-            withCredentials: true,
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrf
-            }
-        })
-        return response
+        return this.requestWrapper(
+            axios.post('http://127.0.0.1:8000/logout', {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrf
+                }
+            })
+        )
+
     }
 
 
@@ -59,21 +67,21 @@ class UserService { // should I split it
 
 
     static async getUser(username){
-        const response = await axios.get(`http://127.0.0.1:8000/user/${username}`, {withCredentials: true})
-        return response.data
+        return this.requestWrapper(
+            axios.get(`http://127.0.0.1:8000/user/${username}`, {withCredentials: true})
+        )
     }
 
     static async updateInformation(username, data, csrf){
+        return this.requestWrapper(
+            axios.patch(`http://127.0.0.1:8000/user/${username}/update`, data=data, {
+                headers: {
+                    'X-CSRFToken': csrf,
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+        )
 
-        const response = await axios.patch(`http://127.0.0.1:8000/user/${username}/update`, data=data, {
-            withCredentials: true,
-            headers: {
-                'X-CSRFToken': csrf,
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-
-        return response.data
     }
 
 }

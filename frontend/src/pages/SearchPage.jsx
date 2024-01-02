@@ -15,8 +15,7 @@ const SearchPage = () => {
   useEffect(() => {
     const search = async () => {
       try{
-        const data = await UserService.searchUsers(username)// HARDCODED NEED TO IMPROVE
-
+        const data = await UserService.searchUsers(username)
         setResultList([...data])
         setError(null)
       } catch (e){

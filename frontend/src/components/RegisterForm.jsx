@@ -32,42 +32,44 @@ const RegisterForm = () => {
     }
 
     const registerUser = async () => {
-        try{
-            const response = await UserService.registerUser({
-            username: username,
-            email: email,
-            password: password,
-            confirmation: confirmation
-            }, csrftoken)
+        
+        const response = await UserService.registerUser({
+        username: username,
+        email: email,
+        password: password,
+        confirmation: confirmation
+        }, csrftoken)
+        
 
-            setUsername('')
-            setEmail('')
-            setPassword('')
-            setConfirmation('')
-            
+        
+        if (response.status === 201){
             setIsAuth(true)
             localStorage.setItem('auth', 'true')
             localStorage.setItem('username', username)
+        }
+            
 
 
-        } catch(e) {
-            if (e.response.data.username){
+        if (response.status === 400){
+            if (response.data.username){
                 setUsername('')
                 setErrors(errors => ({...errors, 'username': 'User already exist'}))
             }
-            if (e.response.data.email){
+            if (response.data.email){
                 setEmail('')
                 setErrors(errors => ({...errors, 'email': 'Enter a valid email'}))
             }
-            if (e.response.data.password){
+            if (response.data.password){
                 setPassword('')
                 setConfirmation('')
                 setErrors(errors => ({...errors, 'password': 'Passwords must match'}))
             }
+        }
+            
             
         }
         
-    }
+    
 
 
   return (

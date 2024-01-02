@@ -3,7 +3,7 @@ import classes from './styles/PopupForm.module.css'
 import CustomInput from './UI/CustomInput/CustomInput'
 import CustomTextarea from './UI/textarea/CustomTextarea'
 import CustomInputV2 from './UI/CustomInput/CustomInputV2'
-import {getFormattedFullDate, getFullDate} from './../utils/calendarUtil'
+import {getFormattedFullDate, getDateForInput} from './../utils/calendarUtil'
 import CustomButton from './UI/CustomButton/CustomButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faCheck } from '@fortawesome/free-solid-svg-icons'
@@ -17,7 +17,7 @@ import UserContext from '../context/UserContext'
 const PopupForm = ({isOpen, setIsOpen}) => {
   const phrases = ['Let\'s go bowling..', 'Let\'s have a drink..', 'Let\'s have a walk..', 'let\'s go have lunch..', 'Would you like...']
   const [phrase, setPhrase] = useState(null)
-  const [minDate, maxDate] = getFullDate()
+  const [minDate, maxDate] = getDateForInput()
   const [valid, setValid] = useState(true)
   const ind = Math.floor(Math.random() * phrases.length)
   const {setEventInformation, setCanAddMarkers, eventInformation, setCategory} = useContext(MapContext)

@@ -4,39 +4,51 @@ axios.defaults.withCredentials = true;
 
 
 class MailService {
+    static async requestWrapper(req){
+        try{
+            return await req
+        } catch (e){
+            return e.response
+        }
+
+    }
+
     static async getEmails(){
         const response = await axios.get(`http://127.0.0.1:8000/mail/recieved`)
         return response.data
     }
 
     static async readMail(csrf){
-        const response = await axios.patch(`http://127.0.0.1:8000/mail/read`, {}, {
-            headers: {
-                'X-CSRFToken': csrf,
-                'Content-Type': 'application/json'
-            }
-        })
-        return response.data
+        return this.requestWrapper(
+            axios.patch(`http://127.0.0.1:8000/mail/read`, {}, {
+                headers: {
+                    'X-CSRFToken': csrf,
+                    'Content-Type': 'application/json'
+                }
+            })
+        )
     }
 
     static async deleteEmail(emailID, csrf){
-        const response = await axios.delete(`http://127.0.0.1:8000/mail/delete?email_id=${emailID}`, {
+        return this.requestWrapper(
+            axios.delete(`http://127.0.0.1:8000/mail/delete?email_id=${emailID}`, {
             headers:{
                 'X-CSRFToken': csrf,
                 'Content-Type': 'application/json'
             }
         })
-        return response.data
+        )
     }
     
     static async clearMail(csrf){
-        const response = await axios.delete(`http://127.0.0.1:8000/mail/clear`, {
+        return this.requestWrapper(
+            axios.delete(`http://127.0.0.1:8000/mail/clear`, {
             headers:{
                 'X-CSRFToken': csrf,
                 'Content-Type': 'application/json'
             }
         })
-        return response.data
+        )
     }
 
     static async getEmailQty(){

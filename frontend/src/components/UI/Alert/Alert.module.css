@@ -1,0 +1,54 @@
+.alertContainer{
+    margin-top: 5px;
+    z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: none;
+    pointer-events: none;
+
+    
+}
+.alertContainer.active{
+    display: flex;
+    justify-content: center;
+    animation: show 0.5s ease-in-out forwards;
+}
+
+.alertContainer.closing{
+    animation: close 0.5s ease-in-out forwards;
+}
+
+.alertContent{
+    text-align: center;
+    max-width: 500px;
+    padding: 15px 40px;
+    font-size: 16px;
+    color: var(--main-white);
+    border-radius: 10px;
+
+}
+
+.alertContent.success{
+    background-color: var(--alert-green);
+}
+.alertContent.redierct{
+    background-color: var(--alert-orange);
+}
+
+.alertContent.error{
+    background-color: var(--alert-red);
+}
+
+
+@keyframes show {
+    from{transform: translateY(-200px); opacity: 0;}
+    to{transform: translateY(0px); opacity: 1;}
+
+}
+
+@keyframes close {
+    from{transform: translateY(0px); opacity: 1;}
+    to{transform: translateY(-200px); opacity: 0;}
+}

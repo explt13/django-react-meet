@@ -5,6 +5,7 @@ import AuthContext from './AuthContext'
 import EventService from '../API/EventService'
 import MailService from '../API/MailService'
 import { faGraduationCap, faPlusSquare, faUtensils, faWineGlass, faMountainSun, faBaseballBatBall, faSnowman, faBriefcase, faCar, faBagShopping, faMugHot } from '@fortawesome/free-solid-svg-icons'
+import Alert from '../components/UI/Alert/Alert'
 
 
 const UserContext = createContext(null)
@@ -19,7 +20,9 @@ export const UserProvider = ({children}) => {// otherwise props.children
     const [isLoading, setIsLoading] = useState(false)
     const [acceptedEvents, setAcceptedEvents] = useState([])
     const [emailQty, setEmailQty] = useState(null)
+    const [alertResponse, setAlertResponse] = useState({status: null, text: null})
     const [eventsQty, setEventsQty] = useState([])
+    const [sentFriendRequests, setSentFriendRequests] = useState([])
     const [eventCategories, setEventCategories] = useState([
       {name: 'Health', value: 'HEALTH', qty: 0, icon: faPlusSquare, className: 'health'},
       {name: 'Education', value: 'EDUCATION', qty: 0, icon: faGraduationCap, className: 'education'},
@@ -31,8 +34,7 @@ export const UserProvider = ({children}) => {// otherwise props.children
       {name: 'Work', value: 'WORK', qty: 0, icon: faBriefcase, className: 'work'},
       {name: 'Travel', value: 'TRAVEL', qty: 0, icon: faCar, className: 'travel'},
       {name: 'Shoping', value: 'SHOPING', qty: 0, icon: faBagShopping, className: 'shoping'}
-  ])
-     
+    ])
 
 
     useEffect(() => {
@@ -48,8 +50,9 @@ export const UserProvider = ({children}) => {// otherwise props.children
           const accepted_events = await EventService.getAcceptedEvents()
           const emailQty = await MailService.getEmailQty() // change to unread mail
           const eventsQty = await EventService.getEventsQty()
+          const sent_friend_requests = await FriendService.getSentRequests(username)
           
-          setThisUser(userData)
+          setThisUser(userData.data)
           setFriends([...friendsData])
           setEmailQty(emailQty)
           setSentEvents([...sent_events])
@@ -57,6 +60,7 @@ export const UserProvider = ({children}) => {// otherwise props.children
           setAcceptedEvents([...accepted_events])
           setEventsQty([...eventsQty])
           setIsLoading(false)
+          setSentFriendRequests([...sent_friend_requests])
         }
         fetchData()
       }
@@ -73,8 +77,11 @@ export const UserProvider = ({children}) => {// otherwise props.children
       }
 
   }, [eventsQty])
+ 
 
     const context = {
+        alertResponse,
+        setAlertResponse,
         eventCategories,
         setEventCategories,
         eventsQty,
@@ -93,11 +100,13 @@ export const UserProvider = ({children}) => {// otherwise props.children
         setThisUser,
         friends,
         setFriends,
+        sentFriendRequests,
+        setSentFriendRequests
     }
-
 
   return (
     <UserContext.Provider value={context}>
+      {alertResponse.status !== null && <Alert type={'success'} alert={alertResponse} setAlert={setAlertResponse}/>}
         {children}
     </UserContext.Provider>
   )

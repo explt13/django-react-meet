@@ -17,16 +17,15 @@ const MailPage = () => {
   const [sortedEmails, setSortedEmails] = useState([])
   const {csrftoken} = useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(false)
-  const {setEmailQty} = useContext(UserContext)
+  const {setEmailQty, setAlertResponse} = useContext(UserContext)
   
 
   useEffect(() => {
     setIsLoading(true)
     const getEmails = async () => {
-      const data = await MailService.getEmails() // read them as well?
+      const data = await MailService.getEmails()
       await MailService.readMail(csrftoken)
       setEmailQty(0)
-      console.log(data)
       setEmails([...data])
       setIsLoading(false)
     }
@@ -36,13 +35,13 @@ const MailPage = () => {
   const handleEmailDelete = async (emailID) =>{
     const response = await MailService.deleteEmail(emailID, csrftoken)
     setEmails(emails.filter(email => email.id !== emailID))
-    console.log(response.data)
+    setAlertResponse({status: response.status, text: response.data})
   }
 
   const handleClearMail = async () => {
     const response = await MailService.clearMail(csrftoken)
     setEmails([])
-    console.log(response)
+    setAlertResponse({status: response.status, text: response.data})
   } 
 
 

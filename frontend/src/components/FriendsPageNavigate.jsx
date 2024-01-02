@@ -32,7 +32,7 @@ const FriendsPageNavigate = ({setTab, setResultList}) => {
       }
       const handleSentRequests = () => {
         fetchData(fetchSentRequests)
-        setTab('requested')
+        setTab('sent')
       }
     
       const handleRecievedRequests = async () => {

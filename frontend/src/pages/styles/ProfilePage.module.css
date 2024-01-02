@@ -5,7 +5,52 @@
 
 
 .profileContainer{
-
     padding: 20px;
+}
 
+.interests{
+    width: 50%;
+    height: 300px;
+    border: 3px solid var(--main-navy);
+    border-radius: 5px;
+}
+
+.interestsHeading{
+    font-size: 20px;
+    padding: 5px 0px;
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+.interestsHeading > svg{
+    font-size: 28px;
+    color: var(--main-purple);
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+}
+.interestsHeading > svg:hover{
+    color: var(--main-navy)
+}
+
+.chooseInterests{
+    height: 50vh;
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--main-white);
+    border-radius: 10px;
+}
+.chooseInterestsHeading{
+    margin-top: 20px;
+    font-size: 24px;
+}
+
+
+.categoryContainer{
+    cursor: default!important;
+}
+.noInterests{
+    font-size: 200px;
+    color: var(--main-navyA3);
 }

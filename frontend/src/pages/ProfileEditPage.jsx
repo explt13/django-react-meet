@@ -15,6 +15,7 @@ const ProfileEditPage = () => {
   const [editedInformation, setEditedInformation] = useState({first_name: '', last_name: '', about: '', profile_pic: ''})
   const [user, setUser] = useState(null)
   const [imgURI, setImgURI] = useState(null)
+  const {setAlertResponse} = useContext(UserContext)
   
 
 
@@ -35,7 +36,7 @@ const ProfileEditPage = () => {
   
   const handleSaveChanges = async () => {
     const response = await UserService.updateInformation(user.username, editedInformation, csrftoken)
-    console.log(response)
+    setAlertResponse({status: response.status, text: response.data})
     navigate(`/user/${user.username}`)
   }
   const handleDiscardChanges = () => {

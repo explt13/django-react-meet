@@ -1,0 +1,91 @@
+
+
+
+.moduleContainer{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.heading{
+    font-size: 38px;
+}
+
+.month{
+    height: 300px;
+    background: linear-gradient(to left, var(--main-navy), var(--main-purple), var(--main-navy));
+    width: 100%;
+    color: var(--main-white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 30px;
+    letter-spacing: 3px;
+}
+.year{
+    font-size: 20px;
+}
+
+.monthContent{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 5px;
+}
+
+.monthName{
+    font-size: 28px;
+    text-transform: uppercase;
+}
+
+.weekdays{
+    display: flex;
+    font-size: 18px;
+    width: 100%;
+    background-color: var(--main-gray50);
+}
+.weekday{
+    padding: 1em 0px;
+    flex-basis: calc(100% / 7);
+    text-align: center;
+}
+
+
+
+.calendarContainer{
+    display: flex;
+    flex-wrap: wrap;
+    background-color: var(--main-gray);
+    width: 100%;
+
+}
+
+.day{
+    text-align: center;
+    flex-basis: calc(100% / 7);
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.today{
+    background-color: var(--main-purple);
+    color: var(--main-white);
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+}
+
+
+.prev, .next{
+    font-size: 24px;
+    cursor: pointer;
+}
+.inactive{
+    color: var(--main-grayA3);
+    cursor: default;
+}

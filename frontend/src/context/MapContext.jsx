@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import UserContext from './UserContext'
-import { getFullDate } from '../utils/calendarUtil'
+import { getDateForInput } from '../utils/calendarUtil'
 
 const MapContext = createContext(null)
 
 export const MapProvider = ({children}) => {
-    const [minDate, maxDate] = getFullDate()
+    const [minDate, maxDate] = getDateForInput()
     const [category, setCategory] = useState('ALL')
     const [selectedUsers, setSelectedUsers] = useState([])
     const [position, setPosition] = useState(null)
