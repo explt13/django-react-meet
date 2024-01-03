@@ -15,6 +15,8 @@ export const MapProvider = ({children}) => {
    
     
     const context = {
+        minDate,
+        maxDate,
         category,
         setCategory,
         selectedUsers,

@@ -2,6 +2,8 @@
     position: relative;
     display: inline-block;
     animation: slideSearchOpen 0.5s forwards ease-in-out;
+
+    
 }
 
 .search.inactive{
@@ -11,11 +13,19 @@
     font-size: 24px!important;
 }
 
+.searchInput{
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+
+}
+
 
 .buttons{
     display: inline-block;
     position: absolute;
     right: 0;
+    bottom: 3px;
     animation: buttonsOpen 0.7s forwards ease-in;
 }
 .buttons.inactive{

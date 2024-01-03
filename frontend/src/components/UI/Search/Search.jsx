@@ -44,7 +44,7 @@ const Search = ({qty, placeholder, handleSearch, searchValue, setSearchValue}) =
         isSearch
         ?
         <div className={searchClasses.join(' ')}>
-            <CustomInput placeholder={`Search ${placeholder}...`} style={{marginBottom: '0px'}} value={searchValue} onKeyDown={(e) => {handleSearch(e)}} onChange={(e) => setSearchValue(e.target.value)} />
+            <CustomInput placeholder={`Search ${placeholder}...`} className={classes.searchInput} value={searchValue} onKeyDown={(e) => {handleSearch(e)}} onChange={(e) => setSearchValue(e.target.value)} />
             <div className={buttonsClasses.join(' ')}>
                 <CustomIcon className={classes.searchIcon}><FontAwesomeIcon icon={faSearch} onClick={(e) => {handleSearch(e)}} /></CustomIcon>
                 <CustomIcon className={classes.searchClose}><FontAwesomeIcon icon={faXmark} onClick={handleSearchClose} /></CustomIcon>

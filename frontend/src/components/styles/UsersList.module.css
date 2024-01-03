@@ -35,7 +35,7 @@
     border-radius: 100px;
     grid-area: image;
 }
-.userImage.forMap{
+.userContainer.forMap .userImage{
     height: 64px;
 }
 
@@ -53,7 +53,7 @@
     font-size: 24px;
     overflow: hidden;
 }
-.information.forMap{
+.userContainer.forMap .information{
     margin-top: 0px;
     font-size: 16px;
     overflow: hidden;
@@ -75,12 +75,12 @@
     color: var(--main-gray-hover)
 }
 
-.userFullName.forMap{
+.userContainer.forMap .userFullName{
     font-size: 18px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.userFullName.forMap > a:hover{
+.userContainer.forMap .userFullName > a:hover{
     color: var(--main-navy);
 }
 

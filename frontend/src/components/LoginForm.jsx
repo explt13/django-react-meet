@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import CustomInput from './UI/CustomInput/CustomInput'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import CustomButton from './UI/CustomButton/CustomButton'
 import UserService from '../API/UserService'
 import classes from './styles/LoginReg.module.css'
@@ -14,6 +14,7 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    const navigate = useNavigate()
 
     const errorClassList = ['alert', 'alert-danger', classes.error]
 
@@ -37,6 +38,7 @@ const LoginForm = () => {
         setUsername('')
         setPassword('')
         if (response.status === 200){
+            navigate('/')
             setIsAuth(true)
             localStorage.setItem('username', username)
         }

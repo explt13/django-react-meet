@@ -1,6 +1,21 @@
 from django.urls import path
 from . import views
-from .views import GetCsrf, UserLogin, UserRegister, UserLogout, CheckAuth, UserView, UsersView, SendFriendRequest, FriendsView, EventSentView, EventRecievedView, MailView, EventQtyView
+from .views import(
+GetCsrf,
+UserLogin,
+UserRegister,
+UserLogout,
+CheckAuth,
+UserView,
+UsersView,
+SendFriendRequest,
+FriendsView,
+EventSentView,
+EventRecievedView,
+MailView,
+EventQtyView,
+InterestView,
+)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -15,6 +30,8 @@ urlpatterns = [
     path('user/<str:username>/friends', FriendsView.as_view(), name='friends'),
     path('user/<str:username>/friends/<str:delete_username>', FriendsView.as_view(), name='friends_delete'),
     path('user/<str:username>/friendship/<int:friendshipID>', FriendsView.as_view(), name='friendsip_response'),
+    path('user/<str:username>/interest', InterestView.as_view(), name='user_interest_get'),
+    path('interest', InterestView.as_view(), name='user_interest_post'),
     path('friend_request', SendFriendRequest.as_view(), name='friend_request'),
     path('users', UsersView.as_view(), name='users'),
 

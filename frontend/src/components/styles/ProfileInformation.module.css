@@ -29,13 +29,13 @@
 }
 
 .options{
-
+    margin-top: 10px;
     flex-basis: 10%;
     display: flex;
     justify-content: right;
 }
 
-.options > a{
+.editProfile > a{
     text-decoration: none;
     height: min-content;
     color: var(--main-navy)
@@ -65,14 +65,12 @@
 }
 
 .addFriend{
-    margin-top: 10px;
     height: min-content;
 }
 
 
 .pending{
     cursor: default;
-    margin-top: 10px;
     background-color: var(--alert-orange);
     padding: 5px 10px;
     border-radius: 25px;
@@ -81,7 +79,6 @@
 }
 .alreadyFriends{
     cursor: default;
-    margin-top: 10px;
     background-color: var(--alert-green);
     padding: 5px 10px;
     border-radius: 25px;

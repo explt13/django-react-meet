@@ -36,6 +36,7 @@ class User(AbstractUser):
     about = models.CharField(max_length=256, null=True, blank=True)
     profile_pic = models.ImageField(upload_to='images/', default='images/default.png')
     friends = models.ManyToManyField('self', blank=True)
+    interests = models.ManyToManyField('Interest', related_name='in_users_interests', blank=True) # blank for forms if true the field is not required
 
 class Friendship(models.Model):
     requester = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_requests')
@@ -64,7 +65,8 @@ class Event_Recipient(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     is_accepted = models.BooleanField(default=False)
 
-
+class Interest(models.Model):
+    name = models.CharField(max_length=32, blank=False, null=False)
 
 
 class Mail(models.Model):

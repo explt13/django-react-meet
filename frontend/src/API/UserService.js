@@ -68,7 +68,7 @@ class UserService { // should I split it
 
     static async getUser(username){
         return this.requestWrapper(
-            axios.get(`http://127.0.0.1:8000/user/${username}`, {withCredentials: true})
+            axios.get(`http://127.0.0.1:8000/user/${username}`) // need for login erros handling 
         )
     }
 
@@ -81,7 +81,21 @@ class UserService { // should I split it
                 }
             })
         )
+    }
 
+    static async getInterests(username){
+        return await axios.get(`http://127.0.0.1:8000/user/${username}/interest`)
+    }
+
+    static async saveInterests(data, csrf){
+        return this.requestWrapper(
+            axios.post('http://127.0.0.1:8000/interest', data, {
+                headers: {
+                    'X-CSRFToken': csrf,
+                    'Content-Type': 'application/json'
+                }
+            })
+        )
     }
 
 }

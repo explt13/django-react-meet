@@ -36,13 +36,13 @@ const ProfileInformation = ({user}) => {
                         <div>{user.last_name}</div>
                     </div>
                     <div className={classes.userUsername}>{user.username}</div>
-                    {user.about &&
-                    <div className={classes.userAbout}>About: <div>{user.about}</div></div>
-                    }
+                    
+                    <div className={classes.userAbout}>{user.about && 'About:' }<div>{user.about}</div></div>
+
                 </div>
             </div>
             <div className={classes.options}>
-                {isThisUser && <Link to={`/user/${thisUser.username}/edit`}>Edit profile</Link>}
+                {isThisUser && <div className={classes.editProfile}><Link to={`/user/${thisUser.username}/edit`}>Edit profile</Link></div>}
                 {isPending && <div className={classes.pending}>pending</div>}
                 {isFriend && <div className={classes.alreadyFriends}>friends <FontAwesomeIcon icon={faCheck}/></div>}
                 {!isThisUser && !isPending && !isFriend &&

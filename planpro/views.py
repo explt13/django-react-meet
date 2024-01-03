@@ -2,11 +2,21 @@ from django.contrib.auth import get_user_model, login, logout
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer, FriendshipSerializer, EventSerializer, MailSerializer, EventQtySerializer
+from .serializers import(
+UserRegisterSerializer,
+UserLoginSerializer,
+UserSerializer,
+FriendshipSerializer,
+EventSerializer,
+MailSerializer,
+EventQtySerializer,
+InterestSerializer,
+InterestListSerializer
+)
 from rest_framework import permissions, status
 from django.core.exceptions import ValidationError
 from django.middleware.csrf import get_token
-from .models import User, Friendship, Event, Event_Recipient, Mail
+from .models import User, Friendship, Event, Event_Recipient, Mail, Interest
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count, F, Sum, Q
@@ -62,7 +72,7 @@ class UserLogout(APIView):
     authentication_classes = (SessionAuthentication, )
     def post(self, request):
         logout(request)
-        return Response('Log out',status=status.HTTP_200_OK)
+        return Response('Logging out..',status=status.HTTP_200_OK)
     
 
 class UserView(APIView):
@@ -195,7 +205,7 @@ class EventSentView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.validated_data['requester'] = request.user
             event = serializer.create(validated_data=serializer.validated_data)
-            event.recipients.add(*recipients) # need model for confirmation?
+            event.recipients.add(*recipients)
 
             mail = Mail.objects.create(sender=request.user, header='Event request', content=f'{data.get('text')} at {data.get('time')}', category='EVENTS')
             mail.recipients.add(*recipients)
@@ -255,6 +265,8 @@ class EventRecievedView(APIView):
 
 
 class MailView(APIView):
+    permission_classes=(permissions.IsAuthenticated,)
+    authentication_classes=(SessionAuthentication, )
     def get(self, request):
         data = request.query_params
         if data.get('qty'):
@@ -286,7 +298,8 @@ class MailView(APIView):
 
 
 class EventQtyView(APIView):
-
+    permission_classes=(permissions.IsAuthenticated,)
+    authentication_classes=(SessionAuthentication, )
     def get(self, request):
         
         se_qs = list(Event.objects.filter(requester_id=request.user).values('category').annotate(qty=Count('category')))
@@ -301,3 +314,26 @@ class EventQtyView(APIView):
         serializer = EventQtySerializer(result_list, many=True)
         return Response(serializer.data)
 
+
+class InterestView(APIView):
+    permission_classes=(permissions.IsAuthenticated,)
+    authentication_classes=(SessionAuthentication, )
+
+    def get(self, request, username):
+        user = User.objects.get(username=username)
+        interests = user.interests.all()
+        serializer = InterestSerializer(interests, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+         # assuming array
+        serializer = InterestListSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            interests_arr = serializer.validated_data
+            interests_qs = Interest.objects.filter(name__in=interests_arr)
+            excluded_qs = request.user.interests.exclude(name__in=interests_arr)
+            request.user.interests.remove(*excluded_qs)
+            request.user.interests.add(*interests_qs)
+            return Response('Interests has been updated', status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        

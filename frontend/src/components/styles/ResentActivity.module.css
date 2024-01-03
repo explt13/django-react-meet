@@ -46,8 +46,24 @@
     border-radius: 30px;
     background-color: var(--main-gray);
     font-size: 20px;
+    position: relative;
 }
 
+.noEventsIcon{
+    position: absolute;
+    font-size: 170px;
+    z-index: 0;
+    filter: opacity(0.5);
+    filter:contrast(0.1);
+    color: var(--main-orange)
+
+}
+
+.noEventsText{
+    color: var(--main-navy);
+    font-size: 36px;
+    z-index: 1;
+}
 
 .moreEvents{
     display: flex;

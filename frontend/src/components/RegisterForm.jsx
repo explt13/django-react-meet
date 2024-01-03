@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import CustomInput from './UI/CustomInput/CustomInput'
 import CustomButton from './UI/CustomButton/CustomButton'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import UserService from '../API/UserService'
 import classes from './styles/LoginReg.module.css'
 import AuthContext from '../context/AuthContext'
@@ -14,6 +14,7 @@ const RegisterForm = () => {
     const [password, setPassword] = useState('');
     const [confirmation, setConfirmation] = useState('')
     const [errors, setErrors] = useState({})
+    const navigate = useNavigate()
 
     const usernameHandler = (e) => {
         setUsername(e.target.value)
@@ -43,6 +44,7 @@ const RegisterForm = () => {
 
         
         if (response.status === 201){
+            navigate('/')
             setIsAuth(true)
             localStorage.setItem('auth', 'true')
             localStorage.setItem('username', username)

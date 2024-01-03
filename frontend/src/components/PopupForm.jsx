@@ -17,10 +17,9 @@ import UserContext from '../context/UserContext'
 const PopupForm = ({isOpen, setIsOpen}) => {
   const phrases = ['Let\'s go bowling..', 'Let\'s have a drink..', 'Let\'s have a walk..', 'let\'s go have lunch..', 'Would you like...']
   const [phrase, setPhrase] = useState(null)
-  const [minDate, maxDate] = getDateForInput()
   const [valid, setValid] = useState(true)
   const ind = Math.floor(Math.random() * phrases.length)
-  const {setEventInformation, setCanAddMarkers, eventInformation, setCategory} = useContext(MapContext)
+  const {setEventInformation, setCanAddMarkers, eventInformation, setCategory, minDate, maxDate} = useContext(MapContext)
   const [dateClasses, setDateClasses] = useState([classes.dateInput])
   const {eventCategories} = useContext(UserContext)
 

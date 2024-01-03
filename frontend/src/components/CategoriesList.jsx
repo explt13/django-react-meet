@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import UserContext from '../context/UserContext'
 import { useNavigate } from 'react-router-dom'
 import classes from './styles/Categories.module.css'
@@ -7,18 +7,18 @@ import Alert from './UI/Alert/Alert'
 
 
 const CategoriesList = ({all, withQty, size, ...props}) => {
-    const {setAlertResponse} = useContext(UserContext)
+    const {setAlertResponse, eventCategories} = useContext(UserContext)
 
-    const handleSelect = (ev, category) => {
+    const handleSelect = (ev, name) => {
         
-        if (props.interests.includes(category)){
+        if (props.interests.includes(name)){
             ev.currentTarget.classList.remove(classes.active) //HERE
-            props.onCategoryClick(props.interests.filter(c => c !== category))
+            props.onCategoryClick(props.interests.filter(c => c !== name))
         
         } else {
             if (props.canAdd){
                 ev.currentTarget.classList.add(classes.active)
-                props.onCategoryClick(prevSelected => [...prevSelected, category])
+                props.onCategoryClick(prevSelected => [...prevSelected, name])
             } else if (!props.canAdd){
                 setAlertResponse({status: 409, text: 'You\'ve already added 5 categories'})
             }
@@ -28,7 +28,7 @@ const CategoriesList = ({all, withQty, size, ...props}) => {
         
     }
 
-    const { eventCategories } = useContext(UserContext)
+    
     const sortedEventCategories = useMemo(() => {
         return [...eventCategories].sort((a, b) => b.qty - a.qty)
     }, [eventCategories])
@@ -37,18 +37,25 @@ const CategoriesList = ({all, withQty, size, ...props}) => {
 
     return (
         <div className={[classes.categories, all ? classes.all : undefined].join(' ')}>
-            {(all ? sortedEventCategories : sortedEventCategories.slice(0, 4)).map(category => (
+            {(all ? sortedEventCategories : sortedEventCategories.slice(0, 4)).map(category => {
+                let found;
+                if (props.interests){
+                    found = props.interests.find(i => i === category.value)
+                }
+                return (
+                
                 <div
-                className={['categoryClass', size ? classes[size]: undefined, classes.category, classes[category.className]].join(' ')}
+                className={[found ? classes.active : undefined, size ? classes[size]: undefined, classes.category, classes[category.className]].join(' ')}
                 key={category.name}
-                onClick={props.choose ? (ev) => handleSelect(ev, category) : () => navigate('/map', {state: {action: 'sort', sort: category.value}})}>
+                onClick={props.choose ? (ev) => handleSelect(ev, category.value) : () => navigate('/map', {state: {action: 'sort', sort: category.value}})}>
                     <div className={classes.categoryIcon}><FontAwesomeIcon icon={category.icon}/></div>
                     <div className={classes.categoryName}>{category.name}</div>
                     {withQty &&
                     <div className={classes.qty}>{category.qty}</div>
                     }
                 </div>
-            ))}
+               
+            )})}
         </div>
     )
 }

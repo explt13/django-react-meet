@@ -2,6 +2,8 @@
     import UserContext from '../context/UserContext'
     import classes from './styles/ResentActivity.module.css'
     import CustomTitle from './UI/CustomTitle/CustomTitle'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faList } from '@fortawesome/free-solid-svg-icons'
 
     const ResentActivity = () => {
         const {sentEvents} = useContext(UserContext)
@@ -26,7 +28,8 @@
                 </div>
                 :
                 <div className={classes.noEvents}>
-                    <div>No recent activity</div>
+                    <div className={classes.noEventsIcon}><FontAwesomeIcon icon={faList} /></div>
+                    <div className={classes.noEventsText}>No recent activity</div>
                 </div>
                 } 
             </div>

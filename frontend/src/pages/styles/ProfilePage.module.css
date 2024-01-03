@@ -33,7 +33,7 @@
 }
 
 .chooseInterests{
-    height: 50vh;
+
     width: 50vw;
     display: flex;
     flex-direction: column;
@@ -47,10 +47,23 @@
 }
 
 
-.categoryContainer{
+.categoryDefault{
     cursor: default!important;
+}
+.categoryPointer{
+    cursor: pointer!important;
 }
 .noInterests{
     font-size: 200px;
     color: var(--main-navyA3);
+}
+
+.buttons{
+    font-size: 32px;
+    color: var(--main-green);
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.buttons:hover{
+    color: var(--main-green-hover)
 }

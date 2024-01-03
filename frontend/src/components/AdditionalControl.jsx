@@ -11,8 +11,9 @@ import MapContext from '../context/MapContext'
 
 const AdditionalControl = () => {
     const [modalPopup, setModalPopup] = useState(false)
-    const {canAddMarkers, setCanAddMarkers, mapID} = useContext(MapContext)
+    const {canAddMarkers, setCanAddMarkers, mapID, setEventInformation, minDate} = useContext(MapContext)
 
+    
     useEffect(() => {
         const map = L.DomUtil.get(mapID)
 
@@ -25,6 +26,11 @@ const AdditionalControl = () => {
     }, [canAddMarkers])
     
 
+    const cancelAddEvent = () => {
+        setModalPopup(false)
+        setEventInformation({text: '', time: minDate, category: 'HEALTH'})
+        setCanAddMarkers(false)
+    }
 
     const handleAddMarker = () =>{
         setCanAddMarkers(true)
@@ -39,7 +45,7 @@ const AdditionalControl = () => {
                     </CustomIcon>
                 </div>
             </div>
-            <Modal visible={modalPopup} setVisible={setModalPopup} block={true}>
+            <Modal visible={modalPopup} setVisible={setModalPopup} onModalClose={cancelAddEvent}>
                 <PopupForm isOpen={modalPopup} setIsOpen={setModalPopup}/>
             </Modal>
         </div>

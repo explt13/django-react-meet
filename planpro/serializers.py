@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from django.core.exceptions import ValidationError
-from .models import User, Friendship, Event, Event_Recipient, Mail
+from .models import User, Friendship, Event, Event_Recipient, Mail, Interest
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -141,3 +141,31 @@ class EventQtySerializer(serializers.Serializer):
 		representation['name'] = category.capitalize()
 		representation['value'] = category
 		return representation
+	
+
+
+
+# class InterestItemSerializer(serializers.Serializer):
+	# name = serializers.CharField()
+	# def to_representation(self, instance):
+		# representation = super().to_representation(instance)
+		# name = representation.pop('name')
+		# return name
+# 
+# class InterestListSerializer(serializers.ListSerializer):
+	# child = InterestItemSerializer()
+
+class InterestSerializer(serializers.ModelSerializer): # equivalent to above impementation
+	class Meta:
+		model = Interest
+		fields = ('name', )
+
+
+	def to_representation(self, instance):
+		representation = super().to_representation(instance)
+		name = representation.pop('name')
+		return name
+
+
+class InterestListSerializer(serializers.ListSerializer):
+	child = serializers.CharField() # child is list item

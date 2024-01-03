@@ -20,10 +20,9 @@ const SidebarContent = ({handleClose}) => {
           setAlertResponse({status: response.status, text: response.data})
           
         } catch (e) {
-          console.log(e)
+
         }
     }
-    console.log(thisUser)
     return (
       isLoading || !thisUser
       ? <Loader />

@@ -5,7 +5,7 @@ import Loader from '../components/UI/Loader/Loader'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import UserService from '../API/UserService'
 import classes from './styles/ProfilePage.module.css'
-import Interests from './Interests'
+import Interests from './../components/Interests'
 
 const ProfilePage = () => {
   const {isLoading, thisUser} = useContext(UserContext)
@@ -17,7 +17,6 @@ const ProfilePage = () => {
   useEffect(() => {
     const getUser = async () => {
         const response = await UserService.getUser(params.username)
-        console.log(params)
         if (response.status === 200){
           setUser(response.data)
         }
@@ -25,9 +24,8 @@ const ProfilePage = () => {
           navigate('error') 
         }
     }
-    getUser()
-    
-}, [params.username])
+    getUser()  
+  }, [params.username])
 
 
   return (
@@ -39,9 +37,9 @@ const ProfilePage = () => {
       <div className={classes.profileContainer}>
         <ProfileInformation user={user}/>
       </div>
-      {thisUser.username === user.username &&
-        <Interests />
-      }
+      
+      <Interests user={user}/>
+      
     </div>
   )
 }

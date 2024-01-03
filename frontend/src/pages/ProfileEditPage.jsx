@@ -22,11 +22,11 @@ const ProfileEditPage = () => {
   useEffect(() => {
 
       const getUserData = async () => {
-        const data = await UserService.getUser(params.username)
-        const dataCp = {...data}
+        const response = await UserService.getUser(params.username)
+        const dataCp = {...response.data}
         delete dataCp.profile_pic
         setEditedInformation(dataCp)
-        setUser(data)
+        setUser(response.data)
         console.log(user)
       }
 
