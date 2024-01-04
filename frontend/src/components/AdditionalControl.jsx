@@ -28,7 +28,7 @@ const AdditionalControl = () => {
 
     const cancelAddEvent = () => {
         setModalPopup(false)
-        setEventInformation({text: '', time: minDate, category: 'HEALTH'})
+        setEventInformation({text: '', time: minDate, category: 'HEALTH', selectedUsers: []})
         setCanAddMarkers(false)
     }
 

@@ -14,16 +14,16 @@
     padding: 15px 10px;
 }
 
-.unSelectedUser{
+.unSelectedFriend{
     cursor: pointer;
     background-color: var(--main-gray);
     transition: background-color 0.2s ease-in-out;
 }
 
-.unSelectedUser:hover{
+.unSelectedFriend:hover{
     background-color: var(--main-gray50);
 }
-.selectedUser{
+.selectedFriend{
     cursor: pointer;
     background-color: var(--main-gray50);
 }

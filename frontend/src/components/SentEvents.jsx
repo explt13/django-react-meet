@@ -13,13 +13,14 @@ import { Link } from 'react-router-dom'
 import MapContext from '../context/MapContext'
 import L from 'leaflet'
 import { getFormattedFullDate, getDateForInput } from '../utils/calendarUtil'
+import useSentEvents from '../hooks/useSentEvents'
 
 const SentEvents = () => {
     const {thisUser, sentEvents, setSentEvents, setEventCategories, setAlertResponse} = useContext(UserContext)
-    const {selectedUsers, setSelectedUsers, canAddMarkers, setCanAddMarkers, eventInformation, setEventInformation, category} = useContext(MapContext)
-    const [draggable, setDraggable] = useState(false)
+    const {canAddMarkers, setCanAddMarkers, eventInformation, setEventInformation, category, friendsSortArray, strictSort} = useContext(MapContext)
     const [minDate, maxDate] = getDateForInput()
     const {csrftoken} = useContext(AuthContext)
+    const sortedCategoryAndFriendsEvents = useSentEvents(sentEvents, category, friendsSortArray, strictSort)
 
     
     const eventMarkers = {
@@ -59,15 +60,13 @@ const SentEvents = () => {
             category: event.category,
             latitude: event.latitude,
             longitude: event.longitude,
-            recipients: selectedUsers,
+            recipients: event.recipients,
             requester_username: thisUser.username,
             icon: event.icon
         }
         const response = await EventService.sendEvent(data, csrftoken)
-        setSentEvents(prevEvents => prevEvents.map(event => event.marker_id === markerID ? {...event, recipients: selectedUsers, is_confirmed: true} : event))
+        setSentEvents(prevEvents => prevEvents.map(event => event.marker_id === markerID ? {...event, recipients: event.recipients, is_confirmed: true} : event))
         setEventCategories(prevCategories => prevCategories.map(category => category.value === event.category ? {...category, qty: category.qty + 1} : category))  
-        setDraggable(false)
-        setSelectedUsers([])
         setAlertResponse({status: response.status, text: response.data})
     }
 
@@ -83,12 +82,7 @@ const SentEvents = () => {
         setAlertResponse({status: response.status, text: response.data})
     }
 
-    const sortedEvents = useMemo(() => {
-        if (category === 'ALL'){
-            return [...sentEvents]
-        }
-        return [...sentEvents].filter(event => event.category === category) // my event not default event
-    }, [category, sentEvents])
+    
 
     
     useMapEvents({
@@ -98,6 +92,7 @@ const SentEvents = () => {
                 const event = {
                     marker_id: Date.now() + Math.random(),
                     requester_username: thisUser.username,
+                    recipients: eventInformation.selectedUsers,
                     latitude: e.latlng.lat,
                     longitude: e.latlng.lng,
                     icon: name,
@@ -108,8 +103,7 @@ const SentEvents = () => {
                 }
                 setSentEvents(prevEvents => [...prevEvents, event])
                 setCanAddMarkers(false)
-                setDraggable(true)
-                setEventInformation({text: '', time: minDate, category: 'HEALTH'})
+                setEventInformation({text: '', time: minDate, category: 'HEALTH', selectedUsers: []})
             } 
         }
     })
@@ -117,7 +111,7 @@ const SentEvents = () => {
 
     return (
         <React.Fragment>{
-        sortedEvents.map(event => (
+        sortedCategoryAndFriendsEvents.map(event => (
             <Marker
             id={event.marker_id}
             key={event.marker_id}
@@ -129,20 +123,10 @@ const SentEvents = () => {
                 <Popup>
                     {
                     (!event.event_id && !event.is_confirmed) &&
-                    <>
-                        {selectedUsers.length > 0
-                        ?
                         <div className={classes.choice}> 
                         <FontAwesomeIcon title='decline' icon={faXmark} style={{color: 'var(--main-red)'}} onClick={() => handleMarkerReject(event.marker_id)}/>
                         <FontAwesomeIcon title='confirm' icon={faCheck} style={{color: 'var(--main-green)'}} onClick={() => handleMarkerAccept(event.marker_id)}/>
                         </div>
-                        :
-                        <div className={classes.noRecipientsSelected}>
-                        <div style={{color: 'var(--main-red)', fontSize: '16px'}}>At least one user must be selected</div>
-                        </div>
-                        }
-
-                    </>
                     }
 
                     <div className={classes.eventInformationContainer}>
@@ -153,11 +137,11 @@ const SentEvents = () => {
                         </div>
                         <div className={classes.recipient}>
                             <strong>Recipients: </strong>
-                            {((!event.event_id && !event.is_confirmed) ? selectedUsers : event.recipients).map((recipient, index) => 
+                            {(event.recipients).map((recipient, index) => 
                             <span key={recipient.username}>
                                 {(index % 2 === 0) && <br /> }
                                 <Link target='_blank' to={`/user/${recipient.username}`}>{recipient.username}</Link>
-                                {(!(index === (!event.event_id ? selectedUsers : event.recipients).length - 1))&&','}&nbsp;
+                                {(!(index === event.recipients.length - 1))&&','}&nbsp;
                             </span>
                             )}
                         </div> 
@@ -174,7 +158,7 @@ const SentEvents = () => {
                         <CustomButton onClick={() => handleCancelEvent(event.marker_id)}>Cancel Event</CustomButton>
                     </div>
                     }
-                    {(!event.event_id && !event.is_confirmed && selectedUsers.length === 0) &&
+                    {(!event.event_id && !event.is_confirmed) &&
                     <div className={classes.cancelEventButton}>
                         <CustomButton onClick={() => handleMarkerReject(event.marker_id)}>Cancel Event</CustomButton>
                     </div>

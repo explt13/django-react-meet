@@ -12,22 +12,18 @@ import { Link } from 'react-router-dom'
 import CustomButton from './UI/CustomButton/CustomButton'
 import L   from 'leaflet'
 import MapContext from '../context/MapContext'
+import useRecievedEvents from '../hooks/useRecievedEvents'
+
 
 
 const RecievedEvents = () => {
 
     const {csrftoken} = useContext(AuthContext)
     const {thisUser, recievedEvents, setRecievedEvents, setAcceptedEvents, setEventCategories, setAlertResponse} = useContext(UserContext)
-    const {category} = useContext(MapContext)
+    const {category, friendsSortArray} = useContext(MapContext)
+    const sortedCategoryAndFriendsEvents = useRecievedEvents(recievedEvents, category, friendsSortArray)
 
-
-    const sortedEvents = useMemo(() => {
-        if (category === 'ALL'){
-            return [...recievedEvents]
-        }
-        return [...recievedEvents].filter(event => event.category === category) // my event not default event
-    }, [category, recievedEvents])
-
+   
     const customIcon = (name) =>{
         const icon = new L.divIcon({
             className: classes.myDivIcon,
@@ -38,7 +34,6 @@ const RecievedEvents = () => {
     } 
 
     const handleMarkerAccept = async (markerID) => { // move to mapComp?
-        console.log("ACCEPTED")
         const response = await EventService.acceptEvent(markerID, csrftoken)
         setRecievedEvents(prevEvents => prevEvents.map(event =>
         event.marker_id === markerID
@@ -65,7 +60,7 @@ const RecievedEvents = () => {
 
 
     return (
-        sortedEvents.map(event => {
+        sortedCategoryAndFriendsEvents.map(event => {
         const recipient = event.recipients.find(recipient => recipient.username === thisUser.username)
         return(
         <Marker

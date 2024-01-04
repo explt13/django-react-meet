@@ -12,7 +12,7 @@ const UsersList = ({resultList,  ...props}) => {
             {resultList.map(user => (
                 <div
                 key={user.id}
-                className={[classes.userContainer, props.forMap ? classes.forMap : undefined, props.forMap && (props.selectedUsers.find(selectedUser => selectedUser.username === user.username) ? classes.selectedUser : classes.unSelectedUser)].join(' ')}
+                className={[classes.userContainer, props.forMap ? classes.forMap : undefined, props.forMap && (props.friendsSortArray.find(selectedFriend => selectedFriend === user.username) ? classes.selectedFriend : classes.unSelectedFriend)].join(' ')}
                 onClick={props.forMap ? () => props.onUserClick(user) : undefined}
                 >
                     <div className={classes.userImage}>

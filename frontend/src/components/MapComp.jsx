@@ -13,11 +13,12 @@ import CustomInput from './UI/CustomInput/CustomInput'
 
 const MapComp = ({state}) => {
      // make for friends and searching ??
-    const {selectedUsers, setSelectedUsers, position, setPosition, category, setCategory, setModalPopup, setEventInformation, senderSort, setSenderSort, setFriendsSort} = useContext(MapContext)
+    const {position, setPosition, setCanAddMarkers, category, setCategory, setModalPopup, setEventInformation, senderSort, setSenderSort, friendsSortArray, setFriendsSortArray, strictSort, setStrictSort} = useContext(MapContext)
     const { friends, eventCategories } = useContext(UserContext)
     const [error, setError] = useState(null)
     const sentInputId = useId()
     const recievedInputId = useId()
+    const strictInputId = useId()
     
     
     window.history.replaceState({}, document.title)
@@ -28,14 +29,15 @@ const MapComp = ({state}) => {
             setEventInformation(prevInformation => ({...prevInformation, category: state.category}))
         }
         if (state?.action === 'selectUser'){
-            setSelectedUsers([{username: state.username, is_accepted: false}])
+            setEventInformation(prevInformation => ({...prevInformation, selectedUsers: [{username: state.username, is_accepted: false}]}))
             setModalPopup(true)
+            setCanAddMarkers(true)
         }
         if (state?.action === 'selectUserSelectCategory'){
             setCategory(state.category)
-            setSelectedUsers([{username: state.username, is_accepted: false}])
-            setEventInformation(prevInformation => ({...prevInformation, category: state.category}))
+            setEventInformation(prevInformation => ({...prevInformation, category: state.category, selectedUsers: [{username: state.username, is_accepted: false}]}))
             setModalPopup(true)
+            setCanAddMarkers(true)
         }
     }, [])
 
@@ -61,11 +63,11 @@ const MapComp = ({state}) => {
 
 
     const handleSeletedUsers = (user) => {
-        const isSelected = selectedUsers.find(selectedUser => selectedUser.username === user.username)
+        const isSelected = friendsSortArray.find(friendSelected => friendSelected === user.username)
         if (!isSelected){
-            setSelectedUsers(prevUsers => [...prevUsers, {username: user.username, is_accepted: false}])
+            setFriendsSortArray(prevUsers => [...prevUsers, user.username])
         } else {
-            setSelectedUsers(selectedUsers.filter(selectedUser => selectedUser.username !== user.username))
+            setFriendsSortArray(friendsSortArray.filter(friendsSelected => friendsSelected !== user.username))
         }
     }
 
@@ -104,15 +106,18 @@ const MapComp = ({state}) => {
                     />
                     </div>
                     <div className={classes.senderSort}>
-                        <label htmlFor={sentInputId}>Sent</label><input onChange={(e) => setSenderSort((prevSort) => ({...prevSort, sent: !senderSort.sent}))} id={sentInputId} checked={senderSort.sent} type='checkbox' />
+                        <label htmlFor={sentInputId}>Sent</label><input onChange={() => setSenderSort((prevSort) => ({...prevSort, sent: !senderSort.sent}))} id={sentInputId} checked={senderSort.sent} type='checkbox' />
                         &nbsp;
-                        <label htmlFor={recievedInputId}>Recieved</label><input onChange={(e) => setSenderSort((prevSort) => ({...prevSort, recieved: !senderSort.recieved}))} id={recievedInputId} checked={senderSort.recieved} type='checkbox' />
+                        <label htmlFor={recievedInputId}>Recieved</label><input onChange={() => setSenderSort((prevSort) => ({...prevSort, recieved: !senderSort.recieved}))} id={recievedInputId} checked={senderSort.recieved} type='checkbox' />
+                    </div>
+                    <div className={classes.strictSort}>
+                        <label htmlFor={strictInputId}>Exact users</label><input onChange={() => setStrictSort(!strictSort)} id={strictInputId} type='checkbox' checked={strictSort}/>
                     </div>
                 </div>
                 <div className={classes.friendsSelect}>
                     Sort events by friends
                     {friends && !(friends.length === 0)
-                    ? <UsersList resultList={friends} forMap={true} onUserClick={handleSeletedUsers} selectedUsers={selectedUsers}/>
+                    ? <UsersList resultList={friends} forMap={true} onUserClick={handleSeletedUsers} friendsSortArray={friendsSortArray}/>
                     : <div >seems empty..</div>}
                 </div>
                 

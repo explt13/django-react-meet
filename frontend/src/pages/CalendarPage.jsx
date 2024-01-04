@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import classes from './styles/CalendarPage.module.css'
-
+import UserContext from './../context/UserContext'
 import { getDateInfo, getDaysInMonth, getWeekdayIndex } from '../utils/calendarUtil'
 
 
 const CalendarPage = () => {
+  const { recievedEvents } = useContext(UserContext)
   const [monthNum, setMonthNum] = useState(0)
   const [today, daysInMonth, monthName, year] = getDateInfo(monthNum)
-
+  console.log(recievedEvents)
   const handlePrev = () => {
     if (monthNum === 1){
       setMonthNum(0)

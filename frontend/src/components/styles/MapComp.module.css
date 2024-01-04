@@ -18,8 +18,8 @@
 
 }
 
-.categorySelectContainer{
-    
+.strictSort > label{
+    margin-right: 5px;
 }
 
 .sortPanel{
