@@ -6,7 +6,7 @@ import MapContext from '../context/MapContext'
 
 const LocationMarkers = () => {
     
-    const {canAddMarkers} = useContext(MapContext)
+    const {canAddMarkers, senderSort} = useContext(MapContext)
     
 
     const map = useMapEvents({
@@ -23,8 +23,8 @@ const LocationMarkers = () => {
 
   return (
     <React.Fragment>
-        <SentEvents />
-        <RecievedEvents />
+        {senderSort.sent && <SentEvents /> }
+        {senderSort.recieved && <RecievedEvents /> }
     </React.Fragment>
   )
 }

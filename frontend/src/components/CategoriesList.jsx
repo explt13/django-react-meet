@@ -37,7 +37,7 @@ const CategoriesList = ({all, withQty, size, ...props}) => {
 
     return (
         <div className={[classes.categories, all ? classes.all : undefined].join(' ')}>
-            {(all ? sortedEventCategories : sortedEventCategories.slice(0, 4)).map(category => {
+            {(all ? sortedEventCategories : sortedEventCategories.slice(0, 4)).map((category) => {
                 let found;
                 if (props.interests){
                     found = props.interests.find(i => i === category.value)
@@ -47,7 +47,7 @@ const CategoriesList = ({all, withQty, size, ...props}) => {
                 <div
                 className={[found ? classes.active : undefined, size ? classes[size]: undefined, classes.category, classes[category.className]].join(' ')}
                 key={category.name}
-                onClick={props.choose ? (ev) => handleSelect(ev, category.value) : () => navigate('/map', {state: {action: 'sort', sort: category.value}})}>
+                onClick={props.choose ? (ev) => handleSelect(ev, category.value) : () => navigate('/map', {state: {action: 'selectCategory', category: category.value}})}>
                     <div className={classes.categoryIcon}><FontAwesomeIcon icon={category.icon}/></div>
                     <div className={classes.categoryName}>{category.name}</div>
                     {withQty &&

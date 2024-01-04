@@ -8,6 +8,7 @@ import categoryStyles from './styles/Categories.module.css'
 import UserService from '../API/UserService'
 import AuthContext from '../context/AuthContext'
 import UserContext from '../context/UserContext'
+import { useNavigate } from 'react-router-dom'
 
 const Interests = ({user}) => {
   const {thisUser} = useContext(UserContext)
@@ -19,6 +20,7 @@ const Interests = ({user}) => {
   const {csrftoken} = useContext(AuthContext)
   const {setAlertResponse, eventCategories} = useContext(UserContext)
   const [isModalClosing, setIsModalClosing] = useState(false)
+  const navigate = useNavigate()
   const isThisUser = thisUser.username === user.username
   
 
@@ -60,6 +62,9 @@ const Interests = ({user}) => {
     setInterests([...initialInterests])
   }
 
+  const onCategoryClick = (category) => {
+    navigate('/map', {state: {action: 'selectUserSelectCategory', username: user.username, category: category}})
+  }
 
   return (
     <div className={classes.interestsContainer}>
@@ -85,7 +90,10 @@ const Interests = ({user}) => {
           interests.map((interest) => {
             const ec = eventCategories.find(ec => ec.value === interest)
             return(
-            <div className={[isThisUser ? classes.categoryDefault : classes.categoryPointer, categoryStyles.category, categoryStyles[ec.className]].join(' ')} key={ec.value}>
+            <div
+            onClick={!isThisUser ? () => onCategoryClick(ec.value): undefined}
+            className={[isThisUser ? classes.categoryDefault : classes.categoryPointer, categoryStyles.category, categoryStyles[ec.className]].join(' ')}
+            key={ec.value}>
               <div className={categoryStyles.categoryIcon}><FontAwesomeIcon icon={ec.icon}/></div>
               <div className={categoryStyles.categoryName}>{ec.name}</div>
             </div>

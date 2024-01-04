@@ -7,11 +7,11 @@ import MapContext, { MapProvider } from '../context/MapContext'
 
 
 const MapPage = () => {
-
+    const { state }= useLocation() // get state from navigate
     return (
         <MapProvider>
             <div className='wrapper container' >
-                <MapComp />
+                <MapComp state={state}/>
             </div>
         </MapProvider>
     )

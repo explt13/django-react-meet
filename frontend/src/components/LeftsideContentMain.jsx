@@ -12,7 +12,7 @@ const LeftsideContentMain = ({friends, randomFriends}) => {
     const navigate = useNavigate()
   
     const handleClickFriend = (username) => {
-      navigate('/map', {state: {action: 'selectuser', username: username}})
+      navigate('/map', {state: {action: 'selectUser', username: username}})
     }
   
     return (

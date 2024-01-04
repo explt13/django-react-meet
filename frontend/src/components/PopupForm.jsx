@@ -36,7 +36,6 @@ const PopupForm = ({isOpen, setIsOpen}) => {
 
   const handleAcceptPopup = () => {
     if (valid){
-      setCategory(eventInformation.category)
       setIsOpen(false)
     }
     

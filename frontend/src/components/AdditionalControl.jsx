@@ -10,8 +10,8 @@ import PopupForm from './PopupForm'
 import MapContext from '../context/MapContext'
 
 const AdditionalControl = () => {
-    const [modalPopup, setModalPopup] = useState(false)
-    const {canAddMarkers, setCanAddMarkers, mapID, setEventInformation, minDate} = useContext(MapContext)
+    const {modalPopup, setModalPopup} = useContext(MapContext)
+    const {canAddMarkers, setCanAddMarkers, mapID, setEventInformation, minDate, setSenderSort} = useContext(MapContext)
 
     
     useEffect(() => {
@@ -35,6 +35,7 @@ const AdditionalControl = () => {
     const handleAddMarker = () =>{
         setCanAddMarkers(true)
         setModalPopup(true)
+        setSenderSort(prevSort => ({...prevSort, sent: true}))
     }
     return (
         <div className={classes.additionalControlContainer}>

@@ -8,13 +8,22 @@ export const MapProvider = ({children}) => {
     const [minDate, maxDate] = getDateForInput()
     const [category, setCategory] = useState('ALL')
     const [selectedUsers, setSelectedUsers] = useState([])
+    const [friendsSort, setFriendsSort] = useState([])
     const [position, setPosition] = useState(null)
     const [canAddMarkers, setCanAddMarkers] = useState(false)
     const [eventInformation, setEventInformation] = useState({text: '', time: minDate, category: 'HEALTH'})
     const [mapID, setMapID] = useState('myMap')
+    const [modalPopup, setModalPopup] = useState(false)
+    const [senderSort, setSenderSort] = useState({sent: true, recieved: true})
    
     
     const context = {
+        friendsSort,
+        setFriendsSort,
+        senderSort,
+        setSenderSort,
+        modalPopup,
+        setModalPopup,
         minDate,
         maxDate,
         category,
