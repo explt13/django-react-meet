@@ -25,16 +25,20 @@
 .dateInput{
     width: 100%;
 }
+
 .dateInput > input{
     height: auto;
 }
-.invalidDate > input{
-    border-bottom: 2px solid var(--main-red);
+.timeInvalid{
+    border-bottom: 2px solid var(--alert-red)!important;
+    animation: shake 0.4s linear forwards
 }
+
 
 .dateAndCategory{
     display: flex;
     column-gap: 20px;
+    width: 100%;
 }
 .formFields{
     margin-top: 10px;
@@ -43,8 +47,15 @@
     row-gap: 10px;
 }
 
+.textInvalid{
+    outline: 3px solid var(--alert-red)!important;
+    animation: 0.4s linear shake forwards
+}
 
-
+.categoryInvalid{
+    outline: 2px solid var(--alert-red)!important;
+    animation: 0.4s linear shake forwards
+}
 .categorySelect{
     font-size: 20px;
     border-radius: 5px;
@@ -79,13 +90,16 @@
 
 .sendTo{
     height: 35px;
-    
+    cursor: pointer;
     position: relative;
     align-items: center;
 }
 
+.sendTo.invalid .userSelectHeading{
+    border: 2px solid var(--alert-red)
+}
 .sendTo.invalid{
-    
+    animation: shake 0.4s linear
 }
 .userSelectContent{
 
@@ -96,9 +110,10 @@
     padding: 5px 20px;
     overflow: auto;
 }
-.userSelectContent.active{
+.sendTo.active .userSelectContent{
     display: block;
 }
+
 .userSelectHeading{
     border: 2px solid var(--main-navy);
     display: flex;
@@ -125,20 +140,51 @@
 }
 
 .userSelectDropIcon{
-    padding-right: 3px;
-    padding-top: 3px;
+    margin-right: 3px;
+    margin-top: 3px;
+
 }
 .userSelectDropIcon > svg{
     font-size: 28px;
 }
 
+.sendTo.active .userSelectDropIcon{
+    
+    rotate: 180deg;
+    transform: translateY(3.5px);
+}
+
 .userSelectOption{
     cursor: pointer;
     margin-bottom: 5px;
+    padding-left: 10px;
 }
 .userSelectOption:hover{
-    background-color: var(--main-green);
+    background-color: var(--main-navy);
+    color: var(--main-white)
 }
 .userSelectOption.active{
     background-color: var(--main-whitegray)
 }
+
+.time{
+    height: min-content;
+}
+.datetime{
+    display: flex;
+    column-gap: 10px;
+    width: 100%;
+}
+.datetime > input:last-child{
+    width: 50%;
+}
+
+@keyframes shake{
+    20%{transform: translateX(-10px);}
+    40%{transform: translateX(10px);}
+    60%{transform: translateX(-10px);}
+    80%{transform: translateX(10px);}
+    100%{transform: translateX(0px);}
+
+}
+

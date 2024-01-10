@@ -8,11 +8,43 @@
     cursor: pointer;
     display: block;
     color: var(--main-navy);
+
     border-radius: 15px;
-    transition: all 0.2s ease-in-out
+
+    background: linear-gradient(to right, var(--main-lightblue), var(--main-blue));
+    background-size: 200%;
+    transition: background-position 0.5s;
 }
 
 .customButton:hover{
-    background-color: var(--main-purple);
-    color: var(--main-gray)
+    background-position: -100%;
+}
+
+
+
+.customButton.cancel{
+    background: linear-gradient(to right, transparent 20%, var(--main-red));
+    background-size: 400%;
+    transition: all 0.5s;
+    color: var(--main-navy);
+    outline: 1px solid var(--main-navy);
+}
+
+
+.customButton.cancel:hover {
+    color: var(--main-white);
+    background-position: -35% 0;
+    outline: 1px solid var(--main-red);
+}
+
+
+.customButton.accept{
+    color: var(--main-white);
+    background: linear-gradient(to right, #00FF00, var(--main-green-hover));
+    background-size: 200%;
+    transition: all 0.5s;
+}
+.customButton.accept:hover {
+    color: var(--main-white);
+    background-position: -100% 0;
 }

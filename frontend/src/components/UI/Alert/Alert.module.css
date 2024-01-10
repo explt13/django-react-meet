@@ -13,7 +13,7 @@
 .alertContainer.active{
     display: flex;
     justify-content: center;
-    animation: show 0.5s ease-in-out forwards;
+    animation: show 0.5s ease-in-out forwards; /* could have same effect using transition and adding and deleting active class*/
 }
 
 .alertContainer.closing{

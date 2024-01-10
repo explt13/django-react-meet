@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import UserContext from '../context/UserContext'
 import { Marker, Popup, useMapEvents } from 'react-leaflet'
-import purpleMarker from './../media/img/purpleMarker.png'
 import EventService from '../API/EventService'
 import AuthContext from '../context/AuthContext'
 import { Icon } from 'leaflet'
@@ -14,6 +13,7 @@ import MapContext from '../context/MapContext'
 import L from 'leaflet'
 import { getFormattedFullDate, getDateForInput } from '../utils/calendarUtil'
 import useSentEvents from '../hooks/useSentEvents'
+import CustomCancelButton from './UI/CustomButton/CustomCancelButton'
 
 const SentEvents = () => {
     const {thisUser, sentEvents, setSentEvents, setEventCategories, setAlertResponse} = useContext(UserContext)
@@ -55,14 +55,15 @@ const SentEvents = () => {
         const event = sentEvents.find(event => event.marker_id === markerID)
         const data = {
             marker_id: event.marker_id,
+            date: event.date,
             time: event.time,
             text: event.text,
             category: event.category,
             latitude: event.latitude,
             longitude: event.longitude,
             recipients: event.recipients,
-            requester_username: thisUser.username,
-            icon: event.icon
+            icon: event.icon,
+            requester: thisUser
         }
         const response = await EventService.sendEvent(data, csrftoken)
         setSentEvents(prevEvents => prevEvents.map(event => event.marker_id === markerID ? {...event, recipients: event.recipients, is_confirmed: true} : event))
@@ -91,19 +92,19 @@ const SentEvents = () => {
                 const name = eventMarkers[eventInformation.category]
                 const event = {
                     marker_id: Date.now() + Math.random(),
-                    requester_username: thisUser.username,
                     recipients: eventInformation.selectedUsers,
                     latitude: e.latlng.lat,
                     longitude: e.latlng.lng,
                     icon: name,
-                    text: eventInformation.text || 'See you soon',
-                    time: getFormattedFullDate(eventInformation.time),
+                    text: eventInformation.text,
+                    date: eventInformation.date,
+                    time: eventInformation.time,
                     category: eventInformation.category,
                     is_confirmed: false,
                 }
                 setSentEvents(prevEvents => [...prevEvents, event])
                 setCanAddMarkers(false)
-                setEventInformation({text: '', time: minDate, category: 'HEALTH', selectedUsers: []})
+                setEventInformation({text: '', date: minDate, time: '', category: '', selectedUsers: []})
             } 
         }
     })
@@ -131,10 +132,7 @@ const SentEvents = () => {
 
                     <div className={classes.eventInformationContainer}>
                         <strong className={classes.category}>{event.category}</strong>
-                        <div className={classes.requester}>
-                            <strong>Requester: </strong>
-                            You
-                        </div>
+                        <div className={classes.requester}><strong>Requester: </strong>You</div>
                         <div className={classes.recipient}>
                             <strong>Recipients: </strong>
                             {(event.recipients).map((recipient, index) => 
@@ -150,17 +148,17 @@ const SentEvents = () => {
                             <strong>Message: </strong><br/>
                             {event.text} <br/>
                             <strong>Time: </strong><br/>
-                            {event.time}
+                            {getFormattedFullDate(event.date)} at {event.time}
                         </div>
                     </div>
                     {(event.event_id || event.is_confirmed) &&
                     <div className={classes.cancelEventButton}>
-                        <CustomButton onClick={() => handleCancelEvent(event.marker_id)}>Cancel Event</CustomButton>
+                        <CustomCancelButton onClick={() => handleCancelEvent(event.marker_id)}>Cancel Event</CustomCancelButton>
                     </div>
                     }
                     {(!event.event_id && !event.is_confirmed) &&
                     <div className={classes.cancelEventButton}>
-                        <CustomButton onClick={() => handleMarkerReject(event.marker_id)}>Cancel Event</CustomButton>
+                        <CustomCancelButton onClick={() => handleMarkerReject(event.marker_id)}>Cancel Event</CustomCancelButton>
                     </div>
                     }
                     

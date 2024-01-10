@@ -2,11 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import classes from './styles/UsersList.module.css'
 import { Link } from 'react-router-dom'
 import CustomButton from './UI/CustomButton/CustomButton'
-
-
+import CustomCancelButton from './UI/CustomButton/CustomCancelButton'
+import CustomAcceptButton from './UI/CustomButton/CustomAcceptButton'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
 
 const UsersList = ({resultList,  ...props}) => {
-    
+
     return (
         <>
             {resultList.map(user => (
@@ -31,23 +33,38 @@ const UsersList = ({resultList,  ...props}) => {
 
                     </div>
 
-                    {!props.forMap
+                    {props.forSearch &&
+
+                        <div className={classes.additional}>
+                            {props.sentFriendRequests.find(friend => friend.username === user.username) ?
+                            <div className={classes.pendingForSearch}>pending</div>
+                            :
+                            props.friends.find(friend => friend.username === user.username)
+                            ?
+                            <div className={classes.friendsForSearch}>Friends <FontAwesomeIcon icon={faCheck}/></div>
+                            :
+                            <CustomButton onClick={() => props.addFriend(user.username)}>friend request</CustomButton>
+                            }
+                        </div>
+                    }
+                    
+                    {props.forFriends
                     &&
                     <>
                         {props.tab === 'recieved' &&
                         <div className={classes.additional}>
-                            <CustomButton onClick={() => props.handleAccept(user.friendship_id)}>Accept</CustomButton>
-                            <CustomButton onClick={() => props.handleReject(user.friendship_id)}>Reject</CustomButton>
+                            <CustomAcceptButton onClick={() => props.handleAccept(user.friendship_id)}>Accept</CustomAcceptButton>
+                            <CustomCancelButton onClick={() => props.handleReject(user.friendship_id)}>Reject</CustomCancelButton>
                         </div>}
 
                         {props.tab === 'sent' &&
                         <div className={classes.additional}>
-                            <CustomButton onClick={() => props.handleCancel(user.friendship_id)}>Cancel request</CustomButton>
+                            <CustomCancelButton onClick={() => props.handleCancel(user.friendship_id)}>Cancel request</CustomCancelButton>
                         </div>}
                         
                         {props.tab === 'friends' &&
                         <div className={classes.additional}>
-                            <CustomButton onClick={() => props.handleDelete(user.username)}>Delete</CustomButton>
+                            <CustomCancelButton onClick={() => props.handleDelete(user.username)}>Delete</CustomCancelButton>
                         </div>}
                     
                     </>

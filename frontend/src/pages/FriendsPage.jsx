@@ -10,17 +10,14 @@ import FriendsPageNavigate from '../components/FriendsPageNavigate'
 
 const FriendsPage = () => {
   const {isLoading} = useContext(UserContext)
-  const {friends} = useContext(UserContext)
   const [tab, setTab] = useState('friends')
-  const [resultList, setResultList] = useState([])
-  
-  useEffect(() => {
-    setResultList(friends)
-  }, [friends])
+
+
+
  
 
   return (
-    isLoading || !resultList
+    isLoading
     ? <Loader />
     :
     <div className='container wrapper'>
@@ -30,8 +27,8 @@ const FriendsPage = () => {
           {tab === 'sent' && 'Sent Requests'}
           {tab === 'recieved' && 'Recieved requests'}
         </div>
-        <FriendsPageNavigate setTab={setTab} setResultList={setResultList}/>
-        <FriendsContent tab={tab} resultList={resultList} setResultList={setResultList}/>
+        <FriendsPageNavigate setTab={setTab}/>
+        <FriendsContent tab={tab}/>
       </div>
     </div>
   )

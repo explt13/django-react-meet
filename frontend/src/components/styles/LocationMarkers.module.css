@@ -31,17 +31,7 @@
     color: inherit;
 }
 
-.cancelEventButton > button{
-    color: black;
-    border: 2px solid var(--main-red);
-    margin-top: 5px;
-    
-}
 
-.cancelEventButton > button:hover{
-    background-color: var(--main-red);
-    color: #ddd;
-}
 .cancelEventButton {
     display: flex;
     justify-content: center;

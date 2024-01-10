@@ -2,6 +2,7 @@
   --main-green: #31af40;
   --main-green-hover: #268a31;
   --main-red: #da2b1d;
+  --main-brightred: #fd5c63;
   --main-black: #212529;
   --main-darkgray: #32363a;
   --main-font-color: #ddd;
@@ -18,6 +19,9 @@
   --main-eggshell: #D0EAD6;
   --main-lightblue: #B9D9EB;
   --main-cyan: #1abc9c;
+  --main-blue: rgb(70, 130, 180);
+  --main-bluegray: rgba(70, 130, 180, 0.5);
+  --main-lightblue: #87CEEB;
   
   --alert-orange: #ff7800;
   --alert-red: #B33A3A;
@@ -36,7 +40,7 @@
     
 }
 body{
-  font-family: 'IBM Plex Mono';
+  font-family: 'Raleway';
   background-color: var(--main-white);
   color: var(--main-navy);
 
@@ -44,26 +48,28 @@ body{
 
 
 ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 7px;
+    height: 7px;
   }
 
 ::-webkit-scrollbar-thumb {
-  background: #ddd;
+  background: var(--main-gray50);
   border-radius: 10px;
 }
 
 .wrapper{
-  margin-top: 40px;
+  background-color: var(--main-white);
+  margin-top: 96px;
   height: 100%;
 
 }
 
-
-
+#root{
+  
+}
 
 @media screen and (max-width: 767px) {
   .wrapper{
-    margin-top: 20px;
+    margin-top: 76px;
   }
 }

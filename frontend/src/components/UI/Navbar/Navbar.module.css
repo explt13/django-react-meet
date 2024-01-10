@@ -3,9 +3,20 @@
     display: flex;
     background-color: var(--main-gray);
     justify-content: space-between;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 5;
+    transition: transform 0.2s;
+
+
 
 }
+.container.hideNavbar{
+    transform: translateY(-50px);
 
+}
 .logout {
     height: max-content;
     margin-top: 7px
@@ -14,13 +25,18 @@
 
 
 .mailIcon{
-    display: inline;
+    vertical-align: top;
+    display: inline-block;
     position: relative;
 }
 .mailIcon > span{
     color: red;
     position: absolute;
     right: 0;
+    font-size: 44px;
+    top: 0;
+    
+    margin-top: -15px;
 }
 
 

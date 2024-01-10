@@ -89,12 +89,30 @@
 }
 
 
+.pendingForSearch{
+    cursor: default;
+    background-color: var(--alert-orange);
+    padding: 5px 10px;
+    border-radius: 25px;
+    height: min-content;
+    color: var(--main-white)
+}
 
-
+.friendsForSearch{
+    cursor: default;
+    background-color: var(--alert-green);
+    padding: 5px 10px;
+    border-radius: 25px;
+    height: min-content;
+    color: var(--main-white)
+}
 
 .additional{
+    display: flex;
+    flex-direction: column;
     grid-area: additional;
     height: min-content;
+    row-gap: 5px;
     margin-top: 10px;
 }
 

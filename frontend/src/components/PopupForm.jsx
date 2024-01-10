@@ -3,7 +3,7 @@ import classes from './styles/PopupForm.module.css'
 import CustomInput from './UI/CustomInput/CustomInput'
 import CustomTextarea from './UI/textarea/CustomTextarea'
 import CustomInputV2 from './UI/CustomInput/CustomInputV2'
-import {getFormattedFullDate, getDateForInput} from './../utils/calendarUtil'
+import {getFormattedFullDate, getDateForInput, getCutTime} from './../utils/calendarUtil'
 import CustomButton from './UI/CustomButton/CustomButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faCheck, faSquareCaretDown } from '@fortawesome/free-solid-svg-icons'
@@ -18,107 +18,159 @@ import Loader from './UI/Loader/Loader'
 const PopupForm = ({isOpen, setIsOpen}) => {
   const phrases = ['Let\'s go bowling..', 'Let\'s have a drink..', 'Let\'s have a walk..', 'let\'s go have lunch..', 'Would you like...']
   const [phrase, setPhrase] = useState(null)
-  const [valid, setValid] = useState(true)
   const ind = Math.floor(Math.random() * phrases.length)
+  const [timeValid, setTimeValid] = useState(false)
   const {setEventInformation, setCanAddMarkers, eventInformation, minDate, maxDate} = useContext(MapContext)
-  const [dateClasses, setDateClasses] = useState([classes.dateInput])
+  const [textClasses, setTextClasses] = useState([])
+  const [timeClasses, setTimeClasses] = useState([])
+  const [categoryClasses, setCategoryClasses] = useState([classes.categorySelect])
   const [selectedUsersClasses, setSelectedUsersClasses] = useState([classes.sendTo])
   const {eventCategories, friends, isLoading} = useContext(UserContext)
   const [dropdown, setDropdown] = useState(false)
   const initialUser = eventInformation.selectedUsers[0]
-  
+  const time = new Date().toLocaleTimeString()
+  const now = getCutTime(time)
 
   useEffect(() => {
     setPhrase(phrases[ind])
-
   }, [isOpen])
 
+  useEffect(() => {
+    if (dropdown){
+      setSelectedUsersClasses(prevClasses => [...prevClasses, classes.active])
+    } else {
+      setSelectedUsersClasses(selectedUsersClasses.filter(cls => cls !== classes.active))
+    }
+  }, [dropdown])
+
+  useEffect(() => {
+    if (eventInformation.selectedUsers.length > 0){
+      setSelectedUsersClasses(selectedUsersClasses.filter(cls => cls !== classes.invalid))
+    }
+  }, [eventInformation.selectedUsers])
+
+  useEffect(() => {
+    if (eventInformation.time && (minDate < eventInformation.date)){
+      setTimeValid(true)
+      setTimeClasses([])
+    }
+  }, [minDate, eventInformation.date])
+
+
+  const handleOutsideUsersSelect = (ev) => {
+    const dropdownElement = document.getElementById('selectUsers');
+    if (dropdownElement && !dropdownElement.contains(ev.target)) {
+      setDropdown(false);
+    }
+  }
+    
   const handleCancelPopup = () => {
     setIsOpen(false)
-    setEventInformation({text: '', time: minDate, category: 'HEALTH', selectedUsers: []})
+    setEventInformation({text: '', date: minDate, time: '', category: '', selectedUsers: []})
     setCanAddMarkers(false)
   }
 
   const handleAcceptPopup = () => {
-    if (valid){
+    if (eventInformation.selectedUsers.length === 0){
+      if (!selectedUsersClasses.includes(classes.invalid))
+        setSelectedUsersClasses(prevClasses => [...prevClasses, classes.invalid])
+    }
+    if(!eventInformation.text){
+      if (!textClasses.includes(classes.textInvalid)){
+        setTextClasses(prevClasses => [...prevClasses, classes.textInvalid])
+      } 
+    }
+    if (!eventInformation.category){
+      if (!categoryClasses.includes(classes.categoryInvalid)){
+        setCategoryClasses(prevClasses => [...prevClasses, classes.categoryInvalid])
+      }
+    }
+    if (!eventInformation.time){
+      if (!timeClasses.includes(classes.timeInvalid)){
+        setTimeClasses(prevClasses => [...prevClasses, classes.timeInvalid])
+      }
+    }
+    if (timeValid && eventInformation.selectedUsers.length > 0 && eventInformation.text && eventInformation.category){
       setIsOpen(false)
     }
-    
   }
-  useEffect(() => {
-    
-    if (eventInformation.selectedUsers.length === 0){
-      setSelectedUsersClasses(prevClasses => [...prevClasses, classes.invalid])
-      setValid(false)
-    } else{
-      console.log(eventInformation.selectedUsers)
-      setSelectedUsersClasses([classes.sendTo])
-      setValid(true)
-    }
-  }, [eventInformation.selectedUsers])
-
 
   const handleText = (ev) => { // i have default text so i dont need to validate this field
+    if (ev.target.value){
+      setTextClasses([])
+    }
     setEventInformation(prevInformation => ({...prevInformation, text: ev.target.value}))
+
   }
 
   const handleDate = (ev) => {
-    if (ev.target.value > maxDate || ev.target.value < minDate){
-      setValid(false)
-      setDateClasses(prevClasses => [...prevClasses, classes.invalidDate])
-    } else{
-      setValid(true)
-      setDateClasses([classes.dateInput])
+    if (!(ev.target.value > maxDate) && !(ev.target.value < minDate)){
+      setEventInformation(prevInformation => ({...prevInformation, date: ev.target.value}))
+    }
+  }
+  
+
+  const handleTime = (ev) => {
+    if (ev.target.value < now && eventInformation.date === minDate){
+      setTimeValid(false)
+      if (!timeClasses.includes(classes.invalidTime)){
+        setTimeClasses(prevClasses => [...prevClasses, classes.timeInvalid])
+      } 
+    } else {
+      setTimeValid(true)
+      setTimeClasses([])
     }
     setEventInformation(prevInformation => ({...prevInformation, time: ev.target.value}))
   }
+  
 
   const handleCategory = (ev) => {
     setEventInformation(prevInformation => ({...prevInformation, category: ev.target.value}))
+    setCategoryClasses([classes.categorySelect])
   }
 
 
   const handleUsers = (ev, username) => {
     const alreadySelected = eventInformation.selectedUsers.find(u => u.username === username)
     ev.currentTarget.classList.toggle(classes.active)
-
     if (alreadySelected){
       setEventInformation(prevInformation => ({...prevInformation, selectedUsers: prevInformation.selectedUsers.filter(su => su.username !== username)}))
-
     } else if (!alreadySelected){
       setEventInformation(prevInformation => ({...prevInformation, selectedUsers: [...prevInformation.selectedUsers, {username: username, is_accepted: false}]}))
 
     }
   }
 
-
   return (
     isLoading
     ? <Loader />
     :
-    <div className={classes.container}>
+    <div className={classes.container} onClick={handleOutsideUsersSelect}>
         <div className={classes.heading}>
           Create Event
         </div>
         <div className={classes.form}>
-          <CustomTextarea placeholder={phrase} value={eventInformation.text} onChange={handleText} />
+          <CustomTextarea className={textClasses.join(" ")} placeholder={phrase} value={eventInformation.text} onChange={handleText} />
           <div className={classes.formFields}>
             <div className={classes.dateAndCategory}>
-              <div className={dateClasses.join(' ')}>
+              <div className={classes.dateInput}>
                 <label htmlFor='datePopup'>Date</label>
-                <CustomInput id='datePopup' value={eventInformation.time} onChange={handleDate} type={'date'} min={minDate} max={maxDate} required/>
+                <div className={classes.datetime} id='datePopup'>
+                  <CustomInput value={eventInformation.date} onChange={handleDate} type={'date'} min={minDate} max={maxDate}/>
+                  <CustomInput className={timeClasses.join(' ')} value={eventInformation.time} onChange={handleTime} type={'time'} min={now} required/>
+                </div>
               </div>
-              <div>
+              <div className={classes.category}>
                 <label htmlFor='categoryPopup'>Category</label>
-                <CustomSelect id='categoryPopup' onChange={handleCategory} className={classes.categorySelect} defaultName='Categrory' options={eventCategories}/>
+                <CustomSelect id='categoryPopup' value={eventInformation.category ? eventInformation.category : 'defaultValue'} onChange={handleCategory} className={categoryClasses.join(' ')} defaultName='Categrory' options={eventCategories}/>
               </div>
             </div>
-            <div className={selectedUsersClasses.join(' ')}>
-              <div className={classes.userSelectHeading}>
+            <div className={selectedUsersClasses.join(' ')} id='selectUsers'>
+              <div className={classes.userSelectHeading} onClick={() => setDropdown(!dropdown)}>
                 <div className={classes.userSelectInformation}><div className={classes.userSelectInformationPlaceholder}>Send to:&nbsp;</div><div className={classes.selectedUsersShow}>{eventInformation.selectedUsers.map(su => (<span key={su.username}>{su.username}&nbsp;</span>))}</div></div>
-                <div className={classes.userSelectDropIcon} onClick={() => setDropdown(!dropdown)}><FontAwesomeIcon icon={faSquareCaretDown} /></div>
+                <div className={classes.userSelectDropIcon}><FontAwesomeIcon icon={faSquareCaretDown} /></div>
               </div>
-              <div className={[classes.userSelectContent, dropdown ? classes.active : undefined].join(' ')} id='selectUsers'>
+              <div className={classes.userSelectContent}>
               {friends.map(friend => (
                 <div
                   key={friend.username}

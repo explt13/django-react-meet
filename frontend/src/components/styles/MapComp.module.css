@@ -21,9 +21,43 @@
 .strictSort > label{
     margin-right: 5px;
 }
+.acceptedSort > label{
+    margin-right: 5px;
+}
+.dateSort > label{
+    margin-right: 5px;
+}
+.dateSort > input{
+    background-color: transparent;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    border-bottom: 1px solid var(--main-navy);
+ 
+}
+.dateSort > span{
+    cursor: pointer;
+}
+.dateSort > input:not(.active)::-webkit-datetime-edit-text {
+    -webkit-appearance: none;
+    display: none;
+}
+.dateSort > input:not(.active)::-webkit-datetime-edit-month-field{
+    -webkit-appearance: none;
+    display: none;
+}
+.dateSort > input:not(.active)::-webkit-datetime-edit-day-field {
+    -webkit-appearance: none;
+    display: none;
+}
+.dateSort > input:not(.active)::-webkit-datetime-edit-year-field {
+    -webkit-appearance: none;
+    display: none;
+}
+
+
 
 .sortPanel{
-    
     margin-top: 10px;
     display: block;
     position: sticky;

@@ -21,11 +21,11 @@ const LocationMarkers = () => {
         
     })
 
-  return (
-    <React.Fragment>
-        {senderSort.sent && <SentEvents /> }
-        {senderSort.recieved && <RecievedEvents /> }
-    </React.Fragment>
+    return (
+        <React.Fragment>
+            {senderSort.sent && <SentEvents /> }
+            {senderSort.recieved && <RecievedEvents /> }
+        </React.Fragment>
   )
 }
 

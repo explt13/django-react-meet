@@ -23,7 +23,7 @@ from django.db.models import Count, F, Sum, Q
 from . import models
 from itertools import chain
 from collections import defaultdict
-
+from datetime import datetime
 
 
 class GetCsrf(APIView):
@@ -39,6 +39,7 @@ class CheckAuth(APIView):
 
     def get(self, request):
         return Response({'auth': request.user.is_authenticated})
+
 
 
 class UserLogin(APIView):
@@ -73,11 +74,21 @@ class UserLogout(APIView):
     def post(self, request):
         logout(request)
         return Response('Logging out..',status=status.HTTP_200_OK)
-    
+
+class ProfileOwner(permissions.BasePermission):
+    def has_permission(self, request, view):
+        
+        # Return a tuple with a boolean and an error message (if any)
+        if request.method == 'PATCH' and request.user == view.get_user():
+            return True
+        if request.method == 'GET': # not checking for perms
+            return True
 
 class UserView(APIView):
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (ProfileOwner, permissions.IsAuthenticated, )
     authentication_classes = (SessionAuthentication, )
+    def get_user(self):
+        return User.objects.get(username=self.kwargs.get('username'))
 
     def get(self, request, username): #get user
         try:
@@ -145,7 +156,8 @@ class FriendsView(APIView):
         if data.get('action') == 'accept':
             user.friends.add(friendship.requester)
             friendship.delete()
-            return Response('Friendship request accepted', status=status.HTTP_200_OK)
+            serializer = UserSerializer(friendship.requester)
+            return Response(data={'alert': 'Friendship request accepted', 'user': serializer.data}, status=status.HTTP_200_OK)
 
         elif data.get('action') == 'reject':
             friendship.delete()
@@ -171,7 +183,7 @@ class SendFriendRequest(APIView):
     def post(self, request): # sent request
         data = request.data
         recipient = User.objects.get(username=data.get('username'))
-        
+        print(data)
         if request.user.friends.filter(username=recipient).exists():
             return Response('Already in friends list', status=status.HTTP_400_BAD_REQUEST)
         
@@ -179,39 +191,54 @@ class SendFriendRequest(APIView):
             mail = Mail.objects.create(sender=request.user, header='Friends request', content=f'User {request.user.username} wants to be friedns', category='FRIENDS') 
             mail.recipients.add(recipient)
             Friendship.objects.create(requester=request.user, recipient=recipient, status='pending')
-            return Response('Friend request has been sent', status=status.HTTP_200_OK)
+            serializer = UserSerializer(recipient)
+            return Response(data={'alert': 'Friend request has been sent', 'user': serializer.data}, status=status.HTTP_200_OK)
 
         return Response('Friend request alreay sent', status=status.HTTP_409_CONFLICT)
 
 
+class CustomEventPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method == 'GET' and request.user.has_perm('planpro.view_event'):
+            return True
+        elif request.method == 'POST' and request.user.has_perm('planpro.add_event'):
+            return True
+        elif request.method == 'DELETE' and request.user.has_perm('planpro.delete_event'):
+            return True
+        else:
+            return False
+# from django.contrib.auth.mixins import PermissionRequiredMixin
 class EventSentView(APIView):
-    permission_classes = (permissions.IsAuthenticated, )
+    # permission_required = ('planpro.view_event', ) # for specific permission groups or permissions
+    permission_classes = (CustomEventPermission, permissions.IsAuthenticated, )
     authentication_classes = (SessionAuthentication, )
+    
 
     def get(self, request):
-        user = request.user
+        user = request.user    
         sent_events = user.sent_events.all()
         serializer = EventSerializer(sent_events, many=True)
         return Response(serializer.data)
+    
 
     def post(self, request):
         data = request.data
+        print(data)
         recipients = data.get('recipients')
         recipients_array = [recipient['username'] for recipient in recipients]
         recipients = User.objects.filter(username__in=recipients_array)
         if not recipients.exists(): return Response('At least one user must be chosen', status=status.HTTP_400_BAD_REQUEST)
-
         serializer = EventSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
+
             serializer.validated_data['requester'] = request.user
             event = serializer.create(validated_data=serializer.validated_data)
             event.recipients.add(*recipients)
-
-            mail = Mail.objects.create(sender=request.user, header='Event request', content=f'{data.get('text')} at {data.get('time')}', category='EVENTS')
+            mail = Mail.objects.create(sender=request.user, header='Event request', content=data.get('text'), category='EVENTS')
             mail.recipients.add(*recipients)
 
             return Response('Event has been sent', status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response('Internal error', status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request):
         try:

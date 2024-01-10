@@ -1,22 +1,24 @@
 
 
 
-.moduleContainer{
-
+.container{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-
-.heading{
-    font-size: 38px;
+.calendarHeader{
+    font-size: 30px;
+    margin-bottom: 20px;
 }
 
 .month{
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
     height: 300px;
-    background: linear-gradient(to left, var(--main-navy), var(--main-purple), var(--main-navy));
+    background: linear-gradient(to right, var(--main-navy), var(--main-lightblue));
     width: 100%;
+    background-size: 200%;
     color: var(--main-white);
     display: flex;
     justify-content: space-between;
@@ -24,9 +26,18 @@
     padding: 0px 30px;
     letter-spacing: 3px;
 }
-.year{
-    font-size: 20px;
+
+
+.monthName{
+    font-size: 36px;
+    text-transform: uppercase;
+
 }
+.year{
+    font-size: 22px;
+}
+
+
 
 .monthContent{
     display: flex;
@@ -35,16 +46,12 @@
     row-gap: 5px;
 }
 
-.monthName{
-    font-size: 28px;
-    text-transform: uppercase;
-}
-
 .weekdays{
     display: flex;
     font-size: 18px;
     width: 100%;
     background-color: var(--main-gray50);
+    
 }
 .weekday{
     padding: 1em 0px;
@@ -63,29 +70,55 @@
 }
 
 .day{
+    
+    display: block;
     text-align: center;
     flex-basis: calc(100% / 7);
     height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-
+    cursor: default;
 }
 
 .today{
-    background-color: var(--main-purple);
+    display: block;
+    background-color: var(--main-blue);
     color: var(--main-white);
     width: 2em;
     height: 2em;
     line-height: 2em;
 }
+.eventDay{
+    cursor: pointer;
+    display: block;
+    background-color: var(--main-red);
+    color: var(--main-white);
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    position: relative;
+}
 
+.today.eventDay{
+    background: linear-gradient(to right, var(--main-blue) 50%, var(--main-red) 50%);
+}
+.invalidDay{
+    display: block;
+    background-color: #d3d3d3;
+    color: var(--main-white);
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
 
-.prev, .next{
+}
+
+.prevButton, .nextButton{
     font-size: 24px;
     cursor: pointer;
 }
-.inactive{
+.prevButton.disabled, .nextButton.disabled{
     color: var(--main-grayA3);
     cursor: default;
 }
+

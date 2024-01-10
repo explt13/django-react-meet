@@ -1,5 +1,6 @@
 
 .categoryContainer{
+
     position: relative;
     grid-area: categories;
     height: 100%;
@@ -7,13 +8,14 @@
 
 
 .categoryHeading{
+    padding: 30px 0;
     font-size: 30px;
     display: flex;
     justify-content: center;
 }
 
 .categories{
-    margin-top: 20px;
+
     padding: 30px 5px;
     border-radius: 10px;
     column-gap: 30px;

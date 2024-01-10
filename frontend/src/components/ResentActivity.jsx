@@ -16,19 +16,17 @@ import { faList } from '@fortawesome/free-solid-svg-icons'
                 {sentEvents.length !== 0 
                 ?
                 <div className={classes.events}>
-                    {sentEvents.slice((sentEvents.length > 6 ? sentEvents.length - 6 : 0), sentEvents.length).map(ev => (
-                        <CustomTitle key={ev.event_id}>
-                            <div className={classes.event}>
-                                <div>to: {ev.recipients.map(recipient => <span key={recipient.username}>{recipient.username} </span>)}</div>
-                                <div>sent: {ev.time}</div>
-                                <div>text: {ev.text}</div>
-                            </div>
-                        </CustomTitle>
+                    {sentEvents.slice((sentEvents.length > 6 ? sentEvents.length - 6 : 0), sentEvents.length).map(event => (
+                        <div key={event.event_id} className={classes.event}>
+                            <div>to: {event.recipients.map(recipient => <span key={recipient.username}>{recipient.username} </span>)}</div>
+                            <div>sent: {event.time}</div>
+                            <div>text: {event.text}</div>
+                        </div>
                     ))}
                 </div>
                 :
                 <div className={classes.noEvents}>
-                    <div className={classes.noEventsIcon}><FontAwesomeIcon icon={faList} /></div>
+
                     <div className={classes.noEventsText}>No recent activity</div>
                 </div>
                 } 

@@ -11,6 +11,9 @@ import useEmails from '../hooks/useEmails'
 import SortEmails from '../components/SortEmails'
 import CustomButton from './../components/UI/CustomButton/CustomButton'
 import UserContext from '../context/UserContext'
+import { getFormattedFullDate } from '../utils/calendarUtil'
+import CustomCancelButton from '../components/UI/CustomButton/CustomCancelButton'
+import NoResult from '../components/UI/NoResult/NoResult'
 
 const MailPage = () => {
   const [emails, setEmails] = useState([])
@@ -43,7 +46,7 @@ const MailPage = () => {
     setEmails([])
     setAlertResponse({status: response.status, text: response.data})
   } 
-
+  
 
   return (
     isLoading
@@ -55,7 +58,7 @@ const MailPage = () => {
       </div>
       <div className={classes.controlPanel}>
         <SortEmails emails={emails} setSortedEmails={setSortedEmails}/>
-        <CustomButton onClick={handleClearMail} className={classes.clearMail}>clear mail</CustomButton>
+        <CustomCancelButton onClick={handleClearMail} className={classes.clearMail}>clear mail</CustomCancelButton>
       </div>
       <div className={classes.mailContainer}>
         {sortedEmails.map(email => (
@@ -65,11 +68,11 @@ const MailPage = () => {
             <div className={classes.to}>To: you</div>
             <hr />
             <div className={classes.header}>{email.header}</div>
-            <div className={classes.content}>{email.content}</div>
+            <div className={classes.content}>{email.content} on {getFormattedFullDate(email.event_date)}</div>
             <div className={classes.sent}>sent {email.formatted_sent}</div>
           </div>
         ))}
-        {sortedEmails.length === 0 && <div className={classes.noMail}>Seems empty..</div>}
+        {sortedEmails.length === 0 && <div className={classes.noMail}><NoResult /></div>}
       </div>
     </div>
   )

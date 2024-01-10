@@ -6,22 +6,22 @@ import AuthContext from '../context/AuthContext'
 import { Marker, Popup, useMapEvents } from 'react-leaflet'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faIceCream, faXmark } from '@fortawesome/free-solid-svg-icons'
-import redMarker from './../media/img/redMarker.png'
 import classes from './styles/LocationMarkers.module.css'
 import { Link } from 'react-router-dom'
 import CustomButton from './UI/CustomButton/CustomButton'
 import L   from 'leaflet'
 import MapContext from '../context/MapContext'
 import useRecievedEvents from '../hooks/useRecievedEvents'
+import { getFormattedFullDate } from '../utils/calendarUtil'
+import CustomCancelButton from './UI/CustomButton/CustomCancelButton'
 
 
 
 const RecievedEvents = () => {
-
     const {csrftoken} = useContext(AuthContext)
     const {thisUser, recievedEvents, setRecievedEvents, setAcceptedEvents, setEventCategories, setAlertResponse} = useContext(UserContext)
-    const {category, friendsSortArray} = useContext(MapContext)
-    const sortedCategoryAndFriendsEvents = useRecievedEvents(recievedEvents, category, friendsSortArray)
+    const {category, friendsSortArray, acceptedSort, dateSort} = useContext(MapContext)
+    const sortedCategoryAndFriendsEvents = useRecievedEvents(recievedEvents, category, friendsSortArray, acceptedSort, dateSort)
 
    
     const customIcon = (name) =>{
@@ -73,7 +73,7 @@ const RecievedEvents = () => {
             >
             <Popup>
                 {
-                (event.event_id && !(thisUser.username === event.requester_username) && !recipient.is_accepted) &&// if user is recipient
+                !recipient.is_accepted &&// if user is recipient
                 <div className={classes.choice}> 
                     <FontAwesomeIcon title='reject' icon={faXmark} style={{color: 'var(--main-red)'}} onClick={() => handleMarkerReject(event.marker_id)}/>
                     <FontAwesomeIcon title='accept' icon={faCheck} style={{color: 'var(--main-green)'}} onClick={() => handleMarkerAccept(event.marker_id)}/>
@@ -85,9 +85,7 @@ const RecievedEvents = () => {
                     <>
                     <strong className={classes.category}>{event.category}</strong>
                     <div className={classes.requester}>
-                        <strong>Requester: </strong>
-                        <Link to={`/user/${event.requester_username}`}>{event.requester_username}</Link>       
-                    </div>
+                        <strong>Requester: </strong><Link to={`/user/${event.requester.username}`}>{event.requester.first_name + ' ' + event.requester.last_name}</Link></div>
                     <div className={classes.recipient}>
                         <strong>Recipients: </strong>
                         {event.recipients.map(recipient =>
@@ -105,7 +103,7 @@ const RecievedEvents = () => {
                         <strong>Message: </strong><br/>
                         {event.text} <br/>
                         <strong>Time: </strong><br/>
-                        {event.time}
+                        {getFormattedFullDate(event.date)} at {event.time}
                     </div>
                     </>
                     }
@@ -113,7 +111,7 @@ const RecievedEvents = () => {
 
                 {(recipient && recipient.is_accepted) &&
                 <div className={classes.cancelEventButton}>
-                    <CustomButton onClick={() => handleMarkerReject(event.marker_id)}>Cancel participation</CustomButton>
+                    <CustomCancelButton onClick={() => handleMarkerReject(event.marker_id)}>Cancel participation</CustomCancelButton>
                 </div>
                 }
             </Popup>

@@ -6,7 +6,8 @@
     border-radius: 5px;
     padding: 5px 10px;
     background: transparent;
-    border: 2px solid var(--main-navy);
+    border: none;
+    outline: 2px solid var(--main-navy);
     
 }
 
@@ -15,5 +16,5 @@
 
 }
 .textarea:focus{
-    outline: none;
+    outline: 3px solid var(--main-navy);
 }

@@ -78,10 +78,37 @@
     color: var(--main-white)
 }
 .alreadyFriends{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.friendsLabel{
     cursor: default;
-    background-color: var(--alert-green);
+    background: linear-gradient(225deg, var(--main-gray), var(--main-green));
+    background-size: 300% 100%;
     padding: 5px 10px;
     border-radius: 25px;
     height: min-content;
-    color: var(--main-white)
+    color: var(--main-white);
+    transition: all 0.5s;
+}
+.friendsLabel:hover{
+    background-position: 0 100%;
+    filter: contrast(1.1)
+}
+
+
+.deleteFriend{
+    border: none!important;
+    background: linear-gradient(to right, var(--main-brightred), var(--main-red))!important;
+    background-size: 200%!important;
+    height: min-content;
+    transition: all 0.5s;
+    color: var(--main-white)!important;
+    outline: none!important;
+}
+
+.deleteFriend:hover{
+    background-position: -100%!important;
 }

@@ -14,10 +14,10 @@ const useInit = (setIsLoading) => {
     const setCsrf = async () => {
         try{
             setIsLoading(true)
-          const response = await UserService.getCsrf()
-          Cookies.set('csrftoken', response.data.csrftoken)
+            const response = await UserService.getCsrf()
+            Cookies.set('csrftoken', response.data.csrftoken)
         } catch (e) {
-          console.log(e)
+            console.log(e)
         } finally {
             setIsLoading(false)
         }

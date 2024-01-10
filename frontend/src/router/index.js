@@ -10,13 +10,11 @@ import MailPage from "../pages/MailPage"
 import MapPage from "../pages/MapPage"
 import CategoriesPage from "../pages/CategoriesPage"
 import ProfileEditPage from "../pages/ProfileEditPage"
-import CalendarPage from "../pages/CalendarPage"
 import ErrorPage from "../pages/ErrorPage"
 
 
 export const privateRoutes = [
     {path: 'user/:username/friends', element: <FriendsPage />, exact: true},
-    {path: 'calendar', element: <CalendarPage />, exact: true},
     {path: 'user/:username/edit', element: <ProfileEditPage />, exact: true},
     {path: 'categories', element: <CategoriesPage />, exact: true},
     {path: 'map', element: <MapPage />, excat: true},

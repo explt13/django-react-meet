@@ -8,6 +8,7 @@ class EventService {
         try{
             return await req
         } catch (e){
+            console.log(e)
             return e.response
         }
 

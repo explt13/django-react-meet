@@ -8,7 +8,7 @@ const CustomSelect = ({withNums, options, defaultName, className, ...props}) => 
   
   return (
     <select {...props} className={[className, classes.select].join(' ')}>
-        <option disabled={true}>{defaultName}</option>
+        <option disabled={true} value='defaultValue'>{defaultName}</option>
         {options.map(option => (
             <option key={option.name} value={option.value}>{option.name} {withNums && option?.qty}</option>
         ))}

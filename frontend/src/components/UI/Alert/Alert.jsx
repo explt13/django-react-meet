@@ -10,7 +10,6 @@ const Alert = ({alert, setAlert}) => {
             if (alert.status >= 100 && alert.status < 300){
                 setStatusClass(classes.success)
             } 
-            
             if (alert.status >= 300 && alert.status < 400){
                 setStatusClass(classes.redirect)
             }

@@ -2,4 +2,5 @@
 
 .container{
     grid-area: content;
+    position: relative;
 }

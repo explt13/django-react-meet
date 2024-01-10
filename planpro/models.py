@@ -24,6 +24,7 @@ STATUS_CHOICES = (
 )
 
 
+
 class User(AbstractUser):
     alphanumeric_validator = RegexValidator(
         r'^[0-9a-zA-Z]*$',
@@ -37,6 +38,9 @@ class User(AbstractUser):
     profile_pic = models.ImageField(upload_to='images/', default='images/default.png')
     friends = models.ManyToManyField('self', blank=True)
     interests = models.ManyToManyField('Interest', related_name='in_users_interests', blank=True) # blank for forms if true the field is not required
+
+    def __str__(self): # can be serialized using StringRelatedSerializer
+        return f'{self.first_name}  {self.last_name}'
 
 class Friendship(models.Model):
     requester = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_requests')
@@ -53,11 +57,20 @@ class Event(models.Model): # split in two?m
     latitude = models.FloatField(null=False)
     longitude = models.FloatField(null=False)
     text = models.CharField(max_length=256)
-    time = models.CharField(max_length=13)
+    date = models.DateField()
+    _time = models.TimeField()
     sent = models.DateField(auto_now_add=True)
     marker_id = models.FloatField(null=False)
     event_id = models.AutoField(primary_key=True)
     icon = models.CharField(max_length=128)
+
+    @property
+    def time(self):
+        return self._time.strftime('%H:%M')
+    
+    @time.setter
+    def time(self, value):
+        self._time = value
 
 
 class Event_Recipient(models.Model):
@@ -76,12 +89,15 @@ class Mail(models.Model):
     header = models.CharField(max_length=32)
     content = models.CharField(max_length=250)
     sent = models.DateTimeField(auto_now_add=True)
-
+    event_date = models.DateTimeField(default=None, null=True)
 
     def format_sent(self):
         return self.sent.strftime('%Y-%m-%d at %H:%M')
+    
 
 class Mail_Recipient(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.ForeignKey(Mail, on_delete=models.CASCADE)
     is_read = models.BooleanField(default=False)
+
+

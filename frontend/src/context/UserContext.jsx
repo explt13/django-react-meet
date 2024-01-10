@@ -14,7 +14,9 @@ const UserContext = createContext(null)
 export const UserProvider = ({children}) => {// otherwise props.children
     const {isAuth} = useContext(AuthContext)
     const [thisUser, setThisUser] = useState(null)
-    const [friends, setFriends] = useState(null)
+    const [friends, setFriends] = useState([])
+    const [sentFriendRequests, setSentFriendRequests] = useState([])
+    const [recievedFriendRequests, setRecievedFriendRequests] = useState([])
     const [sentEvents, setSentEvents] = useState([])
     const [recievedEvents, setRecievedEvents] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -22,7 +24,6 @@ export const UserProvider = ({children}) => {// otherwise props.children
     const [emailQty, setEmailQty] = useState(null)
     const [alertResponse, setAlertResponse] = useState({status: null, text: null})
     const [eventsQty, setEventsQty] = useState([])
-    const [sentFriendRequests, setSentFriendRequests] = useState([])
     const [eventCategories, setEventCategories] = useState([
       {name: 'Health', value: 'HEALTH', qty: 0, icon: faPlusSquare, className: 'health'},
       {name: 'Education', value: 'EDUCATION', qty: 0, icon: faGraduationCap, className: 'education'},
@@ -51,7 +52,8 @@ export const UserProvider = ({children}) => {// otherwise props.children
           const emailQty = await MailService.getEmailQty() // change to unread mail
           const eventsQty = await EventService.getEventsQty()
           const sent_friend_requests = await FriendService.getSentRequests(username)
-          
+          const recieved_friend_requests = await FriendService.getRecievedRequests(username)
+
           setThisUser(userData.data)
           setFriends([...friendsData])
           setEmailQty(emailQty)
@@ -61,6 +63,7 @@ export const UserProvider = ({children}) => {// otherwise props.children
           setEventsQty([...eventsQty])
           setIsLoading(false)
           setSentFriendRequests([...sent_friend_requests])
+          setRecievedFriendRequests([...recieved_friend_requests])
         }
         fetchData()
       }
@@ -101,7 +104,9 @@ export const UserProvider = ({children}) => {// otherwise props.children
         friends,
         setFriends,
         sentFriendRequests,
-        setSentFriendRequests
+        setSentFriendRequests,
+        recievedFriendRequests,
+        setRecievedFriendRequests
     }
 
   return (

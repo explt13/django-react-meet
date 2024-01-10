@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import CustomButton from '../CustomButton/CustomButton'
 import classes from './Navbar.module.css'
 
@@ -21,25 +21,35 @@ const Navbar = () => {
   const [sidebar, setSidebar] = useState(false)
   const [calendarModal, setCalendarModal] = useState(false)
   const [searchValue, setSearchValue] = useState('')
-
-
   const navigate = useNavigate()
+
   const handleSearch = async (e) => {
     if (e.key === 'Enter' || e.type === 'click'){
         navigate(`/search?username=${searchValue}`) // hardcoded as well need to improve
     }
   }
 
+  useEffect(() => {
+    let currentY = 0;
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar')
+      if (currentY < window.scrollY){
+        navbar.classList.add(classes.hideNavbar)
+      } else if (currentY > window.scrollY){
+        navbar.classList.remove(classes.hideNavbar)
+      }
+      currentY = window.scrollY
+    })
+  }, [])
 
   return (
-    <div className={[classes.container, 'navbar'].join(' ')}>
+    <div id='navbar' className={[classes.container, 'navbar'].join(' ')}>
       <div className={classes.leftSide}>
         <Link to='/'><CustomIcon><FontAwesomeIcon icon={faHouse} /></CustomIcon></Link>
-        <Link to='/calendar'><CustomIcon><FontAwesomeIcon icon={faCalendarDays} /></CustomIcon></Link>
         <Link to='/map'><CustomIcon><FontAwesomeIcon icon={faMapLocationDot}/></CustomIcon></Link>
         <div className={classes.mailIcon}>
           <Link to='/mail'><CustomIcon><FontAwesomeIcon icon={faEnvelope} /></CustomIcon></Link>
-          {emailQty > 0&& <span>*</span>}
+          {emailQty >  0&& <span>*</span>}
         </div>
         <Search qty={1} placeholder={'user'} handleSearch={handleSearch} setSearchValue={setSearchValue} searchValue={searchValue}/>
         

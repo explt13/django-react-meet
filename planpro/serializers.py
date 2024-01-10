@@ -75,7 +75,7 @@ class FriendshipSerializer(serializers.ModelSerializer):
 class UserForEventSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ('username', )
+		fields = ('username', 'first_name', 'last_name')
 
 
 class Event_RecipientSerializer(serializers.ModelSerializer):
@@ -94,25 +94,21 @@ class Event_RecipientSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
 	requester = UserForEventSerializer(read_only=True)
-	recipients = serializers.SerializerMethodField() 
-
+	recipients = serializers.SerializerMethodField()
+	time = serializers.TimeField() # could format here insted of using properties in model # Because it's not a model field, it needs to be added explicitly to the serializer class
+	
 
 	class Meta:
 		model = Event
-		fields = ('requester', 'recipients', 'category', 'event_id', 'latitude', 'longitude', 'text', 'time', 'sent', 'marker_id', 'icon')
+		fields = ('requester', 'recipients', 'category', 'event_id', 'latitude', 'longitude', 'text', 'date', 'time', 'sent', 'marker_id', 'icon')
+
 
 	def get_recipients(self, instance):
 		event_recipients = Event_Recipient.objects.filter(event=instance)
 		return Event_RecipientSerializer(event_recipients, many=True).data
 
-	def to_representation(self, instance):
-		representation = super().to_representation(instance)
-		requester_representation = representation.pop('requester')
-		representation['requester_username'] = requester_representation['username']
-		return representation
 	
 	def create(self, validated_data):
-
 		return Event.objects.create(**validated_data)
 	
 
@@ -123,7 +119,7 @@ class MailSerializer(serializers.ModelSerializer):
 	
 	class Meta:
 		model = Mail
-		fields = ('id', 'sender', 'recipients', 'header', 'content', 'sent', 'category', 'formatted_sent')
+		fields = ('id', 'sender', 'recipients', 'header', 'content', 'sent', 'category', 'formatted_sent', 'event_date')
 
 	def get_formatted_sent(self, obj):
 		return obj.format_sent()

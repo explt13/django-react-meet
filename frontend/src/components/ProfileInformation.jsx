@@ -9,22 +9,29 @@ import AuthContext from '../context/AuthContext'
 import UserService from '../API/UserService'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import CustomCancelButton from './UI/CustomButton/CustomCancelButton'
+
 
 
 const ProfileInformation = ({user}) => {
-    const {thisUser, setAlertResponse, friends, sentFriendRequests, setSentFriendRequests} = useContext(UserContext)
+    const {thisUser, setAlertResponse, friends, setFriends, sentFriendRequests, setSentFriendRequests} = useContext(UserContext)
     const { csrftoken } = useContext(AuthContext)
 
     const handleAddFriend = async () => {
-        
         const response = await FriendService.sendFriendRequest(user.username, csrftoken)
-        setSentFriendRequests(prevRequests => [...prevRequests, {username: user.username}])
-        setAlertResponse({status: response.status, text: response.data})
+        setSentFriendRequests(prevRequests => [...prevRequests, response.data.user])
+        setAlertResponse({status: response.status, text: response.data.alert})
     }
 
     const isThisUser = thisUser.username === user.username
     const isPending = sentFriendRequests.find(friend => friend.username === user.username)
     const isFriend = friends.find(friend => friend.username === user.username)
+
+    const deleteFriend = async () => {
+        const response = await FriendService.deleteFriend(thisUser.username, user.username, csrftoken)
+        setFriends(friends.filter(friend => friend.username !== user.username))
+        setAlertResponse({status: response.status, text: response.data})
+    }
     
     return (
         <div className={classes.profileInformationContainer}>
@@ -44,7 +51,12 @@ const ProfileInformation = ({user}) => {
             <div className={classes.options}>
                 {isThisUser && <div className={classes.editProfile}><Link to={`/user/${thisUser.username}/edit`}>Edit profile</Link></div>}
                 {isPending && <div className={classes.pending}>pending</div>}
-                {isFriend && <div className={classes.alreadyFriends}>friends <FontAwesomeIcon icon={faCheck}/></div>}
+                {isFriend &&
+                <div className={classes.alreadyFriends}>
+                <div className={classes.friendsLabel}>friends <FontAwesomeIcon icon={faCheck}/></div>
+                <CustomCancelButton onClick={deleteFriend} className={classes.deleteFriend}>Unfriend</CustomCancelButton>
+                </div>
+                }
                 {!isThisUser && !isPending && !isFriend &&
                 <CustomButton className={classes.addFriend} onClick={handleAddFriend}>Add friend</CustomButton>
                 }
