@@ -14,13 +14,13 @@ class MailService {
     }
 
     static async getEmails(){
-        const response = await axios.get(`http://127.0.0.1:8000/mail/received`)
+        const response = await axios.get(`http://localhost:8000/mail/received`)
         return response.data
     }
 
     static async readMail(csrf){
         return this.requestWrapper(
-            axios.patch(`http://127.0.0.1:8000/mail/read`, {}, {
+            axios.patch(`http://localhost:8000/mail/read`, {}, {
                 headers: {
                     'X-CSRFToken': csrf,
                     'Content-Type': 'application/json'
@@ -31,7 +31,7 @@ class MailService {
 
     static async deleteEmail(emailID, csrf){
         return this.requestWrapper(
-            axios.delete(`http://127.0.0.1:8000/mail/delete?email_id=${emailID}`, {
+            axios.delete(`http://localhost:8000/mail/delete?email_id=${emailID}`, {
             headers:{
                 'X-CSRFToken': csrf,
                 'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ class MailService {
     
     static async clearMail(csrf){
         return this.requestWrapper(
-            axios.delete(`http://127.0.0.1:8000/mail/clear`, {
+            axios.delete(`http://localhost:8000/mail/clear`, {
             headers:{
                 'X-CSRFToken': csrf,
                 'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ class MailService {
     }
 
     static async getEmailQty(){
-        const response = await axios.get('http://127.0.0.1:8000/mail/received?qty=true')
+        const response = await axios.get('http://localhost:8000/mail/received?qty=true')
         return response.data
     }
 }

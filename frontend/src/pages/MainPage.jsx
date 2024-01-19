@@ -8,9 +8,10 @@ import useRandomFriends from './../hooks/useRandomFriends'
 import ResentActivity from '../components/ResentActivity'
 import Calendar from '../components/Calendar'
 import EventService from '../API/EventService'
+import AuthContext from '../context/AuthContext'
 
 
-const MainPage = (props) => {
+const MainPage = () => {
 
   const {friends, isLoading, setReceivedEvents} = useContext(UserContext) // maybe set user here
   const randomFriends = useRandomFriends(friends, 5) //?

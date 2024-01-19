@@ -12,6 +12,7 @@ const UserContext = createContext(null)
 
 
 export const UserProvider = ({children}) => {
+
     const {isAuth} = useContext(AuthContext)
     const [isMobile, setIsMobile] = useState(false)
     const [thisUser, setThisUser] = useState(null)
@@ -44,9 +45,9 @@ export const UserProvider = ({children}) => {
       const username = localStorage.getItem('username')
       if (username && isAuth){
         const fetchData = async () => {
-          const userData = await UserService.getUser(username) // ? set to localStorage?
+          const userData = await UserService.getUser(username)
           const friendsData = await FriendService.getFriends(username)
-          const email_qty = await MailService.getEmailQty() // change to unread mail
+          const email_qty = await MailService.getEmailQty()
           const eventsQty = await EventService.getEventsQty()
           const sent_friend_requests = await FriendService.getSentRequests(username)
           const received_friend_requests = await FriendService.getReceivedRequests(username)
