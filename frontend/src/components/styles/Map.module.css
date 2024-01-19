@@ -3,27 +3,26 @@
     width: 100%;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-}
-
-
-.wrapper {
-    height: 100%;
-    width: 100%;
     position: relative;
-    z-index: 1;
-    padding: 0px;
-    margin-top: 0px;
+    z-index: 0;
+
+}
+.mapContainer{
+    height: 800px;
+    width: 1400px;
 }
 
 
-.mapIsLoading{
-    border: 2px solid red
-}
+
 
 @media screen and (max-width: 767px){
-    .wrapper{
-        height: 50vh;
-        width: 100%;
+    .mapContainer{
+        height: calc(100vh - 137px);
+        width: auto;
+    }
+    .map{
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
     }
 
 }

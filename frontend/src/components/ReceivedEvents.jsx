@@ -11,17 +11,17 @@ import { Link } from 'react-router-dom'
 import CustomButton from './UI/CustomButton/CustomButton'
 import L   from 'leaflet'
 import MapContext from '../context/MapContext'
-import useRecievedEvents from '../hooks/useRecievedEvents'
+import useReceivedEvents from '../hooks/useReceivedEvents'
 import { getFormattedFullDate } from '../utils/calendarUtil'
 import CustomCancelButton from './UI/CustomButton/CustomCancelButton'
 
 
 
-const RecievedEvents = () => {
+const ReceivedEvents = () => {
     const {csrftoken} = useContext(AuthContext)
-    const {thisUser, recievedEvents, setRecievedEvents, setAcceptedEvents, setEventCategories, setAlertResponse} = useContext(UserContext)
-    const {category, friendsSortArray, acceptedSort, dateSort} = useContext(MapContext)
-    const sortedCategoryAndFriendsEvents = useRecievedEvents(recievedEvents, category, friendsSortArray, acceptedSort, dateSort)
+    const {thisUser, receivedEvents, setReceivedEvents, setAcceptedEvents, setEventCategories, setAlertResponse} = useContext(UserContext)
+    const {sort} = useContext(MapContext)
+    const sortedEvents = useReceivedEvents(receivedEvents, sort.category, sort.friendsArray, sort.accepted, sort.date)
 
    
     const customIcon = (name) =>{
@@ -35,33 +35,32 @@ const RecievedEvents = () => {
 
     const handleMarkerAccept = async (markerID) => { // move to mapComp?
         const response = await EventService.acceptEvent(markerID, csrftoken)
-        setRecievedEvents(prevEvents => prevEvents.map(event =>
+        setReceivedEvents(prevEvents => prevEvents.map(event =>
         event.marker_id === markerID
             ? {
                 ...event,
-                recipients: event.recipients.map(recipient => 
+                initial_recipients: event.initial_recipients.map(recipient => 
                     recipient.username === thisUser.username
-                    ? {...recipient, is_accepted: true}
+                    ? {...recipient, status: 'ACCEPTED'}
                     : recipient
                 )
             }
             : event))
-        setAcceptedEvents(prevEvents => [...prevEvents, recievedEvents.find(event => event.marker_id === markerID)])
         setAlertResponse({status: response.status, text: response.data})
     }
 
     const handleMarkerReject = async (markerID) => { // ?? accesptness for someone else?
-        const event = recievedEvents.find(ev => ev.marker_id === markerID)
+        const event = receivedEvents.find(ev => ev.marker_id === markerID)
         const response = await EventService.rejectEvent(markerID, csrftoken)
-        setRecievedEvents(prevEvents => prevEvents.filter(event => event.marker_id !== markerID))
+        setReceivedEvents(prevEvents => prevEvents.filter(event => event.marker_id !== markerID))
         setEventCategories(prevCategories => prevCategories.map(category => category.value === event.category ? {...category, qty: category.qty - 1} : category))   
         setAlertResponse({status: response.status, text: response.data})
     }
 
 
     return (
-        sortedCategoryAndFriendsEvents.map(event => {
-        const recipient = event.recipients.find(recipient => recipient.username === thisUser.username)
+        sortedEvents.map(event => {
+        const recipient = event.initial_recipients.find(recipient => recipient.username === thisUser.username)
         return(
         <Marker
             id={event.marker_id}
@@ -73,7 +72,7 @@ const RecievedEvents = () => {
             >
             <Popup>
                 {
-                !recipient.is_accepted &&// if user is recipient
+                recipient.status === 'PENDING' &&// if user is recipient
                 <div className={classes.choice}> 
                     <FontAwesomeIcon title='reject' icon={faXmark} style={{color: 'var(--main-red)'}} onClick={() => handleMarkerReject(event.marker_id)}/>
                     <FontAwesomeIcon title='accept' icon={faCheck} style={{color: 'var(--main-green)'}} onClick={() => handleMarkerAccept(event.marker_id)}/>
@@ -88,11 +87,11 @@ const RecievedEvents = () => {
                         <strong>Requester: </strong><Link to={`/user/${event.requester.username}`}>{event.requester.first_name + ' ' + event.requester.last_name}</Link></div>
                     <div className={classes.recipient}>
                         <strong>Recipients: </strong>
-                        {event.recipients.map(recipient =>
-                        <span key={recipient.username}>
+                        {event.initial_recipients.map(recipient =>
+                        <span key={recipient.username} className={classes[recipient.status]}>
                             {thisUser.username === recipient.username
                             ? <strong>You</strong>
-                            : <Link to={`/user/${recipient.username}`}>{recipient.username}</Link>
+                            : <Link to={`/user/${recipient.username}`}>{recipient.first_name} {recipient.last_name}</Link>
                             }
                             &nbsp;
                         </span>
@@ -109,7 +108,7 @@ const RecievedEvents = () => {
                     }
                 </div>
 
-                {(recipient && recipient.is_accepted) &&
+                {(recipient && recipient.status === 'ACCEPTED') &&
                 <div className={classes.cancelEventButton}>
                     <CustomCancelButton onClick={() => handleMarkerReject(event.marker_id)}>Cancel participation</CustomCancelButton>
                 </div>
@@ -120,4 +119,4 @@ const RecievedEvents = () => {
   )
 }
 
-export default RecievedEvents
+export default ReceivedEvents

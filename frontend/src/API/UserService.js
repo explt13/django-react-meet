@@ -8,17 +8,26 @@ axios.defaults.withCredentials = true;
 
 class UserService { // should I split it
     static async requestWrapper(req){
-
         try{
             return await req
         } catch (e){
+            console.log(e)
             return e.response
         }
 
     }
-    
+    static async getCsrf() {
+        const response = await axios.get('http://127.0.0.1:8000/csrftoken')
+        return response
+    }
+
     static async checkAuth(){
         const response = await axios.get('http://127.0.0.1:8000/checkauth', {withCredentials: true})
+        return response
+    }
+
+    static async checkUsername(username){
+        const response = await axios.get(`http://127.0.0.1:8000/checkusername/${username}`)
         return response
     }
 
@@ -35,19 +44,16 @@ class UserService { // should I split it
 
     static async registerUser(data, csrf){
         return this.requestWrapper(
-            axios.post('http://127.0.0.1:8000/register', data, {
-                headers: {
-                    'Content-Type': 'application/json',
+            axios.post('http://127.0.0.1:8000/register', data=data, {
+            headers: {
+                    'Content-Type': 'multipart/form-data',
                     'X-CSRFToken': csrf
                 }
             })
         )
     }
 
-    static async getCsrf() {
-        const response = await axios.get('http://127.0.0.1:8000/csrftoken')
-        return response
-    }
+
 
 
     static async logoutUser(csrf) {
@@ -65,7 +71,7 @@ class UserService { // should I split it
 
 
     static async searchUsers(username){
-        const response = await axios.get(`http://127.0.0.1:8000/users?username=${username}`)
+        const response = await axios.get(`http://127.0.0.1:8000/users?query=${username}`)
         return response.data
     }
 

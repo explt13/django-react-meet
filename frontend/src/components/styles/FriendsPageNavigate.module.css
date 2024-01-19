@@ -1,20 +1,24 @@
-.navigate {
-    grid-area: navigate;
-    height: 100%;
 
-    
-
-}
-.navigate > div{
+.navigate{
     position: sticky;
     top: 25px;
-    padding: 40px 20px;
+    padding: 10px 20px;
+    padding-bottom: 20px;
     background-color: var(--main-gray);
-
+    height: min-content;
     border-radius: 5px;
-
 }
 .navigateItem{
     cursor: pointer;
     margin-bottom: 5px;
+}
+.navigateHeader{
+    margin-bottom: 10px;
+    font-size: 22px;
+}
+
+@media screen and (max-width: 767px) {
+    .navigate{
+        display: none;
+    }
 }

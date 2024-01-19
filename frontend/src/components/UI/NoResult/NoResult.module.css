@@ -12,9 +12,20 @@
 }
 
 .icon{
-    font-size: 72px;
+    font-size: 100px;
 }
 
 .text{
-    font-size: 24px;
+    font-size: 28px;
+}
+
+@media screen and (max-width: 767px) {
+    .icon{
+        font-size: 54px;
+    }
+    
+    .text{
+        font-size: 20px;
+    }
+    
 }

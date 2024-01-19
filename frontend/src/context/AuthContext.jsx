@@ -6,8 +6,8 @@ const AuthContext = createContext(false)
 
 export const AuthProvider = ({children}) => {
     const [isAuth, setIsAuth] = useState(false)
-    const [isLoading, setIsLoading] = useState(true)
-    const [checkAuth, setCsrf] = useInit(setIsLoading)
+    const [isAuthLoading, setIsAuthLoading] = useState(true)
+    const [checkAuth, setCsrf] = useInit(setIsAuthLoading)
     const csrftoken = Cookies.get('csrftoken')
 
     useEffect(() => {
@@ -25,7 +25,7 @@ export const AuthProvider = ({children}) => {
     const context = {
         isAuth,
         setIsAuth,
-        isLoading,
+        isAuthLoading,
         csrftoken
     }
     return (

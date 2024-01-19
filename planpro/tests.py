@@ -1,9 +1,9 @@
 from django.test import TestCase
-from .models import User, Interest
-from .serializers import InterestSerializer, InterestListSerializer, Event
+from .models import User, Interest, Event_Recipient, Event_Archived
+from .serializers import InterestListSerializer, Event, User, EventSerializer
 import datetime
 import time
-
+from rest_framework.serializers import OrderedDict
 
 # Create your tests here.
 
@@ -43,7 +43,6 @@ class UserInterestTestCase(TestCase):
 class DateTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create(username='TestCase', first_name='Test', password='12345')
-        # self.event = Event.objects.create(requester_id=self.user.pk, marker_id=1704573545639.4883, date='2024-01-07', time=datetime.datetime.strptime('02:40', '%H:%M'), text='sada', category= 'HEALTH', latitude=49.986552130506176, longitude= 82.59870533966212, icon='<i class="fas fa-plus-square LocationMarkers_health__-TpFM LocationMarkers_borderForIcon__lKa+z"></i>')
     
     def test_date(self):
         date1 = datetime.datetime.strptime('09-05-2024', '%d-%m-%Y').date()
@@ -52,7 +51,90 @@ class DateTestCase(TestCase):
         time1 = datetime.datetime.strptime('12:56', '%H:%M')
         print(time1)
         print('*********')
-def outer(url_base='http://127.0.0.1:8000/') -> str:
-    def inner(route):
-        print(url_base + route)
-    return inner
+
+
+class EventTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(username='TestCase', first_name='Test', password='12345')
+        self.user2 = User.objects.create(username='TestCase2', first_name='Test2', password='12345')
+        self.user3 = User.objects.create(username='TestCase3', first_name='Test3', password='12345')
+
+        self.event = Event.objects.create(requester=self.user, **{
+            "category": "DINNER",
+            "event_id": 1,
+            "latitude": 49.96171186915371,
+            "longitude": 82.64352193503667,
+            "text": "sdasd",
+            "date": "2024-01-11",
+            "time": "17:02",
+            "sent": "2024-01-11",
+            "marker_id": 1704965247196.5312,
+            "icon": "<i class=\"fa-solid fa-mug-hot LocationMarkers_dinner__CMo4V LocationMarkers_borderForIcon__lKa+z\"></i>"
+        })
+    
+    def test_event(self):
+        print('********')
+        self.event.recipients.add(self.user2, self.user3)
+        self.event.set_initial_recipients()
+        self.event.set_initial_requester()
+        self.event.save()
+        # er = self.user2.event_recipient_set.get(event_id=self.event)
+        # self.event.save()
+        # er.status = 'ACCEPTED'
+        # er.save()
+
+        # self.event.save()
+        # self.user2.recieved_events.remove(self.event)
+        # event_recipient = Event_Recipient.objects.get(event=self.event, recipient=self.user2)
+        # event_recipient.delete()
+        # print(self.event.initial_recipients)
+        # print(self.event.event_recipient_set.filter(status='ACCEPTED'))
+        # print(self.event.initial_recipients)
+        # for obj in self.event.initial_recipients:
+        #     if obj.get('username') == 'TestCase2':
+        #         obj['status'] = 'ACCEPTED'
+        # self.event.save()
+        # serializer = EventSerializer(Event.objects.first())
+        # print(serializer.data)
+ 
+        
+
+        self.u2ev = Event_Recipient.objects.get(event=self.event, recipient=self.user2)
+        self.u2ev.status = 'ACCEPTED'
+        self.u2ev.save()
+        
+        self.u3ev = Event_Recipient.objects.get(event=self.event, recipient=self.user3)
+        self.u3ev.status = 'ACCEPTED'
+        self.u3ev.save()
+
+        # accepted_recipients = Event_Recipient.objects.filter(event_id=self.event, status='ACCEPTED')
+        accepted_recipients = User.objects.filter(event_recipient__event=self.event, event_recipient__status='ACCEPTED')
+
+        self.event.event_id = 45
+    
+        
+
+        if accepted_recipients.exists(): # if there are users that accepted but requester deleted event then make archive copy                
+            archived_event = Event_Archived()
+            for field in self.event._meta.fields:
+                if field.name not in ['event_id', 'requester']:
+                    setattr(archived_event, field.name, getattr(self.event, field.name))
+            setattr(archived_event, 'is_cancelled', True)
+            archived_event.save()
+            archived_event.users.add(self.event.requester, *accepted_recipients)
+        self.event.delete()  
+        
+        
+  
+        print(archived_event.users.all())
+
+
+
+        events = self.user2.archived_events.all()
+
+        for event in events:
+            event.users.remove(self.user2)
+
+        print(self.user2.archived_events.all())
+        print(self.user3.archived_events.all())
+        print(archived_event)

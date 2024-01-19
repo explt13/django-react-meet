@@ -8,7 +8,7 @@ const Sidebar = ({children, visible, setVisible}) => {
     const [closing, setClosing] = useState(false)
     const rootClasses = [classes.sidebar]
     const contentClasses = [classes.content]
-
+  
     const handleClose = () => {
         setClosing(true) // animation
         const timeoutId = setTimeout(() => {

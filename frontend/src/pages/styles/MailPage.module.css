@@ -29,10 +29,11 @@
 
 .deleteEmail{
     position: absolute;
-    right: 0;
+    right: 10px;
 }
 .deleteEmail > i{
-    font-size: 20px!important;
+    width: 18px;
+    height: 18px;
     color: var(--main-navy)
 }
 
@@ -56,6 +57,7 @@ hr{
 .controlPanel{
     display: flex;
     justify-content: space-between;
+
 }
 
 .sortContainer{
@@ -72,7 +74,24 @@ hr{
 }
 
 
-.noMail{
-    font-size: 22px;
-    margin-top: 20px;
+
+
+@media screen and (max-width: 767px){
+    .heading{
+        font-size: 24px;
+    }
+
+    .sortContainer{
+        flex-basis: 50%;
+    }
+
+    .header{
+        font-size: 18px;
+    }
+    .from, .to{
+        font-size: 16px;
+    }
+    .clearMail{
+        font-size: 14px;
+    }
 }

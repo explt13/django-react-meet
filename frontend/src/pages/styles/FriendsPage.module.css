@@ -1,27 +1,92 @@
-.container{
-    display: grid;
-    column-gap: 50px;
-    grid-template-rows: max-content auto;
-    grid-template-columns: max-content auto;
-    grid-template-areas:
-    'space heading'
-    'navigate content';
+.contentContainer{
+    display: flex;
+    column-gap: 40px;
+
 
 }
-
 .heading{
-    grid-area: heading;
+    margin-left: 230px;
     font-size: 38px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+
 }
+
+.navigateIcon{
+    display: none;
+}
+
+
+.navigate{
+    position: sticky;
+    top: 25px;
+    padding: 10px 20px;
+    padding-bottom: 20px;
+    background-color: var(--main-gray);
+    height: min-content;
+    border-radius: 5px;
+}
+.navigateItem{
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+.navigateHeader{
+    margin-bottom: 10px;
+    font-size: 22px;
+}
+
+
 
 @media screen and (max-width: 767px) {
-    .container {
-        column-gap: 10px;
-        grid-template-columns: auto;
-        grid-template-rows: auto auto;
-        grid-template-areas:
-        'navigate'
-        'content';
+    .contentContainer{
+        flex-direction: column;
+        row-gap: 20px;
     }
+    .heading{
+        margin-left: 5px;
+        margin-bottom: 2px;
+        font-size: 24px;
+        display: flex;
+
+        column-gap: 5px;
+    }
+    .navigateIcon{
+        display: block;
+        position: relative;
+        top: 7px;
+        transition: all 0.2s;
+
+    }
+    .navigateIcon.opened{
+        transform: scaleY(-1) translateY(-5px);
+    }
+    .navigate{
+        display: none;
+    }
+    
+    .navigate.showNavigationMobile{
+        display: block;
+        animation: showNavigation 0.2s linear forwards;
+    }
+    .navigate.showNavigationMobile > button{
+        background-image: none
+    }
+    .navigate.showNavigationMobile > button:hover{
+        color: var(--main-navy)
+    }
+    .navigateHeader{
+        display: none;
+    }
+    
+    .navigate.closeNavigationMobile{
+        animation: hideNavigation 0.2s linear forwards;
+    }
+}
+
+@keyframes showNavigation {
+    0%{height: 0px; opacity: 0;}
+    100%{height: 150px; opacity: 1;}
+}
+@keyframes hideNavigation {
+    from{height: 150px; opacity: 1;}
+    to{height: 0px; opacity: 0; padding: 0 20px; line-height: 0;}
 }

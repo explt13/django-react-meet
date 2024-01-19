@@ -11,16 +11,16 @@ import Alert from '../components/UI/Alert/Alert'
 const UserContext = createContext(null)
 
 
-export const UserProvider = ({children}) => {// otherwise props.children
+export const UserProvider = ({children}) => {
     const {isAuth} = useContext(AuthContext)
+    const [isMobile, setIsMobile] = useState(false)
     const [thisUser, setThisUser] = useState(null)
     const [friends, setFriends] = useState([])
     const [sentFriendRequests, setSentFriendRequests] = useState([])
-    const [recievedFriendRequests, setRecievedFriendRequests] = useState([])
+    const [receivedFriendRequests, setReceivedFriendRequests] = useState([])
     const [sentEvents, setSentEvents] = useState([])
-    const [recievedEvents, setRecievedEvents] = useState([])
+    const [receivedEvents, setReceivedEvents] = useState([])
     const [isLoading, setIsLoading] = useState(false)
-    const [acceptedEvents, setAcceptedEvents] = useState([])
     const [emailQty, setEmailQty] = useState(null)
     const [alertResponse, setAlertResponse] = useState({status: null, text: null})
     const [eventsQty, setEventsQty] = useState([])
@@ -36,34 +36,28 @@ export const UserProvider = ({children}) => {// otherwise props.children
       {name: 'Travel', value: 'TRAVEL', qty: 0, icon: faCar, className: 'travel'},
       {name: 'Shoping', value: 'SHOPING', qty: 0, icon: faBagShopping, className: 'shoping'}
     ])
-
+    
 
     useEffect(() => {
+
       setIsLoading(true)
       const username = localStorage.getItem('username')
-      
       if (username && isAuth){
         const fetchData = async () => {
           const userData = await UserService.getUser(username) // ? set to localStorage?
           const friendsData = await FriendService.getFriends(username)
-          const sent_events = await EventService.getSentEvents()
-          const recieved_events = await EventService.getRecievedEvents()
-          const accepted_events = await EventService.getAcceptedEvents()
-          const emailQty = await MailService.getEmailQty() // change to unread mail
+          const email_qty = await MailService.getEmailQty() // change to unread mail
           const eventsQty = await EventService.getEventsQty()
           const sent_friend_requests = await FriendService.getSentRequests(username)
-          const recieved_friend_requests = await FriendService.getRecievedRequests(username)
+          const received_friend_requests = await FriendService.getReceivedRequests(username)
 
           setThisUser(userData.data)
           setFriends([...friendsData])
-          setEmailQty(emailQty)
-          setSentEvents([...sent_events])
-          setRecievedEvents([...recieved_events])
-          setAcceptedEvents([...accepted_events])
+          setEmailQty(email_qty)
           setEventsQty([...eventsQty])
-          setIsLoading(false)
           setSentFriendRequests([...sent_friend_requests])
-          setRecievedFriendRequests([...recieved_friend_requests])
+          setReceivedFriendRequests([...received_friend_requests])
+          setIsLoading(false)
         }
         fetchData()
       }
@@ -80,6 +74,15 @@ export const UserProvider = ({children}) => {// otherwise props.children
       }
 
   }, [eventsQty])
+
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 767px)')
+    setIsMobile(mql.matches)
+    
+    window.onresize = () => {
+      setIsMobile(mql.matches)
+    }
+  }, [])
  
 
     const context = {
@@ -91,10 +94,8 @@ export const UserProvider = ({children}) => {// otherwise props.children
         setEventsQty,
         emailQty,
         setEmailQty,
-        acceptedEvents,
-        setAcceptedEvents,
-        recievedEvents,
-        setRecievedEvents,
+        receivedEvents,
+        setReceivedEvents,
         sentEvents,
         setSentEvents,
         isLoading,
@@ -105,13 +106,14 @@ export const UserProvider = ({children}) => {// otherwise props.children
         setFriends,
         sentFriendRequests,
         setSentFriendRequests,
-        recievedFriendRequests,
-        setRecievedFriendRequests
+        receivedFriendRequests,
+        setReceivedFriendRequests,
+        isMobile
     }
 
   return (
     <UserContext.Provider value={context}>
-      {alertResponse.status !== null && <Alert type={'success'} alert={alertResponse} setAlert={setAlertResponse}/>}
+      {alertResponse.status !== null && <Alert alert={alertResponse} setAlert={setAlertResponse}/>}
         {children}
     </UserContext.Provider>
   )

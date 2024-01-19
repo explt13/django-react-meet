@@ -33,7 +33,7 @@
 .alertContent.success{
     background-color: var(--alert-green);
 }
-.alertContent.redierct{
+.alertContent.redirect{
     background-color: var(--alert-orange);
 }
 

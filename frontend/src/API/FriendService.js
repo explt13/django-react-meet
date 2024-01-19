@@ -35,8 +35,8 @@ class FriendService {
         return response.data
     }
 
-    static async getRecievedRequests(username){
-        const response = await axios.get(`http://127.0.0.1:8000/user/${username}/friends?get_recieved_requests=true`)
+    static async getReceivedRequests(username){
+        const response = await axios.get(`http://127.0.0.1:8000/user/${username}/friends?get_received_requests=true`)
         return response.data
     }
 

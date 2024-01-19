@@ -1,17 +1,24 @@
 .userContainer{
-    display: grid;
-    grid-template-columns: 124px auto max-content;
-    grid-template-areas: 'image information additional';
-    padding: 30px 20px;
-    column-gap: 30px;
-    border-radius: 10px;
-    background-color: var(--main-gray);
+    display: flex;
+    justify-content: space-between;
+    padding: 25px 20px;
     margin-bottom: 20px;
+    /* border: 3px solid var(--main-navy); */
+    border-radius: 10px;
+    background: var(--main-gray);
 }
 .userContainer.forMap{
-    grid-template-columns: 64px 1fr;
     column-gap: 10px;
     padding: 15px 10px;
+    
+}
+.userInformation{
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 40px;
+}
+.userContainer.forMap .userInformation{
+    column-gap: 10px;
 }
 
 .unSelectedFriend{
@@ -20,9 +27,7 @@
     transition: background-color 0.2s ease-in-out;
 }
 
-.unSelectedFriend:hover{
-    background-color: var(--main-gray50);
-}
+
 .selectedFriend{
     cursor: pointer;
     background-color: var(--main-gray50);
@@ -30,13 +35,14 @@
 
 
 .userImage{
-    width: 100%;
-    height: 124px;
+    width: 100px;
+    height: 100px;
     border-radius: 100px;
-    grid-area: image;
+    flex-shrink: 0;
 }
 .userContainer.forMap .userImage{
     height: 64px;
+    width: 64px;
 }
 
 .userImage > img {
@@ -49,7 +55,6 @@
 
 .information{
     margin-top: 10px;
-    grid-area: information;
     font-size: 24px;
     overflow: hidden;
 }
@@ -57,6 +62,7 @@
     margin-top: 0px;
     font-size: 16px;
     overflow: hidden;
+    flex: 1;
 }
 
 
@@ -97,7 +103,11 @@
     height: min-content;
     color: var(--main-white)
 }
-
+.pendingForSearch::after{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 500;
+    content: ' \f017';
+}
 .friendsForSearch{
     cursor: default;
     background-color: var(--alert-green);
@@ -118,17 +128,36 @@
 
 @media screen and (max-width: 767px) {
     .userContainer{
-        grid-template-columns: 64px auto max-content;
         column-gap: 10px;
     }
     .information{
         margin-top: 0px;
 
     }
+    .userInformation{
+        flex-direction: column;
+        row-gap: 10px;
+
+    }
+    .userImage{
+        width: 86px;
+        height: 86px;
+    }
     .userFullName{
-        font-size: 24px;
+        font-size: 20px;
     }
     .userUsername{
-        font-size: 18px;
+        font-size: 16px;
     }
+    .userContainer.forMap{
+        column-gap: 10px;
+        padding: 0px;
+        flex-basis: calc(33.333% - 10px);
+        justify-content: center;
+    }
+    .userContainer.forMap .userInformation{
+        display: flex;
+        align-items: center;
+    }
+
 }

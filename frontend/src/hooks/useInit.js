@@ -2,24 +2,24 @@ import React, { useState } from 'react'
 import UserService from '../API/UserService';
 import Cookies from 'js-cookie';
 
-const useInit = (setIsLoading) => {
+const useInit = (setIsAuthLoading) => {
 
     const checkAuth = async () => {
-        setIsLoading(true)
+        setIsAuthLoading(true)
         const response = await UserService.checkAuth();
-        setIsLoading(false)
+        setIsAuthLoading(false)
         return response.data.auth
     
     }
     const setCsrf = async () => {
         try{
-            setIsLoading(true)
+            setIsAuthLoading(true)
             const response = await UserService.getCsrf()
             Cookies.set('csrftoken', response.data.csrftoken)
         } catch (e) {
             console.log(e)
         } finally {
-            setIsLoading(false)
+            setIsAuthLoading(false)
         }
     }
 

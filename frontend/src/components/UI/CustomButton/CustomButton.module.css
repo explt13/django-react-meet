@@ -13,11 +13,12 @@
 
     background: linear-gradient(to right, var(--main-lightblue), var(--main-blue));
     background-size: 200%;
-    transition: background-position 0.5s;
+    transition: all 0.5s;
 }
 
 .customButton:hover{
     background-position: -100%;
+    color: var(--main-gray);
 }
 
 
@@ -48,3 +49,4 @@
     color: var(--main-white);
     background-position: -100% 0;
 }
+

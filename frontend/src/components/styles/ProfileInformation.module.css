@@ -1,7 +1,15 @@
 .profileInformationContainer{
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
+.mainInformation{
+    flex-basis: 80%;
+    display: flex;
+    column-gap: 50px;
+    flex-wrap: wrap;
+}
+
 .imgContainer{
     width: 170px;
     height: 170px;
@@ -14,11 +22,16 @@
     border-radius: inherit;
     
 }
+.userInformation{
+    flex: 1;
+}
 
-.mainInformation{
+
+.options{
+    flex-basis: 20%;
+    margin-top: 10px;
     display: flex;
-    gap: 50px;
-
+    justify-content: right;
 }
 
 .userUsername{
@@ -28,21 +41,20 @@
     content: '@';
 }
 
-.options{
-    margin-top: 10px;
-    flex-basis: 10%;
-    display: flex;
-    justify-content: right;
-}
 
+.editProfile{
+    padding: 5px 10px!important;
+    height: min-content;
+}
 .editProfile > a{
     text-decoration: none;
-    height: min-content;
-    color: var(--main-navy)
+    color: var(--main-gray);
+
 }
 
+
 .fullName{
-    gap: 15px;
+    column-gap: 15px;
     font-size: 36px;
     display: flex;
 }
@@ -51,7 +63,6 @@
 .userAbout{
     margin-top: 20px;
     font-size: 20px;
-    width: 500px;
     height: 200px;
     overflow: auto;
 }
@@ -111,4 +122,36 @@
 
 .deleteFriend:hover{
     background-position: -100%!important;
+}
+
+@media screen and (max-width: 767px) {
+    .profileInformationContainer{
+        flex-direction: column;
+    }
+    .mainInformation{
+        column-gap: 20px;
+        flex-wrap: nowrap;
+        flex-basis: 100%;
+    }
+    .imgContainer{
+        width: 124px;
+        height: 124px;
+    }
+    .fullName{
+        font-size: 20px;
+        column-gap: 5px;
+    }
+    .userUsername{
+        font-size: 18px;
+    }
+    .userAbout{
+        margin-top: 5px;
+        font-size: 18px;
+        height: 150px;
+
+    }
+    .userAbout > div{
+        font-size: 16px;
+    }
+    
 }

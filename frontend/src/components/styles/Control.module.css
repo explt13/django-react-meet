@@ -1,0 +1,61 @@
+
+
+.fullscreenControl{
+    position: absolute;
+    margin-left: 10px;
+    top: 80px;
+    left: 0;
+    z-index: 999;
+    background-color: #fff;
+    width: 34px;
+    height: 34px;
+    border: 2px solid rgba(0,0,0,0.2);
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.fullscreenControl > i {
+    color: var(--main-navy);
+    width: 24px;
+    height: 24px;
+}
+
+
+.additionalControl{
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 999;
+    background-color: #fff;
+    margin-right: 10px;
+    margin-top: 10px;
+    border: 2px solid rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+
+.controlItem {
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.controlItem:hover{
+    background-color: #eee;
+}
+
+.controlItem > i{
+    color: var(--main-navy);
+    margin: 0px;
+    width: 24px;
+    height: 24px;
+    transition: none;
+}
+
+.controlItem > i:hover{
+    color: var(--main-navy);
+}

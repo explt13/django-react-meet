@@ -1,11 +1,16 @@
-.mapContainer{
-    height: 800px;
-    width: 1400px;
+.container{
     display: flex;
     padding: 0px;
+    height: 800px;
 }
 
-.rightPanel{
+.sortPanel{
+    display: block;
+    padding: 20px 5px;
+}
+
+
+.panelContainer{
     position: relative;
     width: 300px;
     overflow-y: auto;
@@ -57,16 +62,6 @@
 
 
 
-.sortPanel{
-    margin-top: 10px;
-    display: block;
-    position: sticky;
-    top: 0;
-    padding: 5px;
-    border-radius: 5px;
-    backdrop-filter: blur(20px);
-    padding-bottom: 20px
-}
 
 
 .categorySelect:focus{
@@ -111,21 +106,58 @@
     margin-right: 5px;
 }
 
+.mobilePanel{
+    display: none;
+}
+
 
 
 @media screen and (max-width: 767px) {
-    .mapContainer{
-        flex-direction: column;
+    .container{
+        flex-direction: column-reverse;
         max-width: 100%;
-        height: var(--main-phone);
+        height: auto;
+        position: relative;
 
     }
-    .rightPanel{
-        height: 30vh;
-        width: 100%;
+    .panelContainer{
+        display: none;
+
     }
     .friendsContainer{
         border-radius: 0px;
         height: 240px;
     }
+    .mobilePanel{
+        display: flex;
+        align-items: end;
+        font-size: 18px;
+        margin: 10px;
+        width: min-content;
+        
+    }
+
+    .panelContainer.visible{
+        display: block;
+        position: absolute;
+        top: 47px;
+        width: auto;
+        height: calc(100% - 47px);
+    }
+    .friendsSelect{
+        margin-top: 10px;
+    }
+    .friends{
+        padding-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .sortMenuIcon{
+        transition: all 0.2s;
+        margin-left: 5px;
+    }
+    .sortMenuIcon.visible{
+        transform: scaleY(-1);
+    }
+
 }

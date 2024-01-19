@@ -1,0 +1,94 @@
+.header{
+    font-size: 38px;
+}
+.control{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    align-items: center;
+}
+.clearButton{
+    height: min-content;
+}
+
+.container{
+    border: 2px solid var(--main-navy);
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+.username::before{
+    content: '@';
+}
+
+.sent{
+    color: gray;
+}
+.link{
+    text-decoration: none;
+    color: var(--main-navy)!important;
+}
+.link:hover{
+    color: var(--main-purple)
+}
+.ACCEPTED > span, .ACCEPTED > a{
+    color: var(--alert-green)!important   
+}
+.ACCEPTED > span::after, .ACCEPTED > a::after{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: ' \f00c';
+
+}
+
+.REJECTED > span, .REJECTED > a{
+    color: var(--alert-red)!important 
+}
+.REJECTED > span::after, .REJECTED > a::after{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: ' \f00d';
+
+}
+
+.PENDING > span, .PENDING > a{
+    color: var(--alert-orange)!important   
+}
+.PENDING > span::after, .PENDING > a::after{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 500;
+    content: ' \f017';
+}
+
+.categoryIcon{
+    font-size: 20px!important;
+}
+.senderSort{
+    width: min-content;
+    font-size: 18px;
+    margin-top: 0;
+}
+
+.noArchiveIcon{
+    font-size: 100px!important;
+}
+
+
+@media screen and (max-width: 767px){
+    .header{
+        font-size: 24px;
+    }
+    .container{
+        font-size: 16px;
+    }
+    .senderSort{
+        font-size: 14px;
+    }
+    .noArchiveIcon{
+        font-size: 54px!important;
+    }
+    .clearButton{
+        font-size: 14px;
+        padding: 3px 5px
+    }
+}

@@ -21,9 +21,9 @@ const Interests = ({user}) => {
   const {setAlertResponse, eventCategories} = useContext(UserContext)
   const [isModalClosing, setIsModalClosing] = useState(false)
   const navigate = useNavigate()
+  
   const isThisUser = thisUser.username === user.username
   
-
   useEffect(() => {
     const fetchInterests = async () => {
       const repsonse = await UserService.getInterests(user.username)
@@ -63,7 +63,7 @@ const Interests = ({user}) => {
   }
 
   const onCategoryClick = (category) => {
-    navigate('/map', {state: {action: 'selectUserSelectCategory', username: user.username, category: category}})
+    navigate('/map', {state: {action: 'selectUserSelectCategory', username: user.username, first_name: user.first_name, last_name: user.last_name, category: category}})
   }
 
   return (
@@ -71,7 +71,7 @@ const Interests = ({user}) => {
       {isThisUser
       ?
       <>
-        <div className={classes.interestsHeading}>Tell friends your interests <FontAwesomeIcon icon={faCircleArrowRight} onClick={() => setModal(true)}/></div>
+        <div className={classes.interestsHeading}><span>Tell friends your interests</span> <FontAwesomeIcon icon={faCircleArrowRight} onClick={() => setModal(true)}/></div>
         <Modal visible={modal} setVisible={setModal} onModalClose={cancelInterestsChange}>
           <div className={classes.chooseInterests}>
             <div className={classes.chooseInterestsHeading}>Choose interests (up to 5)</div>

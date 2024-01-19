@@ -11,7 +11,7 @@ const useSortedCategoryEvents = (sentEvents, category) => {
 }
 
 
-const useSentEvents = (sentEvents, category, friendsSortArray, strictSort) => {
+const useFriendSortedEvents = (sentEvents, category, friendsSortArray, strictSort) => {
     const sortedCategoryEvents = useSortedCategoryEvents(sentEvents, category)
     
     const sortedCategoryAndFriendsEvents = useMemo(() => {
@@ -19,13 +19,25 @@ const useSentEvents = (sentEvents, category, friendsSortArray, strictSort) => {
             return [...sortedCategoryEvents]
         }
         if (strictSort){
-            return [...sortedCategoryEvents].filter(event => friendsSortArray.length === event.recipients.length && event.recipients.every(recipient => friendsSortArray.includes(recipient.username)))
+            return [...sortedCategoryEvents].filter(event => friendsSortArray.length === event.initial_recipients.length && event.initial_recipients.every(recipient => friendsSortArray.includes(recipient.username)))
         } else if (!strictSort){
-            return [...sortedCategoryEvents].filter(event => event.recipients.some(recipient => friendsSortArray.includes(recipient.username)))
+            return [...sortedCategoryEvents].filter(event => event.initial_recipients.some(recipient => friendsSortArray.includes(recipient.username)))
         }    
     }, [sortedCategoryEvents, friendsSortArray, strictSort])
 
   return sortedCategoryAndFriendsEvents
+}
+
+const useSentEvents = (sentEvents, category, friendsSortArray, strictSort, dateSort) => {
+    const friendSortedEvents = useFriendSortedEvents(sentEvents, category, friendsSortArray, strictSort)
+    const dateSortedEvents = useMemo(() => {
+        if (dateSort){
+            return [...friendSortedEvents].filter(event => event.date === dateSort)
+        }
+        return [...friendSortedEvents]
+
+    }, [friendSortedEvents, dateSort])
+    return dateSortedEvents
 }
 
 export default useSentEvents

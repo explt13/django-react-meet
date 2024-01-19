@@ -6,7 +6,7 @@
     left: 0;
     right: 0;
     backdrop-filter: saturate(40%);
-    z-index: 2;
+    z-index: 19;
 }
 
 .sidebar.active{
@@ -35,9 +35,10 @@
 
 .closeBtn{
     position: absolute;
-    right: 20px;
-    top: 10px   
+    right: 30px;
+    top: 15px   
 }
+
 
 
 @keyframes open {

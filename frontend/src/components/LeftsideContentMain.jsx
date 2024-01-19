@@ -10,8 +10,8 @@ const LeftsideContentMain = ({friends, randomFriends}) => {
     const {emailQty} = useContext(UserContext)
     const navigate = useNavigate()
   
-    const handleClickFriend = (username) => {
-      navigate('/map', {state: {action: 'selectUser', username: username}})
+    const handleClickFriend = (username, first_name, last_name) => {
+      navigate('/map', {state: {action: 'selectUser', username: username, first_name: first_name, last_name: last_name}})
     }
   
     return (
@@ -33,7 +33,7 @@ const LeftsideContentMain = ({friends, randomFriends}) => {
               { randomFriends &&
               randomFriends.map(friend => (
                 <div key={friend.username} className={classes.friendContainer}>
-                  <img title={friend.username} className={classes.friendImage} onClick={() => handleClickFriend(friend.username)} src={`http://127.0.0.1:8000/${friend.profile_pic}`}></img>
+                  <img title={friend.username} className={classes.friendImage} onClick={() => handleClickFriend(friend.username, friend.first_name, friend.last_name)} src={`http://127.0.0.1:8000/${friend.profile_pic}`}></img>
                 </div>
               ))
               }

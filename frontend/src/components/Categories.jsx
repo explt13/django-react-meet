@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import classes from './styles/Categories.module.css'
 import UserContext from '../context/UserContext'
 import { Link, useNavigate } from 'react-router-dom'
@@ -18,7 +18,7 @@ const Categories = () => {
               </div>
               <CategoriesList choose={false} all={false}/>
               <div className={classes.moreCategories}>
-                explore more.. <Link to='/categories'><CustomIcon className={classes.arrow}><FontAwesomeIcon icon={faCircleArrowRight} /></CustomIcon></Link>
+                explore more.. <Link className={classes.link} to='/categories'><CustomIcon className={classes.arrow}><FontAwesomeIcon icon={faCircleArrowRight} /></CustomIcon></Link>
               </div>
         </div>
   )

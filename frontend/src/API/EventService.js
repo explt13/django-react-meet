@@ -8,7 +8,6 @@ class EventService {
         try{
             return await req
         } catch (e){
-            console.log(e)
             return e.response
         }
 
@@ -30,17 +29,11 @@ class EventService {
         return response.data
     }
 
-    static async getRecievedEvents(){
-        const response = await axios.get(`http://127.0.0.1:8000/event/recieved`)
+    static async getReceivedEvents(){
+        const response = await axios.get(`http://127.0.0.1:8000/event/received`)
         return response.data
     }
-
-
-    static async getAcceptedEvents(){
-        const response = await axios.get(`http://127.0.0.1:8000/event/recieved?accepted=true`)
-        return response.data
-    }
-
+    
 
     static async acceptEvent(marker_id, csrf){
         return this.requestWrapper(
@@ -83,6 +76,34 @@ class EventService {
             }
         })
         return response.data
+    }
+
+    static async refreshEvents(){
+        const response = await axios.get('http://127.0.0.1:8000/event/refresh', {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        return response
+    }
+
+    static async getArchivedEvents(){
+        const response = await axios.get('http://127.0.0.1:8000/event/archived', {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        return response
+    }
+
+    static async clearArchive(csrf){
+        const response = await axios.delete('http://127.0.0.1:8000/event/archived', {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrf
+            }
+        })
+        return response
     }
 }
 

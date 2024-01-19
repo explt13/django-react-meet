@@ -17,23 +17,23 @@ import CustomCancelButton from './UI/CustomButton/CustomCancelButton'
 
 const SentEvents = () => {
     const {thisUser, sentEvents, setSentEvents, setEventCategories, setAlertResponse} = useContext(UserContext)
-    const {canAddMarkers, setCanAddMarkers, eventInformation, setEventInformation, category, friendsSortArray, strictSort} = useContext(MapContext)
+    const {canAddMarkers, setCanAddMarkers, eventInformation, setEventInformation, sort} = useContext(MapContext)
     const [minDate, maxDate] = getDateForInput()
     const {csrftoken} = useContext(AuthContext)
-    const sortedCategoryAndFriendsEvents = useSentEvents(sentEvents, category, friendsSortArray, strictSort)
+    const sortedSentEvents = useSentEvents(sentEvents, sort.category, sort.friendsArray, sort.strict, sort.date)
 
     
     const eventMarkers = {
-        HEALTH: `<i class="${['fas', 'fa-plus-square', classes.health, classes.borderForIcon].join(' ')}"></i>`,
-        EDUCATION: `<i class="${['fa-solid', 'fa-graduation-cap', classes.education, classes.borderForIcon].join(' ')}"></i>`,
-        DINNER: `<i class="${['fa-solid', 'fa-mug-hot', classes.dinner, classes.borderForIcon].join(' ')}"></i>`,
-        BAR: `<i class="${['fa-solid', 'fa-wine-glass', classes.bar, classes.borderForIcon].join(' ')}"></i>`,
-        LEISURE: `<i class="${['fa-solid', 'fa-baseball-bat-ball', classes.leisure, classes.borderForIcon].join(' ')}"></i>`,
-        RELAXATION: `<i class="${['fa-solid', 'fa-mountain-sun', classes.relaxation, classes.borderForIcon].join(' ')}"></i>`,
-        HOLIDAY: `<i class="${['fa-solid', 'fa-snowman', classes.holiday, classes.borderForIcon].join(' ')}"></i>`,
-        WORK: `<i class="${['fa-solid', 'fa-briefcase', classes.work, classes.borderForIcon].join(' ')}"></i>`,
-        TRAVEL: `<i class="${['fa-solid', 'fa-car', classes.travel, classes.borderForIcon].join(' ')}"></i>`,
-        SHOPING: `<i class="${['fa-solid', 'fa-bag-shopping', classes.shoping, classes.borderForIcon].join(' ')}"></i>`,
+        HEALTH: `<i class="${['fas', 'fa-plus-square', classes.HEALTH, classes.borderForIcon].join(' ')}"></i>`,
+        EDUCATION: `<i class="${['fa-solid', 'fa-graduation-cap', classes.EDUCATION, classes.borderForIcon].join(' ')}"></i>`,
+        DINNER: `<i class="${['fa-solid', 'fa-mug-hot', classes.DINNER, classes.borderForIcon].join(' ')}"></i>`,
+        BAR: `<i class="${['fa-solid', 'fa-wine-glass', classes.BAR, classes.borderForIcon].join(' ')}"></i>`,
+        LEISURE: `<i class="${['fa-solid', 'fa-baseball-bat-ball', classes.LEISURE, classes.borderForIcon].join(' ')}"></i>`,
+        RELAXATION: `<i class="${['fa-solid', 'fa-mountain-sun', classes.RELAXATION, classes.borderForIcon].join(' ')}"></i>`,
+        HOLIDAY: `<i class="${['fa-solid', 'fa-snowman', classes.HOLIDAY, classes.borderForIcon].join(' ')}"></i>`,
+        WORK: `<i class="${['fa-solid', 'fa-briefcase', classes.WORK, classes.borderForIcon].join(' ')}"></i>`,
+        TRAVEL: `<i class="${['fa-solid', 'fa-car', classes.TRAVEL, classes.borderForIcon].join(' ')}"></i>`,
+        SHOPING: `<i class="${['fa-solid', 'fa-bag-shopping', classes.SHOPING, classes.borderForIcon].join(' ')}"></i>`,
 
     }
 
@@ -61,12 +61,12 @@ const SentEvents = () => {
             category: event.category,
             latitude: event.latitude,
             longitude: event.longitude,
-            recipients: event.recipients,
+            recipients: event.initial_recipients,
             icon: event.icon,
             requester: thisUser
         }
         const response = await EventService.sendEvent(data, csrftoken)
-        setSentEvents(prevEvents => prevEvents.map(event => event.marker_id === markerID ? {...event, recipients: event.recipients, is_confirmed: true} : event))
+        setSentEvents(prevEvents => prevEvents.map(event => event.marker_id === markerID ? {...event, is_confirmed: true} : event))
         setEventCategories(prevCategories => prevCategories.map(category => category.value === event.category ? {...category, qty: category.qty + 1} : category))  
         setAlertResponse({status: response.status, text: response.data})
     }
@@ -92,7 +92,7 @@ const SentEvents = () => {
                 const name = eventMarkers[eventInformation.category]
                 const event = {
                     marker_id: Date.now() + Math.random(),
-                    recipients: eventInformation.selectedUsers,
+                    initial_recipients: eventInformation.selectedUsers,
                     latitude: e.latlng.lat,
                     longitude: e.latlng.lng,
                     icon: name,
@@ -112,7 +112,8 @@ const SentEvents = () => {
 
     return (
         <React.Fragment>{
-        sortedCategoryAndFriendsEvents.map(event => (
+            sortedSentEvents.map(event => {
+            return    (
             <Marker
             id={event.marker_id}
             key={event.marker_id}
@@ -131,15 +132,15 @@ const SentEvents = () => {
                     }
 
                     <div className={classes.eventInformationContainer}>
-                        <strong className={classes.category}>{event.category}</strong>
+                        <strong className={[classes[event.category], classes['category']].join(' ')}>{event.category}</strong>
                         <div className={classes.requester}><strong>Requester: </strong>You</div>
                         <div className={classes.recipient}>
                             <strong>Recipients: </strong>
-                            {(event.recipients).map((recipient, index) => 
-                            <span key={recipient.username}>
+                            {(event.initial_recipients).map((recipient, index, arr) =>
+                            <span key={recipient.username} className={classes[recipient.status ?? 'PENDING']}>
                                 {(index % 2 === 0) && <br /> }
-                                <Link target='_blank' to={`/user/${recipient.username}`}>{recipient.username}</Link>
-                                {(!(index === event.recipients.length - 1))&&','}&nbsp;
+                                <Link target='_blank' to={`/user/${recipient.username}`}>{recipient.first_name} {recipient.last_name}</Link>
+                                {(!(index === arr.length - 1))&&','}&nbsp;
                             </span>
                             )}
                         </div> 
@@ -164,7 +165,7 @@ const SentEvents = () => {
                     
                 </Popup>
             </Marker>
-        ))}
+        )})}
     </React.Fragment>
     )
 }

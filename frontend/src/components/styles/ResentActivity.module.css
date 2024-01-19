@@ -62,3 +62,16 @@
     justify-content: center;
     align-items: center;
 }
+
+@media screen and (max-width: 767px){
+    .eventsHeading{
+        margin-top: 20px;
+        text-align: center;
+        font-size: 24px;
+    }
+    .events{
+        grid-template-columns: none;
+        grid-template-rows: repeat(3, auto);
+
+    }
+}

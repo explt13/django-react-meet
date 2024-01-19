@@ -1,0 +1,244 @@
+
+.form{
+    color: var(--main-blue);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* background-color: var(--main-white); */
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    border-radius: 10px;
+    margin-left: auto;
+    /* background: linear-gradient(180deg, var(--main-white), rgb(174, 216, 233)); */
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+
+}
+
+
+.header{
+    margin-bottom: 30px;
+}
+
+
+.formBody{
+    font-size: 18px;
+    text-transform: none;
+    align-self: flex-start;
+    width: 80%;
+    margin-left: 20px;
+}
+
+
+.formBodyUserDetails{
+    font-size: 18px;
+    width: 80%;
+    text-transform: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.formField{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+.passwordField{
+    position: relative;
+}
+
+
+.showPasswordIcon{
+    position: absolute;
+    right: 5px;
+    top: 4px;
+    cursor: pointer;
+}
+
+
+.formField > label{
+    width: 120px;
+}
+
+
+.imageField{
+    margin: 0 auto 10px;
+    width: 132px!important;
+    height: 132px;
+    position: relative;
+    border-radius: 100px;
+    
+    @media screen and (min-width: 992px) {
+        &:hover::before{
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+    
+            font-family: "Font Awesome 5 Free";
+            font-weight: 500;
+            content: "\f044";
+            font-size: 32px;
+    
+            display: flex;
+            justify-content: center;
+            align-items: center;
+    
+            background-color: rgba(0, 0, 0, 0.3)!important;
+            border-radius: 100px;
+            color: var(--main-gray);
+        }
+    }
+    
+}
+
+
+.imageField > img{
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+
+}
+
+
+.login{
+    display: flex;
+    justify-content: right;
+}
+
+
+.firstStage{
+    display: flex;
+    justify-content: right;
+}
+
+
+.secondStage{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.controls  button{
+    padding: 5px 10px;
+    letter-spacing: 1px;
+    background-image: linear-gradient(90deg, var(--main-blue), var(--main-brightred));
+    background-size: 200%;
+    background-position: 0%;
+    color: var(--main-white)
+}
+
+
+.controls button:hover{
+    background-position: 100%;
+}
+
+
+.controls  button:disabled{
+    filter: grayscale(0.7)
+}
+
+
+.error{
+    font-size: 14px;
+    text-transform: lowercase;
+    text-align: center;
+}
+
+
+.footer{
+    margin-top: auto;
+    margin-bottom: 10px;
+    font-size: 16px;
+    text-transform: none;
+}
+
+
+.switch{
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--main-navy)
+}
+
+
+.invalid{
+    border-bottom: 2px solid var(--main-red);
+    animation: shake 0.4s forwards linear;
+}
+
+
+.invalid::placeholder{
+    color: var(--main-red);
+    font-size: 18px;
+}
+
+
+.invalid:placeholder-shown {
+    text-overflow: ellipsis;
+}
+
+
+
+
+@keyframes changeHeader {
+    0%{transform: translateX(0); opacity: 1;}
+    100%{transform: translateX(200px); opacity: 0;}
+}
+
+@keyframes showNewHeader {
+    0%{transform: translateX(-200px); opacity: 0;}
+    100%{transform: translateX(0px); opacity: 1;}
+}
+
+
+@media screen and (max-width: 767px) {
+    .form{
+        font-size: 18px;
+        background: transparent;
+        color: var(--main-white)
+
+        /* background-color: rgba(255, 255, 255, 0.9); */
+
+    }
+
+    .formBody{
+        width: 100%;
+        margin-left: 0;
+        font-size: 16px;
+    }
+    .formField input{
+        border-bottom:  var(--main-white) 2px solid;
+        color: var(--main-white)
+    }
+    .controls > button{
+        font-size: 14px;
+    }
+    .footer{
+        padding-top: 20px;
+        /* margin-top: 10px; */
+        font-size: 14px;
+    }
+    .switch{
+        color:  var(--main-purple);
+    }
+    
+}
+
+@keyframes shake{
+    20%{transform: translateX(-10px);}
+    40%{transform: translateX(10px);}
+    60%{transform: translateX(-10px);}
+    80%{transform: translateX(10px);}
+    100%{transform: translateX(0px);}
+
+}

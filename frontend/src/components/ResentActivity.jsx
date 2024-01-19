@@ -18,7 +18,7 @@ import { faList } from '@fortawesome/free-solid-svg-icons'
                 <div className={classes.events}>
                     {sentEvents.slice((sentEvents.length > 6 ? sentEvents.length - 6 : 0), sentEvents.length).map(event => (
                         <div key={event.event_id} className={classes.event}>
-                            <div>to: {event.recipients.map(recipient => <span key={recipient.username}>{recipient.username} </span>)}</div>
+                            <div>to: {event.initial_recipients.map(recipient => <span key={recipient.username}>{recipient.username} </span>)}</div>
                             <div>sent: {event.time}</div>
                             <div>text: {event.text}</div>
                         </div>

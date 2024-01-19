@@ -2,8 +2,7 @@
 .categoryContainer{
 
     position: relative;
-    grid-area: categories;
-    height: 100%;
+ 
 }
 
 
@@ -15,7 +14,7 @@
 }
 
 .categories{
-
+    width: 100%;
     padding: 30px 5px;
     border-radius: 10px;
     column-gap: 30px;
@@ -40,8 +39,6 @@
     width: 20%;
 }
 
-
-
 .category{
 
     cursor: pointer;
@@ -54,6 +51,15 @@
     position: relative;
     box-shadow: 0px 5px 0px gray;
     transition: all ease-in-out 0.2s;
+
+    @media screen and (min-width: 992px) {
+      &:hover .categoryIcon{
+        font-size: 66px;
+      }
+      &:hover .categoryName{
+        font-size: 28px;
+      }
+    }
     
 }
 
@@ -86,6 +92,7 @@
     width: 100%;
     color: var(--main-navy);
     transition: font-size ease-in-out 0.2s;
+
 }
 
 
@@ -98,6 +105,8 @@
     align-items: center;
     font-size: 56px;
     transition: font-size ease-in-out 0.2s;
+
+    
 }
 
 .qty{
@@ -107,26 +116,17 @@
 }
 
 
-.category:hover .categoryIcon{
-    font-size: 66px;
-}
-.category:hover .categoryName{
-    font-size: 28px;
-}
-
 
 
 .moreCategories{
-
+    column-gap: 5px;
     margin-top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.arrow{
-    font-size: 32px;
-}
+
 .arrow:hover{
     color: var(--main-navy);
 }
@@ -152,7 +152,6 @@
 .dinner:hover{
   box-shadow: 0px 5px 2px #FFC72C;
 }
-
 
 .relaxation{
   color: rgb(122, 224, 11)
@@ -232,4 +231,39 @@
 }
 .shoping:hover{
   box-shadow: 0px 5px 2px #F400A1;
+}
+
+
+@media screen and (max-width: 767px){
+  .category{
+    width: 40%;
+    height: 136.4px;
+  }
+  .categories{
+    background-color: transparent;
+  }
+  .categoryName{
+    font-size: 18px;
+  }
+  .categoryHeading{
+    font-size: 24px;
+  }
+  .moreCategories{
+    font-size: 16px;
+    align-items: center;
+  }
+
+  .categories.all{
+    column-gap: 10px;
+    padding: 20px 0;
+  }
+  .categories.all > .category{
+    width: calc(33.333% - 10px);
+  }
+  .categoryIcon{
+    font-size: 36px;
+  }
+  .qty{
+    font-size: 18px;
+  }
 }

@@ -14,7 +14,7 @@ class MailService {
     }
 
     static async getEmails(){
-        const response = await axios.get(`http://127.0.0.1:8000/mail/recieved`)
+        const response = await axios.get(`http://127.0.0.1:8000/mail/received`)
         return response.data
     }
 
@@ -52,7 +52,7 @@ class MailService {
     }
 
     static async getEmailQty(){
-        const response = await axios.get('http://127.0.0.1:8000/mail/recieved?qty=true')
+        const response = await axios.get('http://127.0.0.1:8000/mail/received?qty=true')
         return response.data
     }
 }

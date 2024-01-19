@@ -1,6 +1,13 @@
 
 
 .container{
-    grid-area: content;
-    position: relative;
+
+    flex-grow: 1;
+
+}
+
+.receivedIcon{
+    transform: rotateZ(265deg) scaleX(-2.5) scaleY(1.3) rotateY(70deg);
+    
+  
 }

@@ -17,3 +17,10 @@ input::placeholder{
 input:focus{
     outline: none
 }
+
+
+@media screen and (max-width: 767px){
+    .customInput {
+        font-size: 16px;
+    }
+}

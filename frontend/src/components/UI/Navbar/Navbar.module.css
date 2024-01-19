@@ -1,5 +1,6 @@
 .container{
-    padding: 10px 20px;
+    padding: 10px 30px;
+    height: 60px;
     display: flex;
     background-color: var(--main-gray);
     justify-content: space-between;
@@ -14,7 +15,7 @@
 
 }
 .container.hideNavbar{
-    transform: translateY(-50px);
+    transform: translateY(-60px);
 
 }
 .logout {
@@ -26,24 +27,58 @@
 
 .mailIcon{
     vertical-align: top;
-    display: inline-block;
     position: relative;
 }
 .mailIcon > span{
     color: red;
     position: absolute;
-    right: 0;
-    font-size: 44px;
-    top: 0;
+    right: -3px;
+    display: block;
+    zoom: 3;
+    top: 5px;
+    line-height: 0;
+}
+
+.leftSide{
+    display: flex;
+    column-gap: 15px;
+    height: 40px;
+    align-items: center;
+
+}
+.rightSide{
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+.navbarItem{
+    height: 30px;
+    width: 30px;
     
-    margin-top: -15px;
 }
 
 
-a > i{
-    font-size: 24px!important;
-}
+@media screen and (max-width: 767px) {
+    .container{
+        height: 50px;
+        padding: 10px 15px
+    }
+    .leftSide{
+        column-gap: 10px;
+        height: 30px;
+    }
+    .rightSide{
+        height: 30px;
+    }
+    .navbarItem{
+        width: 24px;
+        height: 24px;
+    }
 
-.barsIcon{
-    font-size: 24px!important;
+
+    .navbarItem svg{
+        width: 100%;
+        height: 100%;
+    }
+
 }

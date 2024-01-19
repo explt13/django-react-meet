@@ -5,40 +5,21 @@ import { getDateForInput, getFormattedFullDate } from '../utils/calendarUtil'
 const MapContext = createContext(null)
 
 export const MapProvider = ({children}) => {
-
     const [minDate, maxDate] = getDateForInput()
-    const [category, setCategory] = useState('ALL')
-    const [friendsSortArray, setFriendsSortArray] = useState([])
     const [position, setPosition] = useState(null)
     const [canAddMarkers, setCanAddMarkers] = useState(false)
     const [eventInformation, setEventInformation] = useState({text: '', date: minDate, time: '', category: '', selectedUsers: []})
     const [mapID, setMapID] = useState('myMap')
     const [modalPopup, setModalPopup] = useState(false)
-    const [senderSort, setSenderSort] = useState({sent: true, recieved: true})
-    const [acceptedSort, setAcceptedSort] = useState(true)
-    const [dateSort, setDateSort] = useState('')
-    const [strictSort, setStrictSort] = useState(false)
+    const [sort, setSort] = useState({category: 'ALL', friendsArray: [], sent: true, received: true, accepted: false, strict: false, date: ''})
 
-    
-
-    
     const context = {
-        dateSort,
-        setDateSort,
-        acceptedSort,
-        setAcceptedSort,
-        strictSort,
-        setStrictSort,
-        friendsSortArray,
-        setFriendsSortArray,
-        senderSort,
-        setSenderSort,
+        sort,
+        setSort,
         modalPopup,
         setModalPopup,
         minDate,
         maxDate,
-        category,
-        setCategory,
         position,
         setPosition,
         canAddMarkers,

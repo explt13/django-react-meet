@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useInsertionEffect, useRef, useState } from 'react'
 import { useMapEvents } from 'react-leaflet'
 import SentEvents from './SentEvents'
-import RecievedEvents from './RecievedEvents'
+import ReceivedEvents from './ReceivedEvents'
 import MapContext from '../context/MapContext'
 
 const LocationMarkers = () => {
     
-    const {canAddMarkers, senderSort} = useContext(MapContext)
+    const {canAddMarkers, sort} = useContext(MapContext)
     
 
     const map = useMapEvents({
@@ -23,8 +23,8 @@ const LocationMarkers = () => {
 
     return (
         <React.Fragment>
-            {senderSort.sent && <SentEvents /> }
-            {senderSort.recieved && <RecievedEvents /> }
+            {sort.sent && <SentEvents /> }
+            {sort.received && <ReceivedEvents /> }
         </React.Fragment>
   )
 }

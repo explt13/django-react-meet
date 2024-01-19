@@ -1,19 +1,28 @@
 .icon {
     color: var(--main-blue);
-    font-size: 32px;
+    font-size: 30px;
     transition: color 0.2s ease-in-out;
-    margin-right: 10px;
-    margin-left: 10px;
     cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
 }
-
 .icon:hover{
     color: var(--main-navy);
 }
 
 
+.icon svg{
+    width: 100%;
+    height: 100%;
+}
+
 @media screen and ( max-width: 767px){
     .icon{
-        font-size: 20px;
+        width: 24px;
+        height: 24px;
+        font-size: 24px;
+  
     }
+
 }

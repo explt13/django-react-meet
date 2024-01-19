@@ -7,18 +7,27 @@ import LeftsideContentMain from '../components/LeftsideContentMain'
 import useRandomFriends from './../hooks/useRandomFriends'
 import ResentActivity from '../components/ResentActivity'
 import Calendar from '../components/Calendar'
+import EventService from '../API/EventService'
 
 
-const MainPage = () => {
+const MainPage = (props) => {
 
-  const {friends, isLoading} = useContext(UserContext) // maybe set user here
+  const {friends, isLoading, setReceivedEvents} = useContext(UserContext) // maybe set user here
   const randomFriends = useRandomFriends(friends, 5) //?
-  // const [emailQty, setEmailQty] = useState(null) ?? set here
+  const [isRefreshed, setIsRefrehsed] = useState(false)
 
-  // const randomFriends = getRandomFriends(friends, 5) // might it trigger when there is typing for example? => useMemo
-  // console.log(window.innerWidth) for mobile responsive
- 
   useEffect(() => {
+    const refreshEvents = async () => {
+      await EventService.refreshEvents()
+      const received_events = await EventService.getReceivedEvents()
+      setReceivedEvents([...received_events])
+      setIsRefrehsed(true)
+    }
+    refreshEvents() 
+  }, [])
+
+  useEffect(() => {
+    document.title = 'Planpro - Home'
     window.addEventListener('scroll', () => {
       
       const header = document.getElementById('header')
@@ -43,15 +52,15 @@ const MainPage = () => {
   }, [])
 
   return (
-    isLoading || !randomFriends || !friends
+    isLoading || !isRefreshed
     ? <Loader />
     :
     <>
     <header id='header' className={classes.header}>
-      <div>PlanPro</div>
-      <div>Organize, Invite, Meet</div>
+      <div className={classes.name}>PlanPro</div>
+      <div className={classes.desc}>Organize, Invite, Meet</div>
     </header>
-    <div className={['container', 'wrapper',classes.container].join(" ")}>
+    <div className={['container', 'contentWrapper',classes.container].join(" ")}>
         <div className={classes.mainContainer}>
           <Categories />
           <Calendar />

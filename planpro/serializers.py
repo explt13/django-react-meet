@@ -1,25 +1,57 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from django.core.exceptions import ValidationError
-from .models import User, Friendship, Event, Event_Recipient, Mail, Interest
+from .models import User, Friendship, Event, Event_Recipient, Mail, Interest, Event_Archived
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.exceptions import ObjectDoesNotExist
 
 class UserRegisterSerializer(serializers.ModelSerializer):
+	
 	class Meta:
 		model = User
-		fields = '__all__'
+		fields = ('pk', 'password', 'username', 'first_name', 'last_name', 'about', 'email', 'profile_pic')
+		extra_kwargs = {
+			'password': {'write_only': True}
+		}
+
+	
+	default_error_messages = {
+		'mismatch': 'passwords must match',
+		'invalid_length': 'password must be at least 8 characters',
+	}
+
+
+	
+	def validate_password(self, value):
+		confirmation = self.initial_data.get('confirmation')
+		if value != confirmation:
+			self.fail('mismatch')
+			# raise ValidationError('passwords must match') alternative
+		if len(value) < 8:
+			self.fail('invalid_length')
+
+		return value
+	def to_internal_value(self, data):
+        # If profile_pic is an empty string, use the default value
+		if 'profile_pic' in data and data['profile_pic'] == '':
+			data['profile_pic'] = 'images/default.png'
+
+		return super().to_internal_value(data)
+
 
 	def create(self, validated_data):
-		if (validated_data['password'] != validated_data['confirmation']):
-			raise serializers.ValidationError({'password': 'passwords must match'})
-		user_obj = User.objects.create_user(username=validated_data['username'], email=validated_data['email'], password=validated_data['password'])
-		user_obj.save()
-		return user_obj
+		return User.objects.create(
+			username=validated_data['username'],
+			password=validated_data['password'],
+			first_name=validated_data['first_name'],
+			last_name=validated_data['last_name'],
+			email=validated_data['email'],
+			profile_pic=validated_data.get('profile_pic', 'images/default.png')
+			)
 
 
 class UserLoginSerializer(serializers.Serializer):
-	username = serializers.CharField()
-
+	
 	def check_user(self, data):
 		user = authenticate(username=data['username'], password=data['password'])
 		if not user:
@@ -32,10 +64,9 @@ class UserSerializer(serializers.ModelSerializer):
 		model = User
 		fields = ('id', 'username', 'email', 'first_name', 'last_name', 'profile_pic', 'about')
 
-	def validate_profile_pic(self, profile_pic):
-		print(profile_pic)
-		if isinstance(profile_pic, InMemoryUploadedFile):
-			return profile_pic
+	def validate_profile_pic(self, value):
+		if isinstance(value, InMemoryUploadedFile):
+			return value
 		return self.instance.profile_pic
 
 	def update(self, instance, validated_data):
@@ -83,7 +114,7 @@ class Event_RecipientSerializer(serializers.ModelSerializer):
 	
 	class Meta:
 		model = Event_Recipient
-		fields = ('recipient', 'is_accepted')
+		fields = ('recipient', 'status')
 
 	def to_representation(self, instance):
 		representation = super().to_representation(instance)
@@ -94,23 +125,28 @@ class Event_RecipientSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
 	requester = UserForEventSerializer(read_only=True)
-	recipients = serializers.SerializerMethodField()
+	# recipients = serializers.SerializerMethodField()
 	time = serializers.TimeField() # could format here insted of using properties in model # Because it's not a model field, it needs to be added explicitly to the serializer class
-	
-
 	class Meta:
 		model = Event
-		fields = ('requester', 'recipients', 'category', 'event_id', 'latitude', 'longitude', 'text', 'date', 'time', 'sent', 'marker_id', 'icon')
+		fields = ('event_id', 'requester', 'initial_recipients', 'category', 'event_id', 'latitude', 'longitude', 'text', 'date', 'time', 'sent', 'marker_id', 'icon')
 
-
-	def get_recipients(self, instance):
-		event_recipients = Event_Recipient.objects.filter(event=instance)
-		return Event_RecipientSerializer(event_recipients, many=True).data
+	# def get_recipients(self, instance):
+	# 	event_recipients = Event_Recipient.objects.filter(event=instance)
+	# 	return Event_RecipientSerializer(event_recipients, many=True).data
 
 	
 	def create(self, validated_data):
 		return Event.objects.create(**validated_data)
-	
+
+
+class EventArchivedSerializer(serializers.ModelSerializer):
+	# requester = UserForEventSerializer(read_only=True) # will ignore when post methpod
+	time = serializers.TimeField()
+	class Meta:
+		model = Event_Archived
+		fields = ('event_id', 'initial_requester', 'initial_recipients', 'category', 'event_id', 'text', 'date', 'time', 'sent', 'icon')
+
 
 class MailSerializer(serializers.ModelSerializer):
 	sender = UserSerializer(read_only=True)
@@ -123,7 +159,6 @@ class MailSerializer(serializers.ModelSerializer):
 
 	def get_formatted_sent(self, obj):
 		return obj.format_sent()
-	
 
 
 class EventQtySerializer(serializers.Serializer):
@@ -137,21 +172,9 @@ class EventQtySerializer(serializers.Serializer):
 		representation['name'] = category.capitalize()
 		representation['value'] = category
 		return representation
-	
 
 
-
-# class InterestItemSerializer(serializers.Serializer):
-	# name = serializers.CharField()
-	# def to_representation(self, instance):
-		# representation = super().to_representation(instance)
-		# name = representation.pop('name')
-		# return name
-# 
-# class InterestListSerializer(serializers.ListSerializer):
-	# child = InterestItemSerializer()
-
-class InterestSerializer(serializers.ModelSerializer): # equivalent to above impementation
+class InterestSerializer(serializers.ModelSerializer): 
 	class Meta:
 		model = Interest
 		fields = ('name', )
@@ -165,3 +188,5 @@ class InterestSerializer(serializers.ModelSerializer): # equivalent to above imp
 
 class InterestListSerializer(serializers.ListSerializer):
 	child = serializers.CharField() # child is list item
+
+

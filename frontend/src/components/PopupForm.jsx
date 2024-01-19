@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import classes from './styles/PopupForm.module.css'
 import CustomInput from './UI/CustomInput/CustomInput'
 import CustomTextarea from './UI/textarea/CustomTextarea'
-import CustomInputV2 from './UI/CustomInput/CustomInputV2'
 import {getFormattedFullDate, getDateForInput, getCutTime} from './../utils/calendarUtil'
 import CustomButton from './UI/CustomButton/CustomButton'
+import CustomAcceptButton from './UI/CustomButton/CustomAcceptButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faCheck, faSquareCaretDown } from '@fortawesome/free-solid-svg-icons'
 import CustomIcon from './UI/CustomIcon/CustomIcon'
@@ -128,15 +128,15 @@ const PopupForm = ({isOpen, setIsOpen}) => {
     setEventInformation(prevInformation => ({...prevInformation, category: ev.target.value}))
     setCategoryClasses([classes.categorySelect])
   }
+ 
 
-
-  const handleUsers = (ev, username) => {
+  const handleUsers = (ev, username, firstName, lastName) => {
     const alreadySelected = eventInformation.selectedUsers.find(u => u.username === username)
     ev.currentTarget.classList.toggle(classes.active)
     if (alreadySelected){
       setEventInformation(prevInformation => ({...prevInformation, selectedUsers: prevInformation.selectedUsers.filter(su => su.username !== username)}))
     } else if (!alreadySelected){
-      setEventInformation(prevInformation => ({...prevInformation, selectedUsers: [...prevInformation.selectedUsers, {username: username, is_accepted: false}]}))
+      setEventInformation(prevInformation => ({...prevInformation, selectedUsers: [...prevInformation.selectedUsers, {username: username, first_name: firstName, last_name: lastName}]}))
 
     }
   }
@@ -165,9 +165,9 @@ const PopupForm = ({isOpen, setIsOpen}) => {
                 <CustomSelect id='categoryPopup' value={eventInformation.category ? eventInformation.category : 'defaultValue'} onChange={handleCategory} className={categoryClasses.join(' ')} defaultName='Categrory' options={eventCategories}/>
               </div>
             </div>
-            <div className={selectedUsersClasses.join(' ')} id='selectUsers'>
-              <div className={classes.userSelectHeading} onClick={() => setDropdown(!dropdown)}>
-                <div className={classes.userSelectInformation}><div className={classes.userSelectInformationPlaceholder}>Send to:&nbsp;</div><div className={classes.selectedUsersShow}>{eventInformation.selectedUsers.map(su => (<span key={su.username}>{su.username}&nbsp;</span>))}</div></div>
+            <div className={selectedUsersClasses.join(' ')} id='selectUsers' onClick={() => setDropdown(!dropdown)}>
+              <div className={classes.userSelectHeading} >
+                <div className={classes.userSelectInformation}><div className={classes.userSelectInformationPlaceholder}>Send to:&nbsp;</div><div className={classes.selectedUsersShow}>{eventInformation.selectedUsers.map(su => (<span key={su.username}>{su.first_name} {su.last_name}&nbsp;</span>))}</div></div>
                 <div className={classes.userSelectDropIcon}><FontAwesomeIcon icon={faSquareCaretDown} /></div>
               </div>
               <div className={classes.userSelectContent}>
@@ -175,7 +175,7 @@ const PopupForm = ({isOpen, setIsOpen}) => {
                 <div
                   key={friend.username}
                   className={[friend.username === initialUser?.username ? classes.active : undefined, classes.userSelectOption].join(' ')}
-                  onClick={(ev) => handleUsers(ev, friend.username)}>{friend.username}
+                  onClick={(ev) => handleUsers(ev, friend.username, friend.first_name, friend.last_name)}>{friend.first_name} {friend.last_name}
                 </div>
                 ))}
               </div>
@@ -183,8 +183,7 @@ const PopupForm = ({isOpen, setIsOpen}) => {
           </div>
         </div>
         <div className={classes.confirmation}>
-          <CustomIcon className={classes.cancelPopup} onClick={handleCancelPopup}><FontAwesomeIcon icon={faXmark}/></CustomIcon>
-          <CustomIcon className={classes.acceptPopup} onClick={handleAcceptPopup}><FontAwesomeIcon icon={faCheck}/></CustomIcon>
+          <CustomButton className={classes.acceptPopup} onClick={handleAcceptPopup}>Create event</CustomButton>
         </div>
     </div>
   )

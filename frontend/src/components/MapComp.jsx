@@ -8,17 +8,18 @@ import Loader from './UI/Loader/Loader'
 import MapContext from '../context/MapContext'
 import CustomSelect from './UI/CustomSelect/CustomSelect'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLocationPinLock, faMap } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDown, faLocationPinLock, faMap } from '@fortawesome/free-solid-svg-icons'
 import CustomInput from './UI/CustomInput/CustomInput'
+import CustomIcon from './UI/CustomIcon/CustomIcon'
 
 const MapComp = ({state}) => {
      // make for friends and searching ??
-    const {position, setPosition, setCanAddMarkers, category, setCategory, setModalPopup, setEventInformation, senderSort, setSenderSort, friendsSortArray, setFriendsSortArray, strictSort, setStrictSort, acceptedSort, setAcceptedSort, dateSort, setDateSort, minDate, maxDate} = useContext(MapContext)
-    const { friends, eventCategories } = useContext(UserContext)
+    const {position, setPosition, canAddMarkers, setCanAddMarkers, setModalPopup, setEventInformation, minDate, maxDate, sort, setSort} = useContext(MapContext)
+    const { friends, eventCategories, isLoading } = useContext(UserContext)
     const [dateClasses, setDateClasses] = useState()
     const [error, setError] = useState(null)
     const sentInputId = useId()
-    const recievedInputId = useId()
+    const receivedInputId = useId()
     const strictInputId = useId()
     const acceptedInputId = useId()
     const dateInputId = useId()
@@ -26,38 +27,41 @@ const MapComp = ({state}) => {
     
     
     window.history.replaceState({}, document.title)
+    
 
     useEffect(() => {
         if (state?.action === 'selectCategory'){ // ?. means not necessary field / e.g state is null there wont be error null doesnt have field action
-            setCategory(state.category)
+            setSort(prevSort => ({...prevSort, category: state.category}))
             setEventInformation(prevInformation => ({...prevInformation, category: state.category}))
         }
         if (state?.action === 'selectUser'){
-            setEventInformation(prevInformation => ({...prevInformation, selectedUsers: [{username: state.username, is_accepted: false}]}))
+            setEventInformation(prevInformation => ({...prevInformation, selectedUsers: [{username: state.username, first_name: state.first_name, last_name: state.last_name}]}))
             setModalPopup(true)
             setCanAddMarkers(true)
         }
         if (state?.action === 'selectUserSelectCategory'){
             if (friends.find(friend => friend.username === state.username)){
-                setEventInformation(prevInformation => ({...prevInformation, category: state.category, selectedUsers: [{username: state.username, is_accepted: false}]}))
+                setEventInformation(prevInformation => ({...prevInformation, category: state.category, selectedUsers: [{username: state.username, first_name: state.first_name, last_name: state.last_name}]}))
             } else{
                 setEventInformation(prevInformation => ({...prevInformation, category: state.category}))
 
             }
-            setCategory(state.category)
+            setSort(prevSort => ({...prevSort, category: state.category}))
             setModalPopup(true)
             setCanAddMarkers(true)
         }
-        if (state?.date){
-            setDateSort(state.date)
-            setSenderSort(prevSort => ({...prevSort, sent: false}))
+        if (state?.action === 'date'){
+            setSort(prevSort => ({...prevSort, date: state.date}))
+            setSort(prevSort => ({...prevSort, sent: false}))
             setDateClasses(classes.active)
         }
     }, [])
 
-    useEffect(() => {
-        
-    }, [dateInputRef])
+    useEffect(() =>{
+        if (canAddMarkers && !sort.date){
+            setDateClasses()
+        }
+    }, [sort.date])
 
     useEffect(() => {
 
@@ -81,22 +85,25 @@ const MapComp = ({state}) => {
     }, [])
 
 
+
     const handleSeletedUsers = (user) => {
-        const isSelected = friendsSortArray.find(friendSelected => friendSelected === user.username)
+        const isSelected = sort.friendsArray.find(friendSelected => friendSelected === user.username)
         if (!isSelected){
-            setFriendsSortArray(prevUsers => [...prevUsers, user.username])
+            setSort(prevSort => ({...prevSort, friendsArray: [...prevSort.friendsArray, user.username]}))
         } else {
-            setFriendsSortArray(friendsSortArray.filter(friendsSelected => friendsSelected !== user.username))
+            setSort(prevSort => ({...prevSort, friendsArray: prevSort.friendsArray.filter(friend => friend !== user.username)}))
         }
     }
 
+
+
     const handleDateSort = (ev) => {
-        setDateSort(ev.target.value)
+        setSort(prevSort => ({...prevSort, date: ev.target.value}))
         setDateClasses(classes.active)
         // ev.currentTarget.classList.add(classes.active)
     }
     const handleClearDate = (ev) => {
-        setDateSort('')
+        setSort(prevSort => ({...prevSort, date: ''}))
         setDateClasses()
         // ev.currentTarget.closest(`.${classes.dateSort}`).querySelector('input[type=date]').classList.remove(classes.active)
     }
@@ -105,12 +112,18 @@ const MapComp = ({state}) => {
         return [...eventCategories].sort((a, b) => b.qty - a.qty)
     }, [eventCategories])
 
+    const showSortMenu = () => {
+        const sortPanel = document.getElementById('panelContainer')
+        const icon = document.getElementById('sortMenuIcon')
+        sortPanel.classList.toggle(classes.visible)
+        icon.classList.toggle(classes.visible)
+    }
+
 
     return (
-        !position && !error
+        (!position && !error) || isLoading
         ? <Loader />
         :
-
         error
         ? 
         <div className={classes.mapGeoErrorContainer}>
@@ -118,46 +131,49 @@ const MapComp = ({state}) => {
             <div className={classes.mapGeoErrorText}>Allow geolocation to work with map</div>
          </div>
         :
-        <div className={[classes.mapContainer, 'container'].join(' ')}>
-            <Map />
-
-            <div className={classes.rightPanel}>
+        <div className={classes.container}>
+            <Map />   
+            <div id='panelContainer' className={classes.panelContainer}>
                 <div className={classes.sortPanel}>
                     <div className={classes.categorySelectContainer}>
                         Sort events
                         <CustomSelect
                         withNums={true}
-                        value={category}
-                        onChange={(ev) => setCategory(ev.target.value)}
+                        value={sort.category}
+                        onChange={(ev) => setSort(prevSort => ({...prevSort, category: ev.target.value}))}
                         className={classes.categorySelect}
                         defaultName='Categrory'
                         options={[{name: 'All', value: 'ALL'}, ...sortedEventCategories]}
                     />
                     </div>
                     <div className={classes.senderSort}>
-                        <label htmlFor={sentInputId}>Sent</label><input onChange={() => setSenderSort((prevSort) => ({...prevSort, sent: !senderSort.sent}))} id={sentInputId} checked={senderSort.sent} type='checkbox' />
+                        <label htmlFor={sentInputId}>Sent</label><input onChange={() => setSort(prevSort => ({...prevSort, sent: !prevSort.sent}))} id={sentInputId} checked={sort.sent} type='checkbox' />
                         &nbsp;
-                        <label htmlFor={recievedInputId}>Recieved</label><input onChange={() => setSenderSort((prevSort) => ({...prevSort, recieved: !senderSort.recieved}))} id={recievedInputId} checked={senderSort.recieved} type='checkbox' />
+                        <label htmlFor={receivedInputId}>received</label><input onChange={() => setSort(prevSort => ({...prevSort, received: !prevSort.received}))} id={receivedInputId} checked={sort.received} type='checkbox' />
                     </div>
                     <div className={classes.strictSort}>
-                        <label htmlFor={strictInputId}>Exact users</label><input onChange={() => setStrictSort(!strictSort)} id={strictInputId} type='checkbox' checked={strictSort}/>
+                        <label htmlFor={strictInputId}>Exact users</label><input onChange={() => setSort(prevSort => ({...prevSort, strict: !prevSort.strict}))} id={strictInputId} type='checkbox' checked={sort.strict}/>
                     </div>
                     <div className={classes.acceptedSort}>
-                        <label htmlFor={acceptedInputId}>Accepted events</label><input onChange={() => setAcceptedSort(!acceptedSort)} id={acceptedInputId} type='checkbox' checked={acceptedSort}/>
+                        <label htmlFor={acceptedInputId}>Only accepted</label><input onChange={() => setSort(prevSort => ({...prevSort, accepted: !prevSort.accepted}))} id={acceptedInputId} type='checkbox' checked={sort.accepted}/>
                     </div>
                     <div className={classes.dateSort} onClick={(ev) => {}}>
-                        <label htmlFor={dateInputId}>Date</label><input min={minDate} max={maxDate} className={dateClasses} onClick={(ev) => ev.target.showPicker()} onChange={(ev) => handleDateSort(ev)} id={dateInputId} type='date' value={dateSort}/>
-                        <span onClick={handleClearDate}>clear</span>
+                        <label htmlFor={dateInputId}>Date</label><input min={minDate} max={maxDate} className={dateClasses} onClick={(ev) => ev.target.showPicker()} onChange={(ev) => handleDateSort(ev)} id={dateInputId} type='date' value={sort.date}/>
+                        <span onClick={handleClearDate}>clear date</span>
                     </div>
                 </div>
                 <div className={classes.friendsSelect}>
                     Sort by friends
+                    <div className={classes.friends}>
                     {friends && !(friends.length === 0)
-                    ? <UsersList resultList={friends} forMap={true} onUserClick={handleSeletedUsers} friendsSortArray={friendsSortArray}/>
+                    ? <UsersList resultList={friends} forMap={true} onUserClick={handleSeletedUsers} friendsArray={sort.friendsArray}/>
                     : <div >seems empty..</div>}
+                    </div>
                 </div>
                 
             </div>
+
+            <div className={classes.mobilePanel} onClick={showSortMenu}>Sort<CustomIcon id='sortMenuIcon' className={classes.sortMenuIcon}><FontAwesomeIcon icon={faAngleDown} /></CustomIcon></div>
         </div>
 
   )

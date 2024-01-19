@@ -10,19 +10,35 @@
     font-size: 24px;
     cursor: pointer;
 }
+.contentItem > a{
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+
+
 
 .logout:hover{
     color: var(--main-red)
+}
+.icon{
+    color: var(--main-navy)
 }
 
 .link{
     text-decoration: none;
     color: var(--main-navy)
 }
-.link:hover{
-    color: var(--main-purple)
+.contentItem:hover .link, .contentItem:hover .icon{
+    color: var(--main-purple);
 }
-
+.logout:hover .icon{
+    color: var(--main-red);
+}
 .logout{
     font-size: 20px;
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
 }
+

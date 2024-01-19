@@ -10,10 +10,43 @@
 .category{
     display: flex;
     justify-content: center;
-    color: var(--main-red)
+
 }
 .choice > svg {
     cursor: pointer;
+}
+
+.ACCEPTED > a, .ACCEPTED > strong{
+    color: var(--alert-green)!important   
+}
+.ACCEPTED > a::after, .ACCEPTED > strong::after{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: ' \f00c';
+    font-size: 12px
+}
+
+
+.REJECTED > a, .REJECTED > strong{
+    color: var(--alert-red)!important;
+
+}
+.REJECTED > a::after, .REJECTED > strong::after{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: ' \f00d';
+    font-size: 12px;
+}
+
+.PENDING > a, .PENDING > strong{
+    color: var(--alert-orange)!important   
+}
+.PENDING > a::after, .PENDING > strong::after{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 500;
+    content: ' \f017';
+    font-size: 12px
+
 }
 
 .eventInformationContainer{
@@ -43,59 +76,56 @@
 
 
 
-i{
-    font-size: 32px!important;
-}
 
-
-.bar{
+.BAR{
     color: rgb(171, 96, 179)
 }
 
 
-.dinner{
+.DINNER{
     color: #FFC72C;
 }
 
 
 
-.relaxation{
+.RELAXATION{
     color: rgb(122, 224, 11)
 }
 
 
-.leisure{
+.LEISURE{
     color: rgb(224, 195, 117)
 }
 
 
-.education{
+.EDUCATION{
     color: rgb(123, 142, 243)
 }
 
 
-.health{
+.HEALTH{
     color: #FF3800;
 }
 
 
-.holiday{
+.HOLIDAY{
     color: var(--main-lightblue);
 }
 
 
-.work{
+.WORK{
     color: #8FBC8B;
 }
 
-.travel{
+.TRAVEL{
     color: #EE82EE;
 }
 
-.shoping{
+.SHOPING{
     color: #F400A1
 }
 
 .borderForIcon{
     text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+    font-size: 28px!important;
 }

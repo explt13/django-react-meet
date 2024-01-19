@@ -8,6 +8,12 @@
     padding: 20px;
 }
 
+.interestsContainer{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
 .interests{
     width: 50%;
     height: 300px;
@@ -24,13 +30,14 @@
 }
 .interestsHeading > svg{
     font-size: 28px;
-    color: var(--main-purple);
+    color: var(--main-blue);
     cursor: pointer;
     transition: color 0.2s ease-in-out;
 }
 .interestsHeading > svg:hover{
     color: var(--main-navy)
 }
+
 
 .chooseInterests{
 
@@ -66,4 +73,11 @@
 }
 .buttons:hover{
     color: var(--main-green-hover)
+}
+
+
+@media screen and (max-width: 767px) {
+    .profileContainer{
+        padding: 10px 0;
+    }
 }

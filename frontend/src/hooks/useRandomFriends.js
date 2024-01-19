@@ -22,7 +22,7 @@ const useRandomFriends = (friends, qty) => {
         } else if (friends && friends.length <= qty){
             setFinalArray([...friendsArrayCopy])
         }
-        return () => setFinalArray([]) // clear when exit ? (why) when loaded then log out then log in it's making second time
+        return () => setFinalArray([]) // clear when exit  when loaded then log out then log in it's making second time
        
     }, [friendsArrayCopy])
 

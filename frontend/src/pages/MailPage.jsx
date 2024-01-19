@@ -4,7 +4,7 @@ import MailService from '../API/MailService'
 import classes from './styles/MailPage.module.css'
 import Loader from './../components/UI/Loader/Loader'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelopesBulk, faTrash } from '@fortawesome/free-solid-svg-icons'
 import CustomIcon from './../components/UI/CustomIcon/CustomIcon'
 import AuthContext from './../context/AuthContext'
 import useEmails from '../hooks/useEmails'
@@ -24,6 +24,7 @@ const MailPage = () => {
   
 
   useEffect(() => {
+    document.title = 'Mail'
     setIsLoading(true)
     const getEmails = async () => {
       const data = await MailService.getEmails()
@@ -42,9 +43,14 @@ const MailPage = () => {
   }
 
   const handleClearMail = async () => {
-    const response = await MailService.clearMail(csrftoken)
-    setEmails([])
-    setAlertResponse({status: response.status, text: response.data})
+    if (emails.length > 0){
+      const response = await MailService.clearMail(csrftoken)
+      setEmails([])
+      setAlertResponse({status: response.status, text: response.data})
+    } else{
+      setAlertResponse({status: 400, text: 'Nothing to clear'})
+    }
+  
   } 
   
 
@@ -52,7 +58,7 @@ const MailPage = () => {
     isLoading
     ? <Loader />
     :
-    <div className='container wrapper'>
+    <div className='container contentWrapper'>
       <div className={classes.heading}>
         Mail
       </div>
@@ -72,7 +78,7 @@ const MailPage = () => {
             <div className={classes.sent}>sent {email.formatted_sent}</div>
           </div>
         ))}
-        {sortedEmails.length === 0 && <div className={classes.noMail}><NoResult /></div>}
+        {sortedEmails.length === 0 && <NoResult iconStyles={classes.noMail}  data={'No received emails'} icon={<FontAwesomeIcon icon={faEnvelopesBulk} />}/>}
       </div>
     </div>
   )

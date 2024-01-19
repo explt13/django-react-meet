@@ -7,8 +7,7 @@ import CustomTitle from './UI/CustomTitle/CustomTitle'
 import { useNavigate } from 'react-router-dom'
 
 const Calendar = () => {
-
-const { recievedEvents, isLoading, thisUser } = useContext(UserContext)
+  const { receivedEvents, isLoading, thisUser } = useContext(UserContext)
   const [monthShift, setMonthShift] = useState(0)
   const [today, daysInMonth, monthName, year] = getDateInfo(monthShift)
   const [prevClasses, setPrevClasses] = useState([classes.prevButton])
@@ -22,10 +21,11 @@ const { recievedEvents, isLoading, thisUser } = useContext(UserContext)
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (recievedEvents){
-      setAcceptedEvents([...recievedEvents].filter(event => event.recipients.find(recipient => recipient.username === thisUser.username).is_accepted === true))
+    if (receivedEvents){
+      setAcceptedEvents([...receivedEvents].filter(event => event.initial_recipients.find(recipient => recipient.username === thisUser.username).status === "ACCEPTED"))
     }
-  }, [recievedEvents])
+  }, [receivedEvents])
+
 
   useEffect(() => {
     if (acceptedEvents){
@@ -182,7 +182,7 @@ const { recievedEvents, isLoading, thisUser } = useContext(UserContext)
                         {index !== arr.length - 1 && <hr />}
                       </div>
                       ))}>
-                        <span className={dayClasses.join(' ')} onClick={() => navigate('/map', {state: {date: eventInfomation[0].date}})}>{day}</span>
+                        <span className={dayClasses.join(' ')} onClick={() => navigate('/map', {state: {action: 'date', date: eventInfomation[0].date}})}>{day}</span>
                       </CustomTitle>
                       
                       :

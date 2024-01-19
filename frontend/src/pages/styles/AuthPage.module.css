@@ -1,12 +1,217 @@
+::-webkit-scrollbar-thumb{
+    display: none;
+}
 
-.wrapper{
+
+::-webkit-scrollbar{
+    display: none;
+}
+
+
+.container{
+    background-color: var(--main-white);
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
+
+}
+
+
+.heading{
+    color: var(--main-white);
+    height: 80vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    position: fixed;
-    margin: 0 10px;
+    transition: all 1.5s;
+    overflow: hidden;
+    &:hover .bgimage{
+        transform: scale(1.2);
+    }
+}
+
+@keyframes animateText{
+
+}
+
+.bgImageContainer{
+    position: absolute;
+    height: 80vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.bgimage{
+    background-image: url('./../../media/img/sunsetPeople.jpg');
+    background-position: 50%;
+    width: 100%;
+    height: 80vh;
+    background-repeat: no-repeat;
+    background-size: 105%;
+    transition: 2s all;
+    background-size: cover;
+}
+
+
+.headingText{
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    font-size: 48px;
+    letter-spacing: 3px;
+    background-image: linear-gradient(to right, rgb(255, 119, 69), var(--main-white));
+    background-size: 200%;
+    background-position: 0%;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: text-gradient 5s linear alternate infinite;
+}
+
+@keyframes text-gradient {
+    to{background-position: 0%;}
+    from{background-position: 100%;}
+}
+
+
+.headingText > .desc{
+    font-size: 18px;
+}
+
+
+.overlay{
+    height: 80vh;
+    width: 100%;
+    position: absolute;
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.9));
+}
+
+.arrowBtn{
+    position: absolute;
+    bottom: 30px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.content{
+    display: flex;
+}
+
+
+.formContainer{
+    font-size: 24px;
+    width: 45%;
+    padding-top: 100px;
+    background-color: var(--main-gray);
+    border-right: 10px solid var(--alert-orange);
+    padding-bottom: 100px;
+    display: flex;
+    justify-content: center;
+    flex: 1 0
+}
+
+
+.formWrapper{
+    position: relative;
+    height: 24em;
+    width: 22em;
+    margin-left: 100px;
+}
+
+
+.showcase{
+    align-items: center;
+    width: 55%;
+    display: flex;
+    justify-content: center;
+}
+.process{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    height: 60%;
+    column-gap: 20px;
+   
+}
+.showcaseItem{
+    font-size: 24px;
+    flex-basis: 34%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    row-gap: 10px;
+
+}
+.showcaseItem > svg{
+    font-size: 54px;
+}
+
+
+
+@media screen and (max-width: 767px) {
+    .container{
+        padding-bottom: 0px;
+
+    }
+    .headingText{
+        display: none;
+    }
+    .heading{
+        position: absolute;
+        height: 100%;
+    }
+    .bgImageContainer{
+        height: 100%;
+    }
+    .bgimage{
+        height: 100%;
+    }
+    .overlay{
+        height: 100%;
+    }
+
+
+    .content{
+        margin: auto 0;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .formContainer{
+        padding-top: 0px;
+        margin-right: 0px;
+        width: 100%;
+        margin-top: 0px;
+        display: flex;
+        justify-content: center;
+        border: none;
+        padding-bottom: 0;
+    }
+    .formWrapper{
+        margin: 0;
+    }
+    .arrowBtn{
+        display: none;
+    }
+    .showcase{
+        margin-top: 50px;
+        position: relative;
+        color: var(--main-white);
+        width: 100%;
+        
+    }
+    .process{
+        column-gap: 0px;
+    }
+    .showcaseItem{
+        font-size: 14px;
+        flex-basis: 33%;
+
+    }
+    .showcaseItem > svg{
+        font-size: 20px;
+    }
 }

@@ -122,3 +122,25 @@
     cursor: default;
 }
 
+
+
+@media screen and (max-width: 767px) {
+    .calendarHeader{
+        font-size: 24px;
+    }
+    .month{
+        height: 240px;
+    }
+    .monthName{
+        font-size: 28px;
+    }
+    .year{
+        font-size: 20px;
+    }
+    .weekday{
+        font-size: 16px;
+    }
+    .day{
+       height: 40px;
+    }
+}

@@ -3,12 +3,10 @@ import UserContext from '../context/UserContext'
 import classes from './styles/ProfileInformation.module.css'
 import { Link, useParams } from 'react-router-dom'
 import FriendService from '../API/FriendService'
-import Loader from './UI/Loader/Loader'
 import CustomButton from './UI/CustomButton/CustomButton'
 import AuthContext from '../context/AuthContext'
-import UserService from '../API/UserService'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faUserPen } from '@fortawesome/free-solid-svg-icons'
 import CustomCancelButton from './UI/CustomButton/CustomCancelButton'
 
 
@@ -49,7 +47,7 @@ const ProfileInformation = ({user}) => {
                 </div>
             </div>
             <div className={classes.options}>
-                {isThisUser && <div className={classes.editProfile}><Link to={`/user/${thisUser.username}/edit`}>Edit profile</Link></div>}
+                {isThisUser && <CustomButton className={classes.editProfile}><Link to={`/user/${thisUser.username}/edit`}><span>Edit profile</span> <FontAwesomeIcon icon={faUserPen} /></Link></CustomButton>}
                 {isPending && <div className={classes.pending}>pending</div>}
                 {isFriend &&
                 <div className={classes.alreadyFriends}>
@@ -63,8 +61,6 @@ const ProfileInformation = ({user}) => {
             </div>
         </div>
  
-        /* {thisUser.username !== user.username && !friends.find(friend => friend.username === user.username) && <CustomButton onClick={handleAddFriend}>send friend request</CustomButton>} */
-
     )
 }
 

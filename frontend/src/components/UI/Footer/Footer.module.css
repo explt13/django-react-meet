@@ -1,0 +1,27 @@
+.container{
+    margin-top: auto;
+    padding: 20px 25px;
+
+    background: var(--main-gray-hover);
+    color: white
+}
+.content{
+    display: flex;
+    column-gap: 10px;
+    width: 1320px;
+    margin: 0 auto;
+}
+.content > div:not(:last-child){
+    border-right: 2px solid var(--main-purple);
+    padding-right: 10px;
+}
+.contentItem{
+    cursor: pointer;
+}
+@media screen and (max-width: 767px){
+    .content{
+        width: auto;
+        font-size: 14px;
+    }
+
+}

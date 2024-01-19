@@ -12,9 +12,19 @@
 }
 
 .errorIcon{
-    font-size: 124px;
+    font-size: 100px;
 }
 
 .errorText{
-    font-size: 48px;
+    font-size: 42px;
+}
+
+@media screen and (max-width: 767px) {
+    .errorIcon{
+        font-size: 54px;
+    }
+    
+    .errorText{
+        font-size: 24px;
+    }
 }

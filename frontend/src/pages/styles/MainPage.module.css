@@ -2,6 +2,7 @@
     margin-top: -80px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    padding-top: 0px;
 }
 
 .mainContainer{
@@ -15,7 +16,7 @@
 .header{
     top: 0;
     z-index: -5;
-    height: 350px;
+    height: 294px;
     background: linear-gradient(to left, var(--main-blue), var(--main-lightblue));
     background-size: 200% 100%;
     color: white;
@@ -29,7 +30,10 @@
     transition: all 0.5s;
     
 }
-.header > div:last-child{
+.header .name{
+    margin-top: -50px;
+}
+.header .desc{
     font-family: 'Caveat';
 
 }
@@ -55,4 +59,16 @@
     display: flex;
     justify-content: center;
     font-size: 20px;
+}
+
+@media screen and (max-width: 767px) {
+    .mainContentContainer{
+        flex-direction: column;
+    }
+    .header{
+        height: 234px;
+        font-size: 32px;
+    }
+
+
 }

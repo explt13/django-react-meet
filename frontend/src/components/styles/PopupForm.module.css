@@ -1,14 +1,13 @@
 .container{
+    padding-top: 20px;
     width: 800px;
     height: 500px;
     background-color: var(--main-gray);
     border-top-right-radius: 20px;
     border-bottom-left-radius: 20px;
-
-    /* border-radius: 10px; */
-    display: grid;
-    justify-content: center;
-    grid-template-rows: 100px auto 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 
@@ -20,6 +19,7 @@
 .form{
     margin-top: 25px;
     width: 500px;
+    flex: 1;
 }
 
 .dateInput{
@@ -63,30 +63,15 @@
 }
 
 .confirmation{
-    display: flex;
-    justify-content: center;
-    gap: 70px
-
-}
-
-.cancelPopup{
-    font-size: 40px;
-    height: min-content;
-    color: var(--main-red);
+    margin-bottom: 40px;
 }
 
 .acceptPopup{
-    font-size: 40px;
-    height: min-content;
-    color: var(--main-green)
+    font-size: 20px;
+
 }
 
-.acceptPopup:hover{
-    color: green
-}
-.cancelPopup:hover{
-    color: darkred
-}
+
 
 .sendTo{
     height: 35px;
@@ -128,6 +113,7 @@
     overflow: hidden;
     display: flex;
     width: 100%;
+
 }
 .userSelectInformationPlaceholder{
     width: 22%;
@@ -137,6 +123,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     width: 75%;
+    white-space: nowrap;
 }
 
 .userSelectDropIcon{
@@ -158,11 +145,15 @@
     cursor: pointer;
     margin-bottom: 5px;
     padding-left: 10px;
+    
+    @media screen and (min-width: 992px){
+        &:hover{
+            background-color: var(--main-navy);
+            color: var(--main-white)
+        }
+    }
 }
-.userSelectOption:hover{
-    background-color: var(--main-navy);
-    color: var(--main-white)
-}
+
 .userSelectOption.active{
     background-color: var(--main-whitegray)
 }
@@ -188,3 +179,51 @@
 
 }
 
+@media screen and (min-width: 768px) and (max-width: 991px){
+    .container{
+        height:auto;
+        width: 600px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .container{
+        height:auto;
+        width: calc(100vw - 20px);
+    }
+    .heading{
+        font-size: 24px;
+    }
+    .form{
+        margin-top: 10px;
+        width: calc(100% - 20px);
+    }
+    .confirmation{
+        margin-top: 30px;
+        margin-bottom: 25px;
+    }
+    .acceptPopup{
+        font-size: 16px;
+    }
+    .dateAndCategory{
+        flex-direction: column;
+    }
+    .category{
+        display: flex;
+        column-gap: 10px;
+        align-items: center;
+    }
+
+    .categorySelect{
+        margin-top: 0px;
+        font-size: 16px;
+        border-radius: 0px;
+        width: min-content;
+    }
+    .userSelectHeading{
+        font-size: 16px;
+    }
+
+
+    
+}
