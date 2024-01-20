@@ -8,15 +8,7 @@ const Auth = () => {
     const {setIsAuth} = useContext(AuthContext)
     const [errors, setErrors] = useState(null)
     const [form, setForm] = useState('login')
-    const [isMobile, setIsMobile] = useState(null)
-    useEffect(() => {
-        const mql = window.matchMedia('(max-width: 767px)')
-        setIsMobile(mql.matches)
-        window.onresize = () => {
-            setIsMobile(mql.matches)
-        }
 
-    },[])
 
     const handleChangeText = (headerName) => {
         setForm(headerName)
@@ -34,7 +26,8 @@ const Auth = () => {
     return (
         <div className={classes.form}>
             <div id='header' className={classes.header}>Login</div>
-            {errors && errors.map(error => <div className={['alert', 'alert-danger', classes.error].join(' ')}>{error}</div>)} {/*to do */}
+            {errors && errors.map(error => <div className={['alert', 'alert-danger', classes.error].join(' ')} key={error}>{error}</div>)} {/*to do */}
+
             {form === 'login'
             ? <LoginForm setIsAuth={setIsAuth} setErrors={setErrors} onLinkClick={handleChangeText}/>
             : <RegisterForm setIsAuth={setIsAuth} setErrors={setErrors} onLinkClick={handleChangeText} />

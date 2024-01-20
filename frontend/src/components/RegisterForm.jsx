@@ -15,6 +15,7 @@ const RegisterForm = ({setIsAuth, setErrors, onLinkClick}) => {
     const {csrftoken} = useContext(AuthContext)
     const [data, setData] = useState({username: '', email: '', password: '', confirmation: '', first_name: '', last_name: ''})
     const [step, setStep] = useState('first')
+    const errorArray = []
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -34,8 +35,12 @@ const RegisterForm = ({setIsAuth, setErrors, onLinkClick}) => {
         }
             
         if (response.status === 400){
-            console.log(response)
-            setErrors(response.data)
+            console.log(response.data)
+            for (let fieldError in response.data){
+                errorArray.push(response.data[fieldError])
+            }
+            console.log(errorArray)
+            setErrors(errorArray)
             setStep('first')
         } 
     }

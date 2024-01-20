@@ -20,7 +20,6 @@ const ProfileEditPage = () => {
   const [user, setUser] = useState(null)
   const [imgURI, setImgURI] = useState(null)
   const {setAlertResponse, isMobile} = useContext(UserContext)
-  
 
 
   useEffect(() => {
@@ -47,8 +46,11 @@ const ProfileEditPage = () => {
   }
 
   const handleImg = (ev) => {
-    setImgURI(URL.createObjectURL(ev.target.files[0]))
-    setEditedInformation(prevInfo => ({...prevInfo, profile_pic: ev.target.files[0]}))
+    if (ev.target.files[0]){
+      setImgURI(URL.createObjectURL(ev.target.files[0]))
+      setEditedInformation(prevInfo => ({...prevInfo, profile_pic: ev.target.files[0]}))
+    }
+    
   }
   return (
     !user

@@ -4,8 +4,7 @@ import Auth from "../components/Auth";
 import classes from './styles/AuthPage.module.css'
 import { faArrowRightLong, faCalendar, faCalendarDay, faCheckCircle, faChevronDown, faClock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import mapImage from './../media/img/mapImage.png'
-import sunset from './../media/img/sunsetPeople.jpg'
+
 const AuthPage = () => {
     const [descText, setDescText] = useState('')
  

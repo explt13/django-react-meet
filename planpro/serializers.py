@@ -40,7 +40,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
 
 	def create(self, validated_data):
-		return User.objects.create(
+		return User.objects.create_user(
 			username=validated_data['username'],
 			password=validated_data['password'],
 			first_name=validated_data['first_name'],
@@ -64,10 +64,6 @@ class UserSerializer(serializers.ModelSerializer):
 		model = User
 		fields = ('id', 'username', 'email', 'first_name', 'last_name', 'profile_pic', 'about')
 
-	def validate_profile_pic(self, value):
-		if isinstance(value, InMemoryUploadedFile):
-			return value
-		return self.instance.profile_pic
 
 	def update(self, instance, validated_data):
 		instance.about = validated_data.get('about', instance.about)

@@ -12,8 +12,23 @@ import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const FriendsPage = () => {
-  const {isLoading} = useContext(UserContext)
+  const {isLoading, thisUser, setReceivedFriendRequests, setFriends} = useContext(UserContext)
+  const [areFriendsLoading, setAreFriendsLoading] = useState(false)
   const [tab, setTab] = useState('friends')
+
+  useEffect(() => {
+    setAreFriendsLoading(true)
+    const fetchFriends = async () =>{
+        if (thisUser){
+          const friendsData = await FriendService.getFriends(thisUser.username)
+          const received_friend_requests = await FriendService.getReceivedRequests(thisUser.username)
+          setFriends([...friendsData])
+          setReceivedFriendRequests([...received_friend_requests])
+          setAreFriendsLoading(false)
+        }
+    }
+    fetchFriends()
+  }, [thisUser])
   
   useLayoutEffect(() => {
     const mql = window.matchMedia("(max-width: 767px)")
@@ -48,7 +63,7 @@ const FriendsPage = () => {
   }, [])
 
   return (
-    isLoading
+    isLoading || areFriendsLoading
     ? <Loader />
     :
     <div className='container contentWrapper'>

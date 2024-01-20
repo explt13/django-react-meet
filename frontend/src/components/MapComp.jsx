@@ -72,7 +72,7 @@ const MapComp = ({state}) => {
                 (pos) => {
                   const {latitude, longitude} = pos.coords
 
-                  setPosition([latitude, longitude])
+                  setPosition([39, -77])
                 },
                 (err) => {
                 setError(err)
@@ -83,7 +83,6 @@ const MapComp = ({state}) => {
         return () => clearTimeout(timeoutID)
         
     }, [])
-
 
 
     const handleSeletedUsers = (user) => {

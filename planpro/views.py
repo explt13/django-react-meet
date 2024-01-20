@@ -117,6 +117,7 @@ class UserView(APIView):
     
     def patch(self, request, username): #update user information
         data = request.data
+        print(data)
         serializer = UserSerializer(request.user, data=data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.update(request.user, serializer.validated_data) 

@@ -27,14 +27,19 @@ const RegistrationSecondStep = ({setStep, data, setData, registerUser, onBtnClic
     }
 
     const handleImage = (e) => {
-        const URI = URL.createObjectURL(e.target.files[0])
-        setData(prevData => ({...prevData, profile_pic: e.target.files[0]}))
-        setImgURI(URI)
+        if (e.target.files[0]){
+            const URI = URL.createObjectURL(e.target.files[0])
+            setData(prevData => ({...prevData, profile_pic: e.target.files[0]}))
+            setImgURI(URI)
+    
+        }
+
     }
     const handleRegistration = () => {
         const validator = new ValidateFields(data, setData, setValid)
         if (validator.nameValidation()){
             setImgURI(null)
+       
             registerUser()
         }
         

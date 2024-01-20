@@ -15,7 +15,9 @@ const ProfileInformation = ({user}) => {
     const {thisUser, setAlertResponse, friends, setFriends, sentFriendRequests, setSentFriendRequests} = useContext(UserContext)
     const { csrftoken } = useContext(AuthContext)
 
+    
     const handleAddFriend = async () => {
+
         const response = await FriendService.sendFriendRequest(user.username, csrftoken)
         setSentFriendRequests(prevRequests => [...prevRequests, response.data.user])
         setAlertResponse({status: response.status, text: response.data.alert})
