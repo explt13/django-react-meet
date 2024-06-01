@@ -72,7 +72,7 @@ const MapComp = ({state}) => {
                 (pos) => {
                   const {latitude, longitude} = pos.coords
 
-                  setPosition([39, -77])
+                  setPosition([latitude, longitude])
                 },
                 (err) => {
                 setError(err)
